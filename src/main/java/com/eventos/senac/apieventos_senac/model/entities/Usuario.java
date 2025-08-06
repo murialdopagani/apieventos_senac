@@ -5,6 +5,7 @@ import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 public class Usuario {
     private Long id;
     private String nome;
+    private String email;
     private String senha;
     private Cpf cpf;
 
@@ -38,6 +39,14 @@ public class Usuario {
 
     public void setCpf(Cpf cpf) {
         this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String apresentarCpf() {

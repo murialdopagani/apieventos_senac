@@ -1,17 +1,14 @@
 package com.eventos.senac.apieventos_senac.model.entities;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Evento implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Evento {
     private Long id;
     private String nome;
     private LocalDateTime data;
-    private Integer capacidadeMaxima;
-    private Integer inscritos;
+    private int capacidadeMaxima;
     private Usuario organizador;
+    private int inscritos = 0;
 
     public Evento(Long id) {
         this.id = id;
@@ -41,7 +38,7 @@ public class Evento implements Serializable {
         this.data = data;
     }
 
-    public Integer getCapacidadeMaxima() {
+    public int getCapacidadeMaxima() {
         return capacidadeMaxima;
     }
 
@@ -49,7 +46,7 @@ public class Evento implements Serializable {
         this.capacidadeMaxima = capacidadeMaxima;
     }
 
-    public Integer getInscritos() {
+    public int getInscritos() {
         return inscritos;
     }
 
