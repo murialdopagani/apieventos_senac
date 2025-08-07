@@ -1,13 +1,19 @@
 package com.eventos.senac.apieventos_senac.model.entities;
 
-public class Administrador extends Usuario{
-    private boolean AcessoIrrestrito;
+import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
+import lombok.Data;
 
-    public boolean isAcessoIrrestrito() {
-        return AcessoIrrestrito;
+@Data
+public class Administrador extends Usuario{
+    private boolean acessoIrrestrito;
+
+    public Administrador(Long id, String nome, String email, String senha, Cpf cpf) {
+        super(id, nome, email, senha, cpf);
     }
 
-    public void setAcessoIrrestrito(boolean acessoIrrestrito) {
-        AcessoIrrestrito = acessoIrrestrito;
+
+    @Override
+    public String apresentar() {
+        return "Eu sou " + this.getNome() + " administrador e tenho acesso " + (this.acessoIrrestrito ? "Irrestrito" : "Nenhum!") ;
     }
 }

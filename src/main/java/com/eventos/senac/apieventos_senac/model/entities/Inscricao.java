@@ -1,9 +1,11 @@
 package com.eventos.senac.apieventos_senac.model.entities;
 
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 //@Entity
-//@Data
+@Data
 //@NoArgsConstructor
 //@AllArgsConstructor
 public class Inscricao {

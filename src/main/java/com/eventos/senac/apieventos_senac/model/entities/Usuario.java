@@ -1,7 +1,9 @@
 package com.eventos.senac.apieventos_senac.model.entities;
 
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
+import lombok.Data;
 
+@Data
 public class Usuario {
     private Long id;
     private String nome;
@@ -9,49 +11,21 @@ public class Usuario {
     private String senha;
     private Cpf cpf;
 
-    public Long getId() {
-        return id;
+    public Usuario() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Usuario(Long id, String nome, String email, String senha, Cpf cpf) {
+        this.setId(id);
+        this.setNome(nome);
+        this.setCpf(cpf);
+        this.setEmail(email);
+        this.setSenha(senha);
     }
 
-    public String getNome() {
-        return nome;
-    }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public Cpf getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(Cpf cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String apresentarCpf() {
+    public String apresentar() {
         return  "Dados " + this.nome +
-                "Cpf Format : " + this.cpf.toString();
+                " Cpf Format : " + this.cpf.toString();
     }
 
 }
