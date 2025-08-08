@@ -1,4 +1,4 @@
-package com.eventos.senac.apieventos_senac.model.entities;
+package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import lombok.Data;
@@ -13,6 +13,7 @@ public class Usuario {
 
     public Usuario() {
     }
+
 
     public Usuario(Long id, String nome, String email, String senha, Cpf cpf) {
         this.setId(id);

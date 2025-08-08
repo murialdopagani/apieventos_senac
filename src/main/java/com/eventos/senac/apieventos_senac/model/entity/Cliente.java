@@ -1,4 +1,4 @@
-package com.eventos.senac.apieventos_senac.model.entities;
+package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import lombok.Data;
@@ -15,14 +15,6 @@ public class Cliente extends Usuario {
     public Cliente(Long id, String nome, String email, String senha, Cpf cpf, BigDecimal valorConsumido) {
         super(id, nome, email, senha, cpf);
         this.setValorConsumido(valorConsumido);
-    }
-
-    public BigDecimal getValorConsumido() {
-        return valorConsumido;
-    }
-
-    public void setValorConsumido(BigDecimal valorConsumido) {
-        this.valorConsumido = valorConsumido;
     }
 
     @Override

@@ -1,8 +1,6 @@
-package com.eventos.senac.apieventos_senac.model.entities;
+package com.eventos.senac.apieventos_senac.model.entity;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +10,8 @@ public class Evento {
     private String nome;
     private LocalDateTime data;
     private int capacidadeMaxima;
-    private Usuario organizador;
     private int inscritos = 0;
+    private Usuario organizador;
 
     public Evento() {
     }
@@ -27,15 +25,5 @@ public class Evento {
         this.inscritos = inscritos;
     }
 
-    @Override
-    public String toString() {
-        return "Evento{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", data=" + data +
-                ", capacidadeMaxima=" + capacidadeMaxima +
-                ", inscritos=" + inscritos +
-                ", organizador=" + organizador +
-                '}';
-    }
+
 }

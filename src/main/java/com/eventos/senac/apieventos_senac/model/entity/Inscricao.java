@@ -1,4 +1,4 @@
-package com.eventos.senac.apieventos_senac.model.entities;
+package com.eventos.senac.apieventos_senac.model.entity;
 
 import lombok.Data;
 
