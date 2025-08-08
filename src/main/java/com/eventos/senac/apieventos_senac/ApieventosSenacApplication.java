@@ -26,9 +26,13 @@ public class ApieventosSenacApplication {
         System.out.println("Evento: " + evento.getNome() + ", Organizador: " + usuario.getNome() + ", Data: " + evento.getData());
 
         var eventoFormatura = new EventoFormatura();
+
         var eventoShow = new EventoShow();
+
         var eventoPalestra = new EventoPalestra();
-        var eventoWorkshop = new EventoWorkshop();
+
+        var eventoWorkshop = new EventoWorkshop(1L, "Workshop de Teste", java.time.LocalDateTime.of(2025, 8, 6, 21, 54), 100, usuario, 0,
+                "Instrutor Teste", "Tema Teste", "Tecnologia", 120, new java.math.BigDecimal("50.00"), "Nenhum", true);
 
 
         //SpringApplication.run(ApieventosSenacApplication.class, args);
