@@ -1,9 +1,9 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import lombok.Data;
 
 @Data
 public class EventoWorkshop extends Evento {

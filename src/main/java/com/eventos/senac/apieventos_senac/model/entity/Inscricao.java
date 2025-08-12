@@ -1,14 +1,15 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
+
+import lombok.Data;
 
 //@Entity
 @Data
 //@NoArgsConstructor
 //@AllArgsConstructor
 public class Inscricao {
+
     //@Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

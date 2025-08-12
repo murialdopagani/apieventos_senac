@@ -1,14 +1,20 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
+
 import lombok.Data;
 
 @Data
 public class Usuario {
+
     private Long id;
+
     private String nome;
+
     private String email;
+
     private String senha;
+
     private Cpf cpf;
 
     public Usuario() {
@@ -25,7 +31,7 @@ public class Usuario {
 
 
     public String apresentar() {
-        return  "Dados " + this.nome +
+        return "Dados " + this.nome +
                 " Cpf Format : " + this.cpf.toString();
     }
 

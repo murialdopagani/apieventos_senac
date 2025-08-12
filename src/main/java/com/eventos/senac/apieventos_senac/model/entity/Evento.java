@@ -1,16 +1,21 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
 
-@Data
-public class Evento {
+import lombok.Data;
+
+@Data public class Evento {
+
     private Long id;
+
     private String nome;
+
     private LocalDateTime data;
+
     private int capacidadeMaxima;
+
     private int inscritos = 0;
+
     private Usuario organizador;
 
     public Evento() {

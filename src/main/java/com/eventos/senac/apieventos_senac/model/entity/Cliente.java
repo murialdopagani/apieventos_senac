@@ -1,12 +1,14 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
-import lombok.Data;
-
 import java.math.BigDecimal;
+
+import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
+
+import lombok.Data;
 
 @Data
 public class Cliente extends Usuario {
+
     private BigDecimal valorConsumido;
 
     public Cliente() {
@@ -23,4 +25,5 @@ public class Cliente extends Usuario {
         respota += super.apresentar() + "Valor Consumido: " + this.valorConsumido.toString();
         return respota;
     }
+
 }
