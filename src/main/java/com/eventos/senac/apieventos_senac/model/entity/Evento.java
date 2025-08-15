@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 
 import lombok.Data;
 
-@Data public class Evento {
+@Data
+public class Evento {
 
     private Long id;
 

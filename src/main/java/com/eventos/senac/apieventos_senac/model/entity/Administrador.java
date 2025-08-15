@@ -3,8 +3,10 @@ package com.eventos.senac.apieventos_senac.model.entity;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Administrador extends Usuario {
 
     private boolean acessoIrrestrito;

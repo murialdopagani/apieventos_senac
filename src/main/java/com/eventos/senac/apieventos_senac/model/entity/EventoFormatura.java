@@ -3,8 +3,10 @@ package com.eventos.senac.apieventos_senac.model.entity;
 import java.time.LocalDateTime;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class EventoFormatura extends Evento {
 
     private String instituicao;
