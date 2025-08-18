@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 
 import lombok.Data;
 
-@Data public class Evento {
+@Data
+public class Evento {
 
     private Long id;
 
@@ -22,13 +23,24 @@ import lombok.Data;
     }
 
     public Evento(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador, int inscritos) {
-        this.id = id;
-        this.nome = nome;
-        this.data = data;
-        this.capacidadeMaxima = capacidadeMaxima;
-        this.organizador = organizador;
-        this.inscritos = inscritos;
+	this.id = id;
+	this.nome = nome;
+	this.data = data;
+	this.capacidadeMaxima = capacidadeMaxima;
+	this.organizador = organizador;
+	this.inscritos = inscritos;
     }
 
+    public boolean isFull() {
+	return inscritos >= capacidadeMaxima;
+    }
 
+    public boolean isFuture() {
+	return data.isAfter(LocalDateTime.now());
+    }
+
+    public boolean isPast() {
+	return data.isBefore(LocalDateTime.now());
+    }
+    
 }

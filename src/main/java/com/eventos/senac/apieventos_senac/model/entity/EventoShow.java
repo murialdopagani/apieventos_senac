@@ -20,30 +20,20 @@ public class EventoShow extends Evento {
 
     private BigDecimal cacheArtista;
 
-
     public EventoShow() {
-        super();
+	super();
     }
 
-    public EventoShow(Long id,
-                      String nome,
-                      LocalDateTime data,
-                      int capacidadeMaxima,
-                      int inscritos,
-                      Usuario organizador,
-                      String artista,
-                      String generoMusical,
-                      int duracaoShow,
-                      BigDecimal precoIngresso,
-                      int idadeMinima,
-                      BigDecimal cacheArtista) {
-        super(id, nome, data, capacidadeMaxima, organizador, inscritos);
-        this.artista = artista;
-        this.generoMusical = generoMusical;
-        this.duracaoShow = duracaoShow;
-        this.precoIngresso = precoIngresso;
-        this.idadeMinima = idadeMinima;
-        this.cacheArtista = cacheArtista;
+    public EventoShow(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador,
+	    int inscritos, String artista, String generoMusical, int duracaoShow, BigDecimal precoIngresso,
+	    int idadeMinima, BigDecimal cacheArtista) {
+	super(id, nome, data, capacidadeMaxima, organizador, inscritos);
+	this.artista = artista;
+	this.generoMusical = generoMusical;
+	this.duracaoShow = duracaoShow;
+	this.precoIngresso = precoIngresso;
+	this.idadeMinima = idadeMinima;
+	this.cacheArtista = cacheArtista;
     }
 
 }

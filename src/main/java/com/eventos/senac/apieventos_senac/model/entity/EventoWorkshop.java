@@ -23,29 +23,20 @@ public class EventoWorkshop extends Evento {
     private boolean certificado;
 
     public EventoWorkshop() {
+	super();
     }
 
-    public EventoWorkshop(Long id,
-                          String nome,
-                          LocalDateTime data,
-                          int capacidadeMaxima,
-                          Usuario organizador,
-                          int inscritos,
-                          String instrutor,
-                          String tema,
-                          String categoria,
-                          int duracaoMinutos,
-                          BigDecimal precoInscricao,
-                          String preRequisitos,
-                          boolean certificado) {
-        super(id, nome, data, capacidadeMaxima, organizador, inscritos);
-        this.instrutor = instrutor;
-        this.tema = tema;
-        this.categoria = categoria;
-        this.duracaoMinutos = duracaoMinutos;
-        this.precoInscricao = precoInscricao;
-        this.preRequisitos = preRequisitos;
-        this.certificado = certificado;
-    }
+    public EventoWorkshop(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador,
+	    int inscritos, String instrutor, String tema, String categoria, int duracaoMinutos,
+	    BigDecimal precoInscricao, String preRequisitos, boolean certificado) {
+	super(id, nome, data, capacidadeMaxima, organizador, inscritos);
+	this.instrutor = instrutor;
+	this.tema = tema;
+	this.categoria = categoria;
+	this.duracaoMinutos = duracaoMinutos;
+	this.precoInscricao = precoInscricao;
+	this.preRequisitos = preRequisitos;
+	this.certificado = certificado;
 
+    }
 }

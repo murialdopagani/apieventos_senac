@@ -29,21 +29,18 @@ public class EventoFormatura extends Evento {
 
     }
 
-    public EventoFormatura(Long id,
-                           String nome,
-                           LocalDateTime data,
-                           int capacidadeMaxima,
-                           int inscritos,
-                           Usuario organizador,
-                           String instituicao,
-                           String curso,
-                           int anoFormatura,
-                           String grauAcademico) {
-        super(id, nome, data, capacidadeMaxima, organizador, inscritos);
-        this.instituicao = instituicao;
-        this.curso = curso;
-        this.anoFormatura = anoFormatura;
-        this.grauAcademico = grauAcademico;
+    public EventoFormatura(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador,
+	    int inscritos, String instituicao, String curso, int anoFormatura, String grauAcademico,
+	    int numeroFormandos, String paraninfo, String orador, boolean temCerimonialista, String localCerimonia) {
+	super(id, nome, data, capacidadeMaxima, organizador, inscritos);
+	this.instituicao = instituicao;
+	this.curso = curso;
+	this.anoFormatura = anoFormatura;
+	this.grauAcademico = grauAcademico;
+	this.numeroFormandos = numeroFormandos;
+	this.paraninfo = paraninfo;
+	this.orador = orador;
+	this.temCerimonialista = temCerimonialista;
+	this.localCerimonia = localCerimonia;
     }
-
 }
