@@ -4,8 +4,7 @@ import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 
 import lombok.Data;
 
-@Data
-public class Usuario {
+@Data public class Usuario {
 
     private Long id;
 
@@ -31,8 +30,7 @@ public class Usuario {
 
 
     public String apresentar() {
-        return "Dados " + this.nome +
-                " Cpf Format : " + this.cpf.toString();
+        return "Dados " + this.nome + " Cpf Format : " + this.cpf.toString();
     }
 
 }

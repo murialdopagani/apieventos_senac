@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Cliente extends Usuario {
 
     private BigDecimal valorConsumido;

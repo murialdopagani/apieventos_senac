@@ -26,18 +26,12 @@ public class ApieventosSenacApplication {
         administrador.setNome("Nome Alterado");
         System.out.println(administrador.apresentar());
 
-        var cliente = new Cliente(3L,
-                                  "Gilnete Pagani",
-                                  "teste@teste.com",
-                                  "123456",
-                                  new Cpf("996.275.209-25"),
-                                  new java.math.BigDecimal("100.00"));
+        var cliente = new Cliente(3L, "Gilnete Pagani", "teste@teste.com", "123456", new Cpf("996.275.209-25"), new java.math.BigDecimal("100.00"));
 
         System.out.println(cliente.apresentar());
 
         var evento = new Evento(1L, "Evento de Teste", java.time.LocalDateTime.of(2025, 8, 6, 21, 54), 100, usuario, 0);
-        System.out.println(
-                "Evento: " + evento.getNome() + ", Organizador: " + usuario.getNome() + ", Data: " + evento.getData());
+        System.out.println("Evento: " + evento.getNome() + ", Organizador: " + usuario.getNome() + ", Data: " + evento.getData());
 
         var eventoFormatura = new EventoFormatura();
 
@@ -45,19 +39,7 @@ public class ApieventosSenacApplication {
 
         var eventoPalestra = new EventoPalestra();
 
-        var eventoWorkshop = new EventoWorkshop(1L,
-                                                "Workshop de Teste",
-                                                java.time.LocalDateTime.of(2025, 8, 6, 21, 54),
-                                                100,
-                                                usuario,
-                                                0,
-                                                "Instrutor Teste",
-                                                "Tema Teste",
-                                                "Tecnologia",
-                                                120,
-                                                new java.math.BigDecimal("50.00"),
-                                                "Nenhum",
-                                                true);
+        var eventoWorkshop = new EventoWorkshop(1L, "Workshop de Teste", java.time.LocalDateTime.of(2025, 8, 6, 21, 54), 100, usuario, 0, "Instrutor Teste", "Tema Teste", "Tecnologia", 120, new java.math.BigDecimal("50.00"), "Nenhum", true);
 
 
         //SpringApplication.run(ApieventosSenacApplication.class, args);
