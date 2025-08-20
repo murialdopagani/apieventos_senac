@@ -11,8 +11,8 @@ public class Administrador extends Usuario {
 
     private boolean acessoIrrestrito;
 
-    public Administrador(Long id, String nome, String email, String senha, Cpf cpf) {
-        super(id, nome, email, senha, cpf);
+    public Administrador(Long id, String nome, String email, String senha, Cpf cpf, String telefone) {
+        super(id, nome, email, senha, cpf, telefone);
     }
 
 
