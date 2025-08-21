@@ -19,7 +19,9 @@ public class Usuario {
 
   private String telefone;
 
-  public Usuario() {}
+  public Usuario() {
+
+  }
 
 
   public Usuario(Long id, String nome, String email, String senha, Cpf cpf, String telefone) {

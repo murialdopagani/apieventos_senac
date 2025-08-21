@@ -1,7 +1,7 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,40 +9,44 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class EventoFormatura extends Evento {
 
-    private String instituicao;
+  private String instituicao;
 
-    private String curso;
+  private String curso;
 
-    private int anoFormatura;
+  private int anoFormatura;
 
-    private String grauAcademico; // "Graduação", "Pós-graduação", "Mestrado", "Doutorado"
+  private String grauAcademico; // "Graduação", "Pós-graduação", "Mestrado", "Doutorado"
 
-    private int numeroFormandos;
+  private int numeroFormandos;
 
-    private String paraninfo;
+  private String paraninfo;
 
-    private String orador;
+  private String orador;
 
-    private boolean temCerimonialista;
+  private boolean temCerimonialista;
 
-    private String localCerimonia;
+  private String localCerimonia;
 
-    public EventoFormatura() {
+  public EventoFormatura(long l, String formaturaDeTeste, LocalDateTime localDateTime, int i,
+      Usuario usuario, int i1, String cursoDeTeste, String instituiçãoDeTeste, String localDeTeste,
+      String temaDeTeste, String descriçãoDeTeste, boolean b, BigDecimal bigDecimal, String nenhum) {
 
-    }
+  }
 
-    public EventoFormatura(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador,
-	    int inscritos, String instituicao, String curso, int anoFormatura, String grauAcademico,
-	    int numeroFormandos, String paraninfo, String orador, boolean temCerimonialista, String localCerimonia) {
-	super(id, nome, data, capacidadeMaxima, organizador, inscritos);
-	this.instituicao = instituicao;
-	this.curso = curso;
-	this.anoFormatura = anoFormatura;
-	this.grauAcademico = grauAcademico;
-	this.numeroFormandos = numeroFormandos;
-	this.paraninfo = paraninfo;
-	this.orador = orador;
-	this.temCerimonialista = temCerimonialista;
-	this.localCerimonia = localCerimonia;
-    }
+  public EventoFormatura(Long id, String nome, LocalDateTime data, int capacidadeMaxima,
+      Usuario organizador,
+      int inscritos, String instituicao, String curso, int anoFormatura, String grauAcademico,
+      int numeroFormandos, String paraninfo, String orador, boolean temCerimonialista,
+      String localCerimonia) {
+    super(id, nome, data, capacidadeMaxima, organizador, inscritos);
+    this.instituicao = instituicao;
+    this.curso = curso;
+    this.anoFormatura = anoFormatura;
+    this.grauAcademico = grauAcademico;
+    this.numeroFormandos = numeroFormandos;
+    this.paraninfo = paraninfo;
+    this.orador = orador;
+    this.temCerimonialista = temCerimonialista;
+    this.localCerimonia = localCerimonia;
+  }
 }

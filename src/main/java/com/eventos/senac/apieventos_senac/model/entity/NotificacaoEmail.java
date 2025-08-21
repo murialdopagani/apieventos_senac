@@ -14,7 +14,7 @@ public class NotificacaoEmail implements INotificacao {
 
   @Override
   public void Enviar(String mensagem) {
-    System.out.println("Email para : " + this.emailDestino + "MESAGEM: " + mensagem);
+    System.out.println("Email para : " + this.emailDestino + " MESAGEM: " + mensagem);
     
   }
 
