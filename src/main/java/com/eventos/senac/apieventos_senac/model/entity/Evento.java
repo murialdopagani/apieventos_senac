@@ -23,24 +23,24 @@ public class Evento {
     }
 
     public Evento(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador, int inscritos) {
-	this.id = id;
-	this.nome = nome;
-	this.data = data;
-	this.capacidadeMaxima = capacidadeMaxima;
-	this.organizador = organizador;
-	this.inscritos = inscritos;
+        this.id = id;
+        this.nome = nome;
+        this.data = data;
+        this.capacidadeMaxima = capacidadeMaxima;
+        this.organizador = organizador;
+        this.inscritos = inscritos;
     }
 
     public boolean isFull() {
-	return inscritos >= capacidadeMaxima;
+        return inscritos >= capacidadeMaxima;
     }
 
     public boolean isFuture() {
-	return data.isAfter(LocalDateTime.now());
+        return data.isAfter(LocalDateTime.now());
     }
 
     public boolean isPast() {
-	return data.isBefore(LocalDateTime.now());
+        return data.isBefore(LocalDateTime.now());
     }
-    
+
 }

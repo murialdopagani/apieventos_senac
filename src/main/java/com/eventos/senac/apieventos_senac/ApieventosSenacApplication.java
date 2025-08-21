@@ -1,45 +1,107 @@
 package com.eventos.senac.apieventos_senac;
 
-import com.eventos.senac.apieventos_senac.model.entity.Inscricao;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.eventos.senac.apieventos_senac.model.entity.*;
+import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.eventos.senac.apieventos_senac.model.entity.Administrador;
-import com.eventos.senac.apieventos_senac.model.entity.Cliente;
-import com.eventos.senac.apieventos_senac.model.entity.Evento;
-import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
-import com.eventos.senac.apieventos_senac.model.entity.EventoPalestra;
-import com.eventos.senac.apieventos_senac.model.entity.EventoShow;
-import com.eventos.senac.apieventos_senac.model.entity.EventoWorkshop;
-import com.eventos.senac.apieventos_senac.model.entity.NotificacaoEmail;
-import com.eventos.senac.apieventos_senac.model.entity.NotificacaoSMS;
-import com.eventos.senac.apieventos_senac.model.entity.Usuario;
-import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class ApieventosSenacApplication {
 
     public static void main(String[] args) {
-		
-
-        var usuario = new Usuario(1L, "Murialdo Pagani", "mrialdo.pagani@gmail.com", "123", new Cpf("986.275.209-25"),"+5548984045098");
 
 
-        var administrador = new Administrador(2L, "Daniel Pagani", "teste", "123456", new Cpf("996.275.209-25"),"+5548984045098");
+        var usuario = new Usuario(1L,
+                                  "Murialdo Pagani",
+                                  "mrialdo.pagani@gmail.com",
+                                  "123",
+                                  new Cpf("986.275.209-25"),
+                                  "+5548984045098");
+
+
+        var administrador =
+                new Administrador(2L, "Daniel Pagani", "teste", "123456", new Cpf("996.275.209-25"), "+5548984045098");
         administrador.setAcessoIrrestrito(true);
         administrador.setNome("Nome Alterado");
         administrador.setTelefone("+5548984045098");
         administrador.setEmail("adm@gmail.com");
 
 
-        var cliente = new Cliente(3L, "Gilnete Pagani", "teste@teste.com", "123456", new Cpf("996.275.209-25"), new java.math.BigDecimal("100.00"), "+5548984045098");
+        var cliente = new Cliente(3L,
+                                  "Gilnete Pagani",
+                                  "teste@teste.com",
+                                  "123456",
+                                  new Cpf("996.275.209-25"),
+                                  new java.math.BigDecimal("100.00"),
+                                  "+5548984045098");
 
-        var eventoFormatura = new EventoFormatura(2L, "Formatura de Teste", java.time.LocalDateTime.of(2025, 8, 6, 21, 54), 100, usuario, 0, "Curso de Teste", "Instituição de Teste", "Local de Teste", "Tema de Teste", "Descrição de Teste", true, new java.math.BigDecimal("200.00"), "Nenhum");
-        var eventoShow = new EventoShow(3L, "Show de Teste", java.time.LocalDateTime.of(2025, 8, 6, 21, 54), 100, usuario, 0, "Artista Teste", "Gênero Teste", 120, new java.math.BigDecimal("50.00"), 18, new java.math.BigDecimal("1000.00"));
-        var eventoPalestra = new EventoPalestra(4L, "Palestra de Teste", java.time.LocalDateTime.of(2025, 8, 6, 21, 54), 100, usuario, 0, "Palestrante Teste", "Título de Teste", "Tema de Teste", "Categoria de Teste", 60, "Biografia do Palestrante", 15, true, "Objetivos de Aprendizagem", false, new java.math.BigDecimal("0.00"));
-        var eventoWorkshop = new EventoWorkshop(1L, "Workshop de Teste", java.time.LocalDateTime.of(2025, 8, 6, 21, 54), 100, usuario, 0, "Instrutor Teste", "Tema Teste", "Tecnologia", 120, new java.math.BigDecimal("50.00"), "Nenhum", true);
+        var eventoFormatura = new EventoFormatura(2L,
+                                                  "Formatura de Teste",
+                                                  java.time.LocalDateTime.of(2025, 8, 6, 21, 54),
+                                                  100,
+                                                  usuario,
+                                                  0,
+                                                  "Instituição Teste",
+                                                  "Curso Teste",
+                                                  2025,
+                                                  "Graduação",
+                                                  50,
+                                                  "Paraninfo Teste",
+                                                  "Orador Teste",
+                                                  true,
+                                                  "Local Cerimônia Teste");
+        var eventoShow = new EventoShow(3L,
+                                        "Show de Teste",
+                                        java.time.LocalDateTime.of(2025, 8, 6, 21, 54),
+                                        100,
+                                        usuario,
+                                        0,
+                                        "Artista Teste",
+                                        "Gênero Teste",
+                                        120,
+                                        new java.math.BigDecimal("50.00"),
+                                        18,
+                                        new java.math.BigDecimal("1000.00"));
+        var eventoPalestra = new EventoPalestra(4L,
+                                                "Palestra de Teste",
+                                                java.time.LocalDateTime.of(2025, 8, 6, 21, 54),
+                                                100,
+                                                usuario,
+                                                0,
+                                                "Palestrante Teste",
+                                                "Título de Teste",
+                                                "Tema de Teste",
+                                                "Categoria de Teste",
+                                                60,
+                                                "Biografia do Palestrante",
+                                                15,
+                                                true,
+                                                "Objetivos de Aprendizagem",
+                                                false,
+                                                new java.math.BigDecimal("0.00"));
+        var eventoWorkshop = new EventoWorkshop(1L,
+                                                "Workshop de Teste",
+                                                java.time.LocalDateTime.of(2025, 8, 6, 21, 54),
+                                                100,
+                                                usuario,
+                                                0,
+                                                "Instrutor Teste",
+                                                "Tema Teste",
+                                                "Tecnologia",
+                                                120,
+                                                new java.math.BigDecimal("50.00"),
+                                                "Nenhum",
+                                                true);
+
+        var inscricao = new Inscricao(1L,
+                                      usuario,
+                                      eventoFormatura,
+                                      java.time.LocalDateTime.now(),
+                                      "Observação de Teste",
+                                      "Pendente",
+                                      "Normal");
 
         List<Evento> listaEventos = new ArrayList<>();
         listaEventos.add(eventoFormatura);
@@ -47,11 +109,42 @@ public class ApieventosSenacApplication {
         listaEventos.add(eventoPalestra);
         listaEventos.add(eventoWorkshop);
 
-        var inscricao = new Inscricao(1L, usuario, listaEventos, java.time.LocalDateTime.now(), "Observação de Teste", "Pendente", "Normal");
 
+        listaEventos.forEach(evento ->
+                             {
+                                 if (evento instanceof EventoFormatura) {
+                                     EventoFormatura formatura = (EventoFormatura) evento;
+                                     System.out.println("Instituição: " + formatura.getInstituicao());
+                                     System.out.println("Curso: " + formatura.getCurso());
+                                 } else if (evento instanceof EventoShow) {
+                                     EventoShow show = (EventoShow) evento;
+                                     System.out.println("Artista: " + show.getArtista());
+                                     System.out.println("Gênero: " + show.getGeneroMusical());
+                                 } else if (evento instanceof EventoPalestra) {
+                                     EventoPalestra palestra = (EventoPalestra) evento;
+                                     System.out.println("Palestrante: " + palestra.getPalestrante());
+                                     System.out.println("Título: " + palestra.getTituloPalestra());
+                                 } else if (evento instanceof EventoWorkshop) {
+                                     EventoWorkshop workshop = (EventoWorkshop) evento;
+                                     System.out.println("Instrutor: " + workshop.getInstrutor());
+                                     System.out.println("Tema: " + workshop.getTema());
+                                 }
+                             });
+
+
+//        listaEventos.remove(eventoFormatura);
+
+
+/*
         listaEventos.forEach(evento -> {
             System.out.println("Evento: " + evento.getNome());
         });
+*/
+
+        listaEventos.forEach(System.out::println);
+
+
+
 
 
 
@@ -70,16 +163,7 @@ public class ApieventosSenacApplication {
 
 */
 
-        List<Usuario> listaUsuarios = new ArrayList<>();
-        listaUsuarios.add(administrador);
-        listaUsuarios.add(usuario);
 
-        listaUsuarios.stream().filter(u -> u.getId() ==1L); 
-        
-
-	
-        
-        
         //SpringApplication.run(ApieventosSenacApplication.class, args);
     }
 

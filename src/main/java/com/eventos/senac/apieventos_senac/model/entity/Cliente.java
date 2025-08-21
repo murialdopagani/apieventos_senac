@@ -16,7 +16,13 @@ public class Cliente extends Usuario {
     public Cliente() {
     }
 
-    public Cliente(Long id, String nome, String email, String senha, Cpf cpf, BigDecimal valorConsumido, String telefone) {
+    public Cliente(Long id,
+                   String nome,
+                   String email,
+                   String senha,
+                   Cpf cpf,
+                   BigDecimal valorConsumido,
+                   String telefone) {
         super(id, nome, email, senha, cpf, telefone);
         this.setValorConsumido(valorConsumido);
     }
