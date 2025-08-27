@@ -1,8 +1,8 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import java.time.LocalDateTime;
-
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 //@Entity
 @Data
@@ -28,14 +28,13 @@ public class Inscricao {
 
     private String tipoIngresso; // Ex: "VIP", "Normal", etc.
 
-
     public Inscricao() {
         this.dataInscricao = LocalDateTime.now();
         this.statusPresenca = "Pendente"; // Padrão ao criar uma inscrição
     }
 
-    public Inscricao(Long id, Usuario usuario, Evento evento, LocalDateTime dataInscricao,
-                     String observacao, String statusPresenca, String tipoIngresso) {
+    public Inscricao(Long id, Usuario usuario, Evento evento, LocalDateTime dataInscricao, String observacao, String statusPresenca,
+            String tipoIngresso) {
         this.id = id;
         this.usuario = usuario;
         this.evento = evento;
@@ -44,7 +43,6 @@ public class Inscricao {
         this.statusPresenca = statusPresenca != null ? statusPresenca : "Pendente";
         this.tipoIngresso = tipoIngresso;
     }
-
 
     public boolean isConfirmed() {
         return "Confirmado".equalsIgnoreCase(statusPresenca);

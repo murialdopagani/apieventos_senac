@@ -4,8 +4,11 @@ import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 public class Usuario {
+
 
     private Long id;
 

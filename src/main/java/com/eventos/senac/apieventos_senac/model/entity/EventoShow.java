@@ -1,10 +1,10 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -26,9 +26,9 @@ public class EventoShow extends Evento {
         super();
     }
 
-    public EventoShow(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador,
-                      int inscritos, String artista, String generoMusical, int duracaoShow, BigDecimal precoIngresso,
-                      int idadeMinima, BigDecimal cacheArtista) {
+    public EventoShow(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador, int inscritos,
+            String artista, String generoMusical, int duracaoShow, BigDecimal precoIngresso, int idadeMinima,
+            BigDecimal cacheArtista) {
         super(id, nome, data, capacidadeMaxima, organizador, inscritos);
         this.artista = artista;
         this.generoMusical = generoMusical;

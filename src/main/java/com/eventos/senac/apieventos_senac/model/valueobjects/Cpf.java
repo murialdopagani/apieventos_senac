@@ -1,9 +1,11 @@
 package com.eventos.senac.apieventos_senac.model.valueobjects;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 
 @Data
 public class Cpf {
+
 
     private final String cpf;
 
@@ -15,5 +17,6 @@ public class Cpf {
     public String toString() {
         return cpf;
     }
+
 
 }
