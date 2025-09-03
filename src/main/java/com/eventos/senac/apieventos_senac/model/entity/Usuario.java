@@ -36,11 +36,12 @@ public class Usuario {
 
     }
 
-    public Usuario(UsuarioCriarRequestDto usuario){
-        this.email = usuario.email();
-        this.senha = usuario.senha();
-        this.cpf = new Cpf(usuario.Cpf());
-        this.nome = usuario.nome();
+    public Usuario(UsuarioCriarRequestDto usuarioDto) {
+        this.nome = usuarioDto.nome();
+        this.email = usuarioDto.email();
+        this.senha = usuarioDto.senha();
+        this.cpf = new Cpf(usuarioDto.Cpf());
+        this.telefone = usuarioDto.telefone();
     }
 
 
@@ -52,6 +53,7 @@ public class Usuario {
         this.setSenha(senha);
         this.setTelefone(telefone);
     }
+
 
     public String apresentar() {
         return "Dados " + this.nome + " Cpf Format : " + this.cpf.toString();

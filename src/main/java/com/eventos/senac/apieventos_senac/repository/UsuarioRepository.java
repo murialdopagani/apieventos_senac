@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 
-
     boolean existsUsuarioByCpf_CpfAndSenhaContaining(String Cpf , String Senha);
+
 }

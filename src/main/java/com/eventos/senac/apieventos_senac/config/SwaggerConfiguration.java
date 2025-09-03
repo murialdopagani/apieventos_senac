@@ -20,4 +20,7 @@ public class SwaggerConfiguration {
         );
     }
 
+    //Para acessar a pagina do swagger
+    //http://localhost:8080/swagger-ui/index.html#/usuario-controller
+
 }
