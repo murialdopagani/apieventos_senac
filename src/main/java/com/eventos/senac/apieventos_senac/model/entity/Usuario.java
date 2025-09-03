@@ -1,11 +1,9 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
+import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
-
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.io.Serializable;
 
 @Data
 @Entity
@@ -27,7 +25,8 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
-    @OneToOne
+    @Column
+    @Embedded
     private Cpf cpf;
 
     @Column(nullable = false)
@@ -36,6 +35,14 @@ public class Usuario {
     public Usuario() {
 
     }
+
+    public Usuario(UsuarioCriarRequestDto usuario){
+        this.email = usuario.email();
+        this.senha = usuario.senha();
+        this.cpf = new Cpf(usuario.Cpf());
+        this.nome = usuario.nome();
+    }
+
 
     public Usuario(Long id, String nome, String email, String senha, Cpf cpf, String telefone) {
         this.setId(id);
