@@ -44,7 +44,6 @@ public class Usuario {
         this.telefone = usuarioDto.telefone();
     }
 
-    // Construtor existente com todos os parâmetros
     public Usuario(Long id, String nome, String email, String senha, Cpf cpf, String telefone) {
         this.setId(id);
         this.setNome(nome);
