@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -33,7 +34,6 @@ public class Usuario {
     private String telefone;
 
     public Usuario() {
-
     }
 
     public Usuario(UsuarioCriarRequestDto usuarioDto) {
@@ -44,7 +44,7 @@ public class Usuario {
         this.telefone = usuarioDto.telefone();
     }
 
-
+    // Construtor existente com todos os parâmetros
     public Usuario(Long id, String nome, String email, String senha, Cpf cpf, String telefone) {
         this.setId(id);
         this.setNome(nome);

@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.controllers;
 
 import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.model.entity.Usuario;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import com.eventos.senac.apieventos_senac.repository.UsuarioRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 @RestController
@@ -24,16 +26,30 @@ public class UsuarioController {
 
     @PostMapping(value = "/salvarUsuario")
     @Operation(summary = "Salva um Usuário", description = "Método responsável por salvar um Usuário no banco de dados.")
-    public ResponseEntity<Usuario> salvarUsuario(@RequestBody UsuarioCriarRequestDto usuarioDto) {
-        Usuario usuarioSalvo = usuarioRepository.save(new Usuario(usuarioDto));
-        return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
+    public ResponseEntity<UsuarioResponseDto> salvarUsuario(@RequestBody UsuarioCriarRequestDto usuarioRequestDto) {
+
+        try {
+            Usuario usuarioSalvo = usuarioRepository.save(new Usuario(usuarioRequestDto));
+            //UsuarioResponseDto usuarioResponseDto = new UsuarioResponseDto(usuarioSalvo);
+            UsuarioResponseDto usuarioResponseDto = UsuarioResponseDto.fromUsuario(usuarioSalvo);
+
+            return new ResponseEntity<UsuarioResponseDto>(usuarioResponseDto, HttpStatus.OK);
+            //return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponseDto);
+        } catch (Exception e) {
+            System.err.println("Erro ao salvar usuário: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        //endregion
+
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Consulta de usuário por id", description = "Método responsável por consultar um único usuário por id, se não existir retorna null")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+
         var usuario = usuarioRepository.findById(id).orElse(null);
         return ResponseEntity.ok(usuario);
+
     }
 
 
@@ -43,13 +59,16 @@ public class UsuarioController {
 
         usuarioRepository.deleteById(id);
         return ResponseEntity.ok().build();
+
     }
 
 
     @GetMapping("/listar")
     public ResponseEntity<List<Usuario>> listarUsuarios(){
+
         List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
         return ResponseEntity.ok(usuarios);
+
     }
 
 //    @PostMapping
