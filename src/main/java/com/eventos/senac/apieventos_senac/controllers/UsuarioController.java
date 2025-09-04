@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -72,11 +71,10 @@ public class UsuarioController {
 
         });
 
-//        List<UsuarioResponseDto> usuarioResponseDto = usuarios
-//                .stream()
-//                .map(UsuarioResponseDto::fromUsuario)
-//                .collect(Collectors.toList());
-
+        //        List<UsuarioResponseDto> usuarioResponseDto = usuarios
+        //                .stream()
+        //                .map(UsuarioResponseDto::fromUsuario)
+        //                .collect(Collectors.toList());
 
         return ResponseEntity.ok(usuarioResponseDto);
 

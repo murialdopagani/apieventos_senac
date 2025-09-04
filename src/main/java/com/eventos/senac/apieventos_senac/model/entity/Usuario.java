@@ -1,7 +1,6 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
-import com.eventos.senac.apieventos_senac.dto.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -52,7 +51,6 @@ public class Usuario {
         this.setSenha(senha);
         this.setTelefone(telefone);
     }
-
 
     public String apresentar() {
         return "Dados " + this.nome + " Cpf Format : " + this.cpf.toString();
