@@ -1,9 +1,9 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import java.time.LocalDateTime;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
