@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -64,19 +65,23 @@ public class UsuarioController {
     public ResponseEntity<List<UsuarioResponseDto>> listarUsuarios() {
 
         ArrayList<Usuario> usuarios = (ArrayList<Usuario>) usuarioRepository.findAll();
-        ArrayList<UsuarioResponseDto> usuarioResponseDto = new ArrayList<>();
 
+
+        ArrayList<UsuarioResponseDto> usuarioResponseDto0 = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            usuarioResponseDto0.add(UsuarioResponseDto.fromUsuario(usuario));
+        }
+
+        ArrayList<UsuarioResponseDto> usuarioResponseDto1 = new ArrayList<>();
         usuarios.forEach(usuarioResponse -> {
-            usuarioResponseDto.add(UsuarioResponseDto.fromUsuario(usuarioResponse));
-
+            usuarioResponseDto1.add(UsuarioResponseDto.fromUsuario(usuarioResponse));
         });
 
-        //        List<UsuarioResponseDto> usuarioResponseDto = usuarios
-        //                .stream()
-        //                .map(UsuarioResponseDto::fromUsuario)
-        //                .collect(Collectors.toList());
+        List<UsuarioResponseDto> usuarioResponseDto = usuarios.stream()
+                .map(UsuarioResponseDto::fromUsuario)
+                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(usuarioResponseDto);
+        return ResponseEntity.ok(usuarioResponseDto0);
 
     }
 
