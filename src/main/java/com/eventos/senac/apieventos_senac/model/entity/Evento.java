@@ -4,18 +4,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.EventoFormaturaCriarRequestDto;
 import jakarta.persistence.*;
 import lombok.Data;
 
+
 @Data
 @Entity
-@Table(name = "tb_evento")
-@SequenceGenerator(name = "seq_evento", sequenceName = "seq_evento", allocationSize = 1, initialValue = 1)
+@Table(name = "tb_eventos")
+@SequenceGenerator(name = "seq_eventos", sequenceName = "seq_eventos", allocationSize = 1, initialValue = 1)
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "tipoEventos", discriminatorType = DiscriminatorType.STRING)
 public class Evento {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_evento")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_eventos")
     private Long id;
 
     @Column(nullable = false)
@@ -47,12 +50,13 @@ public class Evento {
     }
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    public Evento(EventoCriarRequestDto eventoCriarRequestDto, Usuario organizador) {
-        LocalDate dataEvento = LocalDate.parse(eventoCriarRequestDto.data(), FORMATTER);
 
-        this.nome = eventoCriarRequestDto.nome();
+    public Evento(EventoFormaturaCriarRequestDto eventoFormaturaCriarRequestDto, Usuario organizador) {
+        LocalDate dataEvento = LocalDate.parse(eventoFormaturaCriarRequestDto.data(), FORMATTER);
+
+        this.nome = eventoFormaturaCriarRequestDto.nome();
         this.data = dataEvento.atStartOfDay(); // Define como início do dia (00:00:00)
-        this.capacidadeMaxima = eventoCriarRequestDto.capacidadeMaxima();
+        this.capacidadeMaxima = eventoFormaturaCriarRequestDto.capacidadeMaxima();
         this.organizador = organizador;
         this.inscritos = 0;
     }

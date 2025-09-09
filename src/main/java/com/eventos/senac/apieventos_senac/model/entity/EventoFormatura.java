@@ -1,12 +1,23 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
+import com.eventos.senac.apieventos_senac.dto.EventoFormaturaCriarRequestDto;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Entity
+@Table(name = "tb_eventos_formatura")
+@DiscriminatorValue("FORMATURA")
+@PrimaryKeyJoinColumn(name = "evento_id", referencedColumnName = "id")
 public class EventoFormatura extends Evento {
 
     private String instituicao;
@@ -31,31 +42,21 @@ public class EventoFormatura extends Evento {
 
     }
 
-    public EventoFormatura(Long id,
-                           String nome,
-                           LocalDateTime data,
-                           int capacidadeMaxima,
-                           Usuario organizador,
-                           int inscritos,
-                           String instituicao,
-                           String curso,
-                           int anoFormatura,
-                           String grauAcademico,
-                           int numeroFormandos,
-                           String paraninfo,
-                           String orador,
-                           boolean temCerimonialista,
-                           String localCerimonia) {
-        super(id, nome, data, capacidadeMaxima, organizador, inscritos);
-        this.instituicao = instituicao;
-        this.curso = curso;
-        this.anoFormatura = anoFormatura;
-        this.grauAcademico = grauAcademico;
-        this.numeroFormandos = numeroFormandos;
-        this.paraninfo = paraninfo;
-        this.orador = orador;
-        this.temCerimonialista = temCerimonialista;
-        this.localCerimonia = localCerimonia;
+    public EventoFormatura(EventoFormaturaCriarRequestDto dto, Usuario organizador) {
+        // Chama o construtor da classe pai que já existe
+        super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy")).atStartOfDay(),
+                dto.capacidadeMaxima(), organizador, 0);
+
+        // Define os campos específicos da formatura
+        this.instituicao = dto.instituicao();
+        this.curso = dto.curso();
+        this.anoFormatura = dto.anoFormatura();
+        this.grauAcademico = dto.grauAcademico();
+        this.numeroFormandos = dto.numeroFormandos();
+        this.paraninfo = dto.paraninfo();
+        this.orador = dto.orador();
+        this.temCerimonialista = dto.temCerimonialista();
+        this.localCerimonia = dto.localCerimonia();
     }
 
 }
