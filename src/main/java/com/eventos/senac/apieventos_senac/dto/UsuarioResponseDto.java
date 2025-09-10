@@ -1,6 +1,9 @@
 package com.eventos.senac.apieventos_senac.dto;
 
+import com.eventos.senac.apieventos_senac.model.entity.Evento;
 import com.eventos.senac.apieventos_senac.model.entity.Usuario;
+
+import java.util.List;
 
 public record UsuarioResponseDto(Long id, String nome, String email, String cpf, String telefone) {
 

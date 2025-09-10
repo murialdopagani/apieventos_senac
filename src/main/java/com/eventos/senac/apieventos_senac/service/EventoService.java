@@ -22,11 +22,11 @@ public class EventoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Evento criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
+    public EventoFormatura criarEventoFormatura(EventoCriarRequestDto eventoCriarRequestDto) {
         Usuario organizador = usuarioRepository.findById(eventoCriarRequestDto.organizadorId())
                                                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        Evento evento = new Evento(eventoCriarRequestDto, organizador);
+        EventoFormatura eventoFormatura = new EventoFormatura(eventoCriarRequestDto, organizador);
 
-        return eventoRepository.save(evento);
+        return eventoRepository.save(eventoFormatura);
     }
 }

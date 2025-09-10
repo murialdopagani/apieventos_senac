@@ -27,7 +27,7 @@ public class EventoController {
     public ResponseEntity<EventoResponseDto> criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
 
         try {
-            Evento eventoCriado = eventoService.criarEvento(eventoCriarRequestDto);
+            EventoFormatura eventoCriado = eventoService.criarEventoFormatura(eventoCriarRequestDto);
             EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento((EventoFormatura) eventoCriado);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);

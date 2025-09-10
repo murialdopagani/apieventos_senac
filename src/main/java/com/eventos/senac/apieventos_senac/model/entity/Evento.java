@@ -1,13 +1,12 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @Entity
@@ -17,22 +16,18 @@ import lombok.Data;
 @DiscriminatorColumn(name = "tipoEventos", discriminatorType = DiscriminatorType.STRING)
 public class Evento {
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_eventos")
     private Long id;
-
     @Column(nullable = false)
     private String nome;
-
     @Column(nullable = false)
     private LocalDateTime data;
-
     @Column(nullable = false)
     private int capacidadeMaxima;
-
     @Column(nullable = false)
     private int inscritos = 0;
-
     @ManyToOne
     @JoinColumn(name = "organizador_id", nullable = false, foreignKey = @ForeignKey(name = "fk_evento_organizador"))
     private Usuario organizador;
@@ -48,8 +43,6 @@ public class Evento {
         this.organizador = organizador;
         this.inscritos = inscritos;
     }
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public Evento(EventoCriarRequestDto eventoCriarRequestDto, Usuario organizador) {
         LocalDate dataEvento = LocalDate.parse(eventoCriarRequestDto.data(), FORMATTER);
