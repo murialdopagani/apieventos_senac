@@ -2,7 +2,6 @@ package com.eventos.senac.apieventos_senac.controllers;
 
 import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
 import com.eventos.senac.apieventos_senac.dto.EventoResponseDto;
-import com.eventos.senac.apieventos_senac.model.entity.Evento;
 import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
 import com.eventos.senac.apieventos_senac.service.EventoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,12 +22,13 @@ public class EventoController {
     private EventoService eventoService;
 
     @PostMapping(value = "/criarFormatura")
-    @Operation(summary = "Cria um Evento de Formatura", description = "Método responsável por criar um Evento Formatura no sistema.")
+    @Operation(summary = "Cria um Evento de Formatura",
+            description = "Método responsável por criar um Evento Formatura no sistema.")
     public ResponseEntity<EventoResponseDto> criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
 
         try {
             EventoFormatura eventoCriado = eventoService.criarEventoFormatura(eventoCriarRequestDto);
-            EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento((EventoFormatura) eventoCriado);
+            EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoCriado);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
         } catch (Exception e) {
