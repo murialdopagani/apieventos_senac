@@ -1,7 +1,6 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,11 +14,9 @@ public class Administrador extends Usuario {
         super(id, nome, email, senha, cpf, telefone);
     }
 
-
     @Override
     public String apresentar() {
-        return "Eu sou " + this.getNome() + " administrador e tenho acesso " +
-                (this.acessoIrrestrito ? "Irrestrito" : "Nenhum!");
+        return "Eu sou " + this.getNome() + " administrador e tenho acesso " + (this.acessoIrrestrito ? "Irrestrito" : "Nenhum!");
     }
 
 }

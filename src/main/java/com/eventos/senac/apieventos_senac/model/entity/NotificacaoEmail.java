@@ -4,8 +4,7 @@ import com.eventos.senac.apieventos_senac.model.interfaces.INotificacao;
 
 public class NotificacaoEmail implements INotificacao {
 
-    private String emailDestino;
-
+    private final String emailDestino;
 
     public NotificacaoEmail(String emailDestino) {
         this.emailDestino = emailDestino;

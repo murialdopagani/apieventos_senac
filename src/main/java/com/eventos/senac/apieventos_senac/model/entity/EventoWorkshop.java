@@ -28,9 +28,19 @@ public class EventoWorkshop extends Evento {
         super();
     }
 
-    public EventoWorkshop(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador, int inscritos,
-            String instrutor, String tema, String categoria, int duracaoMinutos, BigDecimal precoInscricao, String preRequisitos,
-            boolean certificado) {
+    public EventoWorkshop(Long id,
+                          String nome,
+                          LocalDateTime data,
+                          int capacidadeMaxima,
+                          Usuario organizador,
+                          int inscritos,
+                          String instrutor,
+                          String tema,
+                          String categoria,
+                          int duracaoMinutos,
+                          BigDecimal precoInscricao,
+                          String preRequisitos,
+                          boolean certificado) {
         super(id, nome, data, capacidadeMaxima, organizador, inscritos);
         this.instrutor = instrutor;
         this.tema = tema;

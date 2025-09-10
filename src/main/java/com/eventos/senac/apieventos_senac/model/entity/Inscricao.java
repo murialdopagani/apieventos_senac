@@ -33,8 +33,13 @@ public class Inscricao {
         this.statusPresenca = "Pendente"; // Padrão ao criar uma inscrição
     }
 
-    public Inscricao(Long id, Usuario usuario, Evento evento, LocalDateTime dataInscricao, String observacao, String statusPresenca,
-            String tipoIngresso) {
+    public Inscricao(Long id,
+                     Usuario usuario,
+                     Evento evento,
+                     LocalDateTime dataInscricao,
+                     String observacao,
+                     String statusPresenca,
+                     String tipoIngresso) {
         this.id = id;
         this.usuario = usuario;
         this.evento = evento;

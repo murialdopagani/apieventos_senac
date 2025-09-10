@@ -9,13 +9,12 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfiguration {
 
     @Bean
-    public OpenAPI customOpenApi(){
+    public OpenAPI customOpenApi() {
 
-        return new OpenAPI().info(new Info()
-                .title("API Eventos Senac")
-                .version("1.0")
-                .description("Api responsável para gerenciar Eventos")
-                .termsOfService("http://")
+        return new OpenAPI().info(new Info().title("API Eventos Senac")
+                                            .version("1.0")
+                                            .description("Api Gerenciamento de  Eventos")
+                                            .termsOfService("http://")
 
         );
     }

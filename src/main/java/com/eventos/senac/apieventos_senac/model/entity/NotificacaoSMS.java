@@ -4,7 +4,7 @@ import com.eventos.senac.apieventos_senac.model.interfaces.INotificacao;
 
 public class NotificacaoSMS implements INotificacao {
 
-    private String telefoneDestino;
+    private final String telefoneDestino;
 
     public NotificacaoSMS(String numeroDestino) {
         this.telefoneDestino = numeroDestino;

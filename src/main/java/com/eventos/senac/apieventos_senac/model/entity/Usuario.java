@@ -2,6 +2,7 @@ package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
+import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,12 +25,12 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
-    @Column
     @Embedded
     private Cpf cpf;
 
-    @Column(nullable = false)
     private String telefone;
+
+    private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
     public Usuario() {
     }
@@ -38,7 +39,7 @@ public class Usuario {
         this.nome = usuarioDto.nome();
         this.email = usuarioDto.email();
         this.senha = usuarioDto.senha();
-        this.cpf = new Cpf(usuarioDto.Cpf());
+        this.cpf = new Cpf(usuarioDto.cpf());
         this.telefone = usuarioDto.telefone();
     }
 
@@ -49,6 +50,15 @@ public class Usuario {
         this.setEmail(email);
         this.setSenha(senha);
         this.setTelefone(telefone);
+    }
+
+    public Usuario atualizarUsuarioFromDTO(Usuario usuarioBanco, UsuarioCriarRequestDto dto) {
+        usuarioBanco.setCpf(new Cpf(dto.cpf()));
+        usuarioBanco.setNome(dto.nome());
+        usuarioBanco.setSenha(dto.senha());
+        usuarioBanco.setEmail(dto.email());
+        usuarioBanco.setTelefone(dto.telefone());
+        return usuarioBanco;
     }
 
     public String apresentar() {

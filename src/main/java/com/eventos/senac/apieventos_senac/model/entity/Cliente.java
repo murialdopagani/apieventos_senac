@@ -1,11 +1,10 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import java.math.BigDecimal;
-
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.math.BigDecimal;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
