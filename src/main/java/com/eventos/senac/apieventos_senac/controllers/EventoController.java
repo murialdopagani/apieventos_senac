@@ -1,9 +1,10 @@
 package com.eventos.senac.apieventos_senac.controllers;
 
-import com.eventos.senac.apieventos_senac.dto.EventoFormaturaCriarRequestDto;
-import com.eventos.senac.apieventos_senac.dto.EventoFormaturaResponseDto;
+import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.EventoResponseDto;
+import com.eventos.senac.apieventos_senac.model.entity.Evento;
 import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
-import com.eventos.senac.apieventos_senac.service.EventoFormaturaService;
+import com.eventos.senac.apieventos_senac.service.EventoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,25 +15,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/evento_formatura")
+@RequestMapping("/evento")
 @Tag(name = "Evento Controller", description = "Controladora responsável por gerenciar os Eventos")
-public class EventoFormaturaController {
+public class EventoController {
 
     @Autowired
-    private EventoFormaturaService eventoFormaturaService;
+    private EventoService eventoService;
 
-    @PostMapping(value = "/criar")
+    @PostMapping(value = "/criarFormatura")
     @Operation(summary = "Cria um Evento de Formatura", description = "Método responsável por criar um Evento Formatura no sistema.")
-    public ResponseEntity<EventoFormaturaResponseDto> criarEventoFormatura(EventoFormaturaCriarRequestDto eventoFormaturaCriarRequestDto) {
+    public ResponseEntity<EventoResponseDto> criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
+
         try {
-            EventoFormatura eventoCriado = eventoFormaturaService.criarEventoFormatura(eventoFormaturaCriarRequestDto);
-            EventoFormaturaResponseDto eventoResponseDto = EventoFormaturaResponseDto.fromEvento(eventoCriado);
+            Evento eventoCriado = eventoService.criarEvento(eventoCriarRequestDto);
+            EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento((EventoFormatura) eventoCriado);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
         } catch (Exception e) {
             System.err.println("Erro ao criar evento formatura: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+
     }
 
 }

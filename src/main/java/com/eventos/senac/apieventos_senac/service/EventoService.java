@@ -1,9 +1,10 @@
 package com.eventos.senac.apieventos_senac.service;
 
-import com.eventos.senac.apieventos_senac.dto.EventoFormaturaCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.model.entity.Evento;
 import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
 import com.eventos.senac.apieventos_senac.model.entity.Usuario;
-import com.eventos.senac.apieventos_senac.repository.EventoFormaturaRepository;
+import com.eventos.senac.apieventos_senac.repository.EventoRepository;
 import com.eventos.senac.apieventos_senac.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,21 +12,21 @@ import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 
 @Service
-public class EventoFormaturaService {
+public class EventoService {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Autowired
-    private EventoFormaturaRepository eventoFormaturaRepository;
+    private EventoRepository eventoRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public EventoFormatura criarEventoFormatura(EventoFormaturaCriarRequestDto eventoFormaturaCriarRequestDto) {
-        Usuario organizador = usuarioRepository.findById(eventoFormaturaCriarRequestDto.organizadorId())
+    public Evento criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
+        Usuario organizador = usuarioRepository.findById(eventoCriarRequestDto.organizadorId())
                                                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        EventoFormatura eventoFormatura = new EventoFormatura(eventoFormaturaCriarRequestDto, organizador);
+        Evento evento = new Evento(eventoCriarRequestDto, organizador);
 
-        return eventoFormaturaRepository.save(eventoFormatura);
+        return eventoRepository.save(evento);
     }
 }

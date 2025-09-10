@@ -1,48 +1,51 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import com.eventos.senac.apieventos_senac.dto.EventoFormaturaCriarRequestDto;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "tb_eventos_formatura")
 @DiscriminatorValue("FORMATURA")
-@PrimaryKeyJoinColumn(name = "evento_id", referencedColumnName = "id")
 public class EventoFormatura extends Evento {
 
+    @Column
     private String instituicao;
 
+    @Column
     private String curso;
 
-    private int anoFormatura;
+    @Column
+    private Integer anoFormatura;
 
+    @Column
     private String grauAcademico; // "Graduação", "Pós-graduação", "Mestrado", "Doutorado"
 
+    @Column
     private int numeroFormandos;
 
+    @Column
     private String paraninfo;
 
+    @Column
     private String orador;
 
-    private boolean temCerimonialista;
+    @Column
+    private boolean temCerimonialista = true;
 
+    @Column
     private String localCerimonia;
 
     public EventoFormatura() {
 
     }
 
-    public EventoFormatura(EventoFormaturaCriarRequestDto dto, Usuario organizador) {
+    public EventoFormatura(EventoCriarRequestDto dto, Usuario organizador) {
         // Chama o construtor da classe pai que já existe
         super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy")).atStartOfDay(),
                 dto.capacidadeMaxima(), organizador, 0);
