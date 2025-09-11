@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,14 +22,15 @@ public class EventoController {
     @Autowired
     private EventoService eventoService;
 
-    @PostMapping(value = "/criarFormatura")
-    @Operation(summary = "Cria um Evento de Formatura",
-            description = "Método responsável por criar um Evento Formatura no sistema.")
-    public ResponseEntity<EventoResponseDto> criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
+    @PostMapping
+    @Operation(summary = "Cria/Atualiza um Evento",
+            description = "Método responsável por criar/atualizar um Evento no sistema.")
+    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoCriarRequestDto eventoCriarRequestDto) {
 
         try {
-            EventoFormatura eventoCriado = eventoService.criarEventoFormatura(eventoCriarRequestDto);
-            EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoCriado);
+            var eventoBanco = eventoService.criarEvento(eventoCriarRequestDto);
+            EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento((EventoFormatura) eventoBanco);
+
 
             return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
         } catch (Exception e) {

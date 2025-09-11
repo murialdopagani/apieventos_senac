@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,20 +18,28 @@ import java.time.format.DateTimeFormatter;
 public class Evento {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_eventos")
     private Long id;
+
     @Column(nullable = false)
     private String nome;
+
     @Column(nullable = false)
     private LocalDateTime data;
+
     @Column(nullable = false)
     private int capacidadeMaxima;
+
     @Column(nullable = false)
     private int inscritos = 0;
+
     @ManyToOne
     @JoinColumn(name = "organizador_id", nullable = false, foreignKey = @ForeignKey(name = "fk_evento_organizador"))
     private Usuario organizador;
+
+    private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
     public Evento() {
     }

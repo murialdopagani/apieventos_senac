@@ -12,5 +12,6 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
                 evento.getAnoFormatura(), evento.getGrauAcademico(), evento.getNumeroFormandos(), evento.getParaninfo(),
                 evento.getOrador(), evento.isTemCerimonialista(), evento.getLocalCerimonia());
     }
+
 }
 
