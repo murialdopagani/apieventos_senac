@@ -23,18 +23,25 @@ public class EventoController {
     private EventoService eventoService;
 
     @PostMapping
-    @Operation(summary = "Cria/Atualiza um Evento",
-            description = "Método responsável por criar/atualizar um Evento no sistema.")
+    @Operation(summary = "Cria/Atualiza um Evento", description = "Método responsável por criar/atualizar um Evento no sistema.")
     public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoCriarRequestDto eventoCriarRequestDto) {
 
         try {
             var eventoBanco = eventoService.criarEvento(eventoCriarRequestDto);
-            EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento((EventoFormatura) eventoBanco);
 
+            // Verificação de tipo e conversão segura
+            if (eventoBanco instanceof EventoFormatura evento) {
+                EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(evento);
+                return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
+            } else {
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
+                // Caso o tipo de evento não seja EventoFormatura, trate de forma apropriada
+                // Por exemplo, retornar um erro ou um DTO mais genérico
+
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
         } catch (Exception e) {
-            System.err.println("Erro ao criar evento formatura: " + e.getMessage());
+            System.err.println("Erro ao criar evento: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 

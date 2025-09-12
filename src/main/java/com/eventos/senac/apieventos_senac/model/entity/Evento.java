@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 @Table(name = "tb_eventos")
 @SequenceGenerator(name = "seq_eventos", sequenceName = "seq_eventos", allocationSize = 1, initialValue = 1)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipoEventos", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "tipoEventos", discriminatorType = DiscriminatorType.INTEGER)
 public class Evento {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -53,15 +53,15 @@ public class Evento {
         this.inscritos = inscritos;
     }
 
-    public Evento(EventoCriarRequestDto eventoCriarRequestDto, Usuario organizador) {
-        LocalDate dataEvento = LocalDate.parse(eventoCriarRequestDto.data(), FORMATTER);
-
-        this.nome = eventoCriarRequestDto.nome();
-        this.data = dataEvento.atStartOfDay(); // Define como início do dia (00:00:00)
-        this.capacidadeMaxima = eventoCriarRequestDto.capacidadeMaxima();
-        this.organizador = organizador;
-        this.inscritos = 0;
-    }
+//    public Evento(EventoCriarRequestDto eventoCriarRequestDto, Usuario organizador) {
+//        LocalDate dataEvento = LocalDate.parse(eventoCriarRequestDto.data(), FORMATTER);
+//
+//        this.nome = eventoCriarRequestDto.nome();
+//        this.data = dataEvento.atStartOfDay(); // Define como início do dia (00:00:00)
+//        this.capacidadeMaxima = eventoCriarRequestDto.capacidadeMaxima();
+//        this.organizador = organizador;
+//        this.inscritos = 0;
+//    }
 
     public boolean isFull() {
         return inscritos >= capacidadeMaxima;

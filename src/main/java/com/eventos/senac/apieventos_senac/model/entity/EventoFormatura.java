@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.model.valueobjects.EnumTipoEvento;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -13,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@DiscriminatorValue("FORMATURA")
+@DiscriminatorValue("1")
 public class EventoFormatura extends Evento {
 
     @Column
