@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusEvento;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -39,7 +40,7 @@ public class Evento {
     @JoinColumn(name = "organizador_id", nullable = false, foreignKey = @ForeignKey(name = "fk_evento_organizador"))
     private Usuario organizador;
 
-    private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
+    private EnumStatusEvento status = EnumStatusEvento.ATIVO;
 
     public Evento() {
     }

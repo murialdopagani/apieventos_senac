@@ -11,6 +11,10 @@ import com.eventos.senac.apieventos_senac.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Service
@@ -26,6 +30,7 @@ public class EventoService {
         Usuario organizador = usuarioRepository.findById(eventoCriarRequestDto.organizadorId())
                                                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
+        validarDataEvento(eventoCriarRequestDto.data());
         Evento evento = criarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador);
 
         return eventoRepository.save(evento);
@@ -42,8 +47,6 @@ public class EventoService {
             default -> throw new IllegalArgumentException("Tipo de evento inválido: " + dto.tipoEvento());
         };
     }
-
-
 
     public List<Evento> listarTodosEventos() {
         return eventoRepository.findAllByOrderByDataAsc();
@@ -62,6 +65,19 @@ public class EventoService {
         }
         evento.setInscritos(evento.getInscritos() + 1);
         return eventoRepository.save(evento);
+    }
+
+    private void validarDataEvento(String dataString) {
+        try {
+            LocalDateTime dataEvento = LocalDate.parse(dataString, DateTimeFormatter.ofPattern("dd/MM/yyyy")).atStartOfDay();
+            LocalDateTime hoje = LocalDate.now().atStartOfDay();
+
+            if (dataEvento.isBefore(hoje)) {
+                throw new RuntimeException("Não é possível criar evento com data no passado");
+            }
+        } catch (DateTimeParseException e) {
+            throw new RuntimeException("Formato de data inválido");
+        }
     }
 
 }
