@@ -3,6 +3,8 @@ package com.eventos.senac.apieventos_senac.controllers;
 import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
 import com.eventos.senac.apieventos_senac.dto.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.model.entity.Usuario;
+import com.eventos.senac.apieventos_senac.model.valueobjects.Cnpj;
+import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
 import com.eventos.senac.apieventos_senac.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,7 +67,8 @@ public class UsuarioController {
     public ResponseEntity<?> criarUsuario(@RequestBody UsuarioCriarRequestDto usuarioRequestDto) {
 
         try {
-            var usuarioBanco = usuarioRepository.findByCpf_CpfAndStatusNot(usuarioRequestDto.cpf(), EnumStatusUsuario.EXCLUIDO)
+            var usuarioBanco = usuarioRepository.findByCpf_CpfAndStatusNot(
+                                                        String.valueOf(new Cpf(usuarioRequestDto.cpf())), EnumStatusUsuario.EXCLUIDO)
                                                 .orElse(new Usuario(usuarioRequestDto));
 
             if (usuarioBanco.getId() != null) {
