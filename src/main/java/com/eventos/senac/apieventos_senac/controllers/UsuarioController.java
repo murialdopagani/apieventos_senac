@@ -3,7 +3,6 @@ package com.eventos.senac.apieventos_senac.controllers;
 import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
 import com.eventos.senac.apieventos_senac.dto.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.model.entity.Usuario;
-import com.eventos.senac.apieventos_senac.model.valueobjects.Cnpj;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
 import com.eventos.senac.apieventos_senac.repository.UsuarioRepository;
@@ -52,14 +51,22 @@ public class UsuarioController {
     @Operation(summary = "Consulta de usuário por id",
             description = "Método responsável por consultar um único usuário por id, se não existir retorna null..!")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+        try {
+            var usuario = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO).orElse(null);
 
-        var usuario = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO).orElse(null);
+            if (usuario == null) {
+                return ResponseEntity.notFound().build();
+            }
 
-        if (usuario == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(usuario);
+
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
 
-        return ResponseEntity.ok(usuario);
     }
 
     @PostMapping
@@ -67,9 +74,8 @@ public class UsuarioController {
     public ResponseEntity<?> criarUsuario(@RequestBody UsuarioCriarRequestDto usuarioRequestDto) {
 
         try {
-            var usuarioBanco = usuarioRepository.findByCpf_CpfAndStatusNot(
-                                                        String.valueOf(new Cpf(usuarioRequestDto.cpf())), EnumStatusUsuario.EXCLUIDO)
-                                                .orElse(new Usuario(usuarioRequestDto));
+            var usuarioBanco = usuarioRepository.findByCpf_CpfAndStatusNot(String.valueOf(new Cpf(usuarioRequestDto.cpf())),
+                    EnumStatusUsuario.EXCLUIDO).orElse(new Usuario(usuarioRequestDto));
 
             if (usuarioBanco.getId() != null) {
                 usuarioBanco = usuarioBanco.atualizarUsuarioFromDTO(usuarioBanco, usuarioRequestDto);
