@@ -40,18 +40,23 @@ public class Evento {
     @JoinColumn(name = "organizador_id", nullable = false, foreignKey = @ForeignKey(name = "fk_evento_organizador"))
     private Usuario organizador;
 
+    @ManyToOne
+    @JoinColumn(name = "local_cerimonia_id", nullable = false, foreignKey = @ForeignKey(name = "fk_evento_localCerimonia"))
+    private LocalCerimonia localCerimonia;
+
     private EnumStatusEvento status = EnumStatusEvento.ATIVO;
 
     public Evento() {
     }
 
-    public Evento(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador, int inscritos) {
+    public Evento(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador, int inscritos, LocalCerimonia localCerimonia) {
         this.id = id;
         this.nome = nome;
         this.data = data;
         this.capacidadeMaxima = capacidadeMaxima;
         this.organizador = organizador;
         this.inscritos = inscritos;
+        this.localCerimonia = localCerimonia;
     }
 
 //    public Evento(EventoCriarRequestDto eventoCriarRequestDto, Usuario organizador) {

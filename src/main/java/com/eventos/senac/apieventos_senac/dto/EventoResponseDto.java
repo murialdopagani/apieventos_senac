@@ -3,7 +3,6 @@ package com.eventos.senac.apieventos_senac.dto;
 import com.eventos.senac.apieventos_senac.model.entity.Evento;
 import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.DiscriminatorValue;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record EventoResponseDto(Long id, String nome, String data, int capacidadeMaxima, int inscritos, Long organizadorId,
@@ -22,6 +21,7 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
         int capacidadeMaxima = evento.getCapacidadeMaxima();
         int inscritos = evento.getInscritos();
         Long organizadorId = evento.getOrganizador().getId();
+        String localCerimonia = evento.getLocalCerimonia() != null ? evento.getLocalCerimonia().getNome() : null;
 
         // Obter o tipo através da anotação @DiscriminatorValue
         String tipoEvento = evento.getClass().getSimpleName().toString();
@@ -35,7 +35,6 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
         String paraninfo = null;
         String orador = null;
         Boolean temCerimonialista = null;
-        String localCerimonia = null;
 
         if (evento instanceof EventoFormatura ef) {
             instituicao = ef.getInstituicao();
@@ -46,7 +45,6 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
             paraninfo = ef.getParaninfo();
             orador = ef.getOrador();
             temCerimonialista = ef.isTemCerimonialista();
-            localCerimonia = ef.getLocalCerimonia();
         }
         // else if (evento instanceof OutroTipoEvento ote) { ... }
 

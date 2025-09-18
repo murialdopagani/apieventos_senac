@@ -32,13 +32,14 @@ public class EventoShow extends Evento {
                       int capacidadeMaxima,
                       Usuario organizador,
                       int inscritos,
+                      LocalCerimonia localCerimonia,
                       String artista,
                       String generoMusical,
                       int duracaoShow,
                       BigDecimal precoIngresso,
                       int idadeMinima,
                       BigDecimal cacheArtista) {
-        super(id, nome, data, capacidadeMaxima, organizador, inscritos);
+        super(id, nome, data, capacidadeMaxima, organizador, inscritos, localCerimonia);
         this.artista = artista;
         this.generoMusical = generoMusical;
         this.duracaoShow = duracaoShow;

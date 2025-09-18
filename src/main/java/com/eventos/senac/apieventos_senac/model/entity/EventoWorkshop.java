@@ -34,6 +34,7 @@ public class EventoWorkshop extends Evento {
                           int capacidadeMaxima,
                           Usuario organizador,
                           int inscritos,
+                          LocalCerimonia localCerimonia,
                           String instrutor,
                           String tema,
                           String categoria,
@@ -41,7 +42,7 @@ public class EventoWorkshop extends Evento {
                           BigDecimal precoInscricao,
                           String preRequisitos,
                           boolean certificado) {
-        super(id, nome, data, capacidadeMaxima, organizador, inscritos);
+        super(id, nome, data, capacidadeMaxima, organizador, inscritos, localCerimonia);
         this.instrutor = instrutor;
         this.tema = tema;
         this.categoria = categoria;

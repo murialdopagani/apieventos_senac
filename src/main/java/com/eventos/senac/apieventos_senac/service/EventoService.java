@@ -1,12 +1,10 @@
 package com.eventos.senac.apieventos_senac.service;
 
 import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
-import com.eventos.senac.apieventos_senac.model.entity.Evento;
-import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
-import com.eventos.senac.apieventos_senac.model.entity.EventoPalestra;
-import com.eventos.senac.apieventos_senac.model.entity.Usuario;
+import com.eventos.senac.apieventos_senac.model.entity.*;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumTipoEvento;
 import com.eventos.senac.apieventos_senac.repository.EventoRepository;
+import com.eventos.senac.apieventos_senac.repository.LocalCerimoniaRepository;
 import com.eventos.senac.apieventos_senac.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,24 +24,29 @@ public class EventoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private LocalCerimoniaRepository localCerimoniaRepository;
+
     public Evento criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
         Usuario organizador = usuarioRepository.findById(eventoCriarRequestDto.organizadorId())
                                                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        LocalCerimonia localCerimonia = localCerimoniaRepository.findById(eventoCriarRequestDto.localCerimonia())
+                                               .orElseThrow(() -> new RuntimeException("Local de cerimônia não encontrado"));
 
         validarDataEvento(eventoCriarRequestDto.data());
-        Evento evento = criarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador);
+        Evento evento = criarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador, localCerimonia);
 
         return eventoRepository.save(evento);
     }
 
     // Metodo Factory para criar a instância do evento
-    private Evento criarEventoBaseadoNoTipo(EventoCriarRequestDto dto, Usuario organizador) {
+    private Evento criarEventoBaseadoNoTipo(EventoCriarRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
 
         var tipoEvento = EnumTipoEvento.fromCodigo(dto.tipoEvento());
 
         return switch (tipoEvento) {
-            case FORMATURA -> new EventoFormatura(dto, organizador);
-            //case PALESTRA -> new EventoPalestra(dto, organizador);
+            case FORMATURA -> new EventoFormatura(dto, organizador, localCerimonia);
+            //case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia);
             default -> throw new IllegalArgumentException("Tipo de evento inválido: " + dto.tipoEvento());
         };
     }

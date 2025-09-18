@@ -2,31 +2,30 @@ package com.eventos.senac.apieventos_senac.model.valueobjects;
 
 public record Cpf(String cpf) {
 
-    public Cpf() {
-        this("");
-    }
+    public Cpf {
+        if (cpf == null) {
+            throw new IllegalArgumentException("CPF não pode ser nulo");
+        }
 
-    public Cpf(String cpf, Long id) {
-           this.cpf = cpf;
-    }
+        String cpfLimpo = cpf.replaceAll("\\D", "");
 
-    public Cpf(String cpf) {
-        if(cpf == null || !validadorDeCpf(cpf)) {
+        if (!validarCpf(cpfLimpo)) {
             throw new IllegalArgumentException("CPF inválido");
         }
-        this.cpf = cpf.replaceAll("[^0-9]", "");
+
+        cpf = cpfLimpo;
     }
 
-    public static boolean validadorDeCpf(String cpf) {
-        if (cpf == null)
+    public static boolean validarCpf(String cpf) {
+        if (cpf == null || cpf.length() != 11) {
             return false;
+        }
 
-        cpf = cpf.replaceAll("\\D", "");
-        if (cpf.length() != 11)
+        if (cpf.chars().distinct().count() == 1) {
             return false;
-        if (cpf.chars().distinct().count() == 1)
-            return false;
+        }
 
+        // Calcula primeiro dígito verificador
         int sum = 0;
         for (int i = 0; i < 9; i++) {
             sum += (cpf.charAt(i) - '0') * (10 - i);
@@ -34,6 +33,7 @@ public record Cpf(String cpf) {
         int d1 = sum % 11;
         d1 = d1 < 2 ? 0 : 11 - d1;
 
+        // Calcula segundo dígito verificador
         sum = 0;
         for (int i = 0; i < 10; i++) {
             sum += (cpf.charAt(i) - '0') * (11 - i);
@@ -48,5 +48,4 @@ public record Cpf(String cpf) {
     public String toString() {
         return cpf;
     }
-
 }

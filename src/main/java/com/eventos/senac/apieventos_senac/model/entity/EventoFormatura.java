@@ -41,17 +41,14 @@ public class EventoFormatura extends Evento {
     @Column
     private boolean temCerimonialista = true;
 
-    @Column
-    private String localCerimonia;
-
     public EventoFormatura() {
 
     }
 
-    public EventoFormatura(EventoCriarRequestDto dto, Usuario organizador) {
+    public EventoFormatura(EventoCriarRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
         super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy")).atStartOfDay(),
-                dto.capacidadeMaxima(), organizador, 0);
+                dto.capacidadeMaxima(), organizador, 0, localCerimonia);
 
         // Define os campos específicos da formatura
         this.instituicao = dto.instituicao();
@@ -62,7 +59,6 @@ public class EventoFormatura extends Evento {
         this.paraninfo = dto.paraninfo();
         this.orador = dto.orador();
         this.temCerimonialista = dto.temCerimonialista();
-        this.localCerimonia = dto.localCerimonia();
     }
 
 }

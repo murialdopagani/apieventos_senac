@@ -42,6 +42,7 @@ public class EventoPalestra extends Evento {
                           int capacidadeMaxima,
                           Usuario organizador,
                           int inscritos,
+                          LocalCerimonia localCerimonia,
                           String palestrante,
                           String tituloPalestra,
                           String tema,
@@ -53,7 +54,7 @@ public class EventoPalestra extends Evento {
                           String objetivosAprendizagem,
                           boolean gratuita,
                           BigDecimal precoInscricao) {
-        super(id, nome, data, capacidadeMaxima, organizador, inscritos);
+        super(id, nome, data, capacidadeMaxima, organizador, inscritos, localCerimonia);
         this.palestrante = palestrante;
         this.tituloPalestra = tituloPalestra;
         this.tema = tema;

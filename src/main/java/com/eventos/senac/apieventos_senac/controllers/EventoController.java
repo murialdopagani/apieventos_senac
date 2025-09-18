@@ -45,6 +45,8 @@ public class EventoController {
 
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             System.err.println("Erro ao criar evento: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
