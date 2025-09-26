@@ -1,4 +1,4 @@
-package com.eventos.senac.apieventos_senac.service;
+package com.eventos.senac.apieventos_senac.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -13,7 +13,7 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    @Value("${spring.minhapalavraforte}")
+    @Value("${spring.palavrapasse}")
     private String secret;
 
     private String emissor = "Murialdo";

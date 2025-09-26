@@ -1,12 +1,9 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusEvento;
-import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -49,7 +46,13 @@ public class Evento {
     public Evento() {
     }
 
-    public Evento(Long id, String nome, LocalDateTime data, int capacidadeMaxima, Usuario organizador, int inscritos, LocalCerimonia localCerimonia) {
+    public Evento(Long id,
+                  String nome,
+                  LocalDateTime data,
+                  int capacidadeMaxima,
+                  Usuario organizador,
+                  int inscritos,
+                  LocalCerimonia localCerimonia) {
         this.id = id;
         this.nome = nome;
         this.data = data;
@@ -59,15 +62,17 @@ public class Evento {
         this.localCerimonia = localCerimonia;
     }
 
-//    public Evento(EventoCriarRequestDto eventoCriarRequestDto, Usuario organizador) {
-//        LocalDate dataEvento = LocalDate.parse(eventoCriarRequestDto.data(), FORMATTER);
-//
-//        this.nome = eventoCriarRequestDto.nome();
-//        this.data = dataEvento.atStartOfDay(); // Define como início do dia (00:00:00)
-//        this.capacidadeMaxima = eventoCriarRequestDto.capacidadeMaxima();
-//        this.organizador = organizador;
-//        this.inscritos = 0;
-//    }
+    //    public Evento(EventoCriarRequestDto eventoCriarRequestDto, Usuario organizador) {
+    //        LocalDate dataEvento = LocalDate.parse(eventoCriarRequestDto.data(), FORMATTER);
+    //
+    //        this.nome = eventoCriarRequestDto.nome();
+    //        this.data = dataEvento.atStartOfDay(); // Define como início do dia (00:00:00)
+    //        this.capacidadeMaxima = eventoCriarRequestDto.capacidadeMaxima();
+    //        this.organizador = organizador;
+    //        this.inscritos = 0;
+    //    }
+
+
 
     public boolean isFull() {
         return inscritos >= capacidadeMaxima;

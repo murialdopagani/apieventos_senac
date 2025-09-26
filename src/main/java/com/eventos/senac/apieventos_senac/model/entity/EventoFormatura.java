@@ -1,7 +1,6 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
 import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
-import com.eventos.senac.apieventos_senac.model.valueobjects.EnumTipoEvento;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -45,10 +44,12 @@ public class EventoFormatura extends Evento {
 
     }
 
-    public EventoFormatura(EventoCriarRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
+    public EventoFormatura(EventoCriarRequestDto dto,
+                           Usuario organizador,
+                           LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
-        super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy")).atStartOfDay(),
-                dto.capacidadeMaxima(), organizador, 0, localCerimonia);
+        super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                         .atStartOfDay(), dto.capacidadeMaxima(), organizador, 0, localCerimonia);
 
         // Define os campos específicos da formatura
         this.instituicao = dto.instituicao();
@@ -61,4 +62,29 @@ public class EventoFormatura extends Evento {
         this.temCerimonialista = dto.temCerimonialista();
     }
 
+    public EventoFormatura atualizarEventoFromDTO(EventoFormatura eventoBanco,
+                                                  EventoCriarRequestDto dto,
+                                                  Usuario organizador,
+                                                  LocalCerimonia localCerimonia) {
+        // Atualiza os campos da classe pai
+        super.setNome(dto.nome());
+        super.setData(LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                               .atStartOfDay());
+        super.setCapacidadeMaxima(dto.capacidadeMaxima());
+        // O campo 'inscritos' não deve ser atualizado aqui, pois é gerenciado internamente
+
+        // Atualiza os campos específicos da formatura
+        eventoBanco.setOrganizador(organizador);
+        eventoBanco.setLocalCerimonia(localCerimonia);
+        eventoBanco.setInstituicao(dto.instituicao());
+        eventoBanco.setCurso(dto.curso());
+        eventoBanco.setAnoFormatura(dto.anoFormatura());
+        eventoBanco.setGrauAcademico(dto.grauAcademico());
+        eventoBanco.setNumeroFormandos(dto.numeroFormandos());
+        eventoBanco.setParaninfo(dto.paraninfo());
+        eventoBanco.setOrador(dto.orador());
+        eventoBanco.setTemCerimonialista(dto.temCerimonialista());
+
+        return this;
+    }
 }

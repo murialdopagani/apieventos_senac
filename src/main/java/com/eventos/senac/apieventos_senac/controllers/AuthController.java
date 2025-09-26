@@ -2,7 +2,7 @@ package com.eventos.senac.apieventos_senac.controllers;
 
 import com.eventos.senac.apieventos_senac.dto.LoginRequestDto;
 import com.eventos.senac.apieventos_senac.dto.LoginResponseDto;
-import com.eventos.senac.apieventos_senac.service.TokenService;
+import com.eventos.senac.apieventos_senac.services.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +25,20 @@ public class AuthController {
     @Operation(summary = "Autenticação de usuário", description = "Método para fazer autenticação")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
 
-        if (loginRequestDto.email().equals("string") && loginRequestDto.senha().equals("string")) {
+        if (loginRequestDto.email()
+                           .equals("string") && loginRequestDto.senha()
+                                                               .equals("string")) {
 
             var token = tokenService.generateToken(loginRequestDto);
+
             if (token == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                     .build();
             }
             return ResponseEntity.ok(new LoginResponseDto(token));
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                             .build();
     }
-
 
 }

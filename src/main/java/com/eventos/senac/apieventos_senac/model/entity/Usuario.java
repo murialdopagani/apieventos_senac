@@ -3,7 +3,14 @@ package com.eventos.senac.apieventos_senac.model.entity;
 import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
@@ -43,7 +50,12 @@ public class Usuario {
         this.telefone = usuarioDto.telefone();
     }
 
-    public Usuario(Long id, String nome, String email, String senha, Cpf cpf, String telefone) {
+    public Usuario(Long id,
+                   String nome,
+                   String email,
+                   String senha,
+                   Cpf cpf,
+                   String telefone) {
         this.setId(id);
         this.setNome(nome);
         this.setCpf(cpf);
@@ -52,7 +64,8 @@ public class Usuario {
         this.setTelefone(telefone);
     }
 
-    public Usuario atualizarUsuarioFromDTO(Usuario usuarioBanco, UsuarioCriarRequestDto dto) {
+    public Usuario atualizarUsuarioFromDTO(Usuario usuarioBanco,
+                                           UsuarioCriarRequestDto dto) {
         usuarioBanco.setCpf(new Cpf(dto.cpf()));
         usuarioBanco.setNome(dto.nome());
         usuarioBanco.setSenha(dto.senha());

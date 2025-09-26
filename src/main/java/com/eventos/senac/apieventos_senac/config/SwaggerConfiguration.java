@@ -20,9 +20,7 @@ public class SwaggerConfiguration {
                             .info(new Info().title("API Eventos Senac")
                                             .version("1.0")
                                             .description("Api Gerenciamento de  Eventos")
-                                            .termsOfService("http://")
-
-                            );
+                                            .termsOfService("http://"));
     }
 
     //Para acessar a pagina do swagger
