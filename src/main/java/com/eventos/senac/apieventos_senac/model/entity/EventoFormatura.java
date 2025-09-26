@@ -66,14 +66,11 @@ public class EventoFormatura extends Evento {
                                                   EventoCriarRequestDto dto,
                                                   Usuario organizador,
                                                   LocalCerimonia localCerimonia) {
-        // Atualiza os campos da classe pai
-        super.setNome(dto.nome());
-        super.setData(LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                               .atStartOfDay());
-        super.setCapacidadeMaxima(dto.capacidadeMaxima());
-        // O campo 'inscritos' não deve ser atualizado aqui, pois é gerenciado internamente
 
-        // Atualiza os campos específicos da formatura
+        eventoBanco.setNome(dto.nome());
+        eventoBanco.setData(LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                     .atStartOfDay());
+        eventoBanco.setCapacidadeMaxima(dto.capacidadeMaxima());
         eventoBanco.setOrganizador(organizador);
         eventoBanco.setLocalCerimonia(localCerimonia);
         eventoBanco.setInstituicao(dto.instituicao());
@@ -85,6 +82,6 @@ public class EventoFormatura extends Evento {
         eventoBanco.setOrador(dto.orador());
         eventoBanco.setTemCerimonialista(dto.temCerimonialista());
 
-        return this;
+        return eventoBanco;
     }
 }

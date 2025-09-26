@@ -34,7 +34,6 @@ public class EventoService {
     private LocalCerimoniaRepository localCerimoniaRepository;
 
     public Evento criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
-
         Usuario organizador = usuarioRepository.findByIdAndStatusNot(eventoCriarRequestDto.organizadorId(),
                                                                      EnumStatusUsuario.EXCLUIDO)
                                                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -52,13 +51,14 @@ public class EventoService {
                          .atStartOfDay(), organizador, localCerimonia, EnumStatusEvento.EXCLUIDO);
 
         if (eventoBanco.isPresent()) {
-
-
+            Evento eventoExistente = eventoBanco.get();
+            Evento eventoAtualizado = atualizarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador, localCerimonia,
+                                                                   eventoExistente);
+            return eventoRepository.save(eventoAtualizado);
         } else {
             Evento evento = criarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador, localCerimonia);
             return eventoRepository.save(evento);
         }
-        return null;
     }
 
     // Metodo Factory para criar a instância do evento
@@ -75,6 +75,20 @@ public class EventoService {
         };
     }
 
+    // Metodo Factory para atualizar um evento
+    private Evento atualizarEventoBaseadoNoTipo(EventoCriarRequestDto dto,
+                                                Usuario organizador,
+                                                LocalCerimonia localCerimonia,
+                                                Evento eventoBanco) {
+        var tipoEvento = EnumTipoEvento.fromCodigo(dto.tipoEvento());
+
+        return switch (tipoEvento) {
+            case FORMATURA -> new EventoFormatura(dto, organizador, localCerimonia).atualizarEventoFromDTO(
+                    (EventoFormatura) eventoBanco, dto, organizador, localCerimonia);
+            //case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia);
+            default -> throw new IllegalArgumentException("Tipo de evento inválido: " + dto.tipoEvento());
+        };
+    }
 
     private List<Evento> listarTodosEventos() {
         return eventoRepository.findAllByOrderByDataAsc();
