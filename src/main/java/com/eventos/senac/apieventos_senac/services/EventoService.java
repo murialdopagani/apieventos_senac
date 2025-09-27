@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.services;
 
 import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.model.entity.Evento;
 import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
 import com.eventos.senac.apieventos_senac.model.entity.LocalCerimonia;
@@ -33,27 +34,25 @@ public class EventoService {
     @Autowired
     private LocalCerimoniaRepository localCerimoniaRepository;
 
-    public Evento criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
+    public Evento criarEvento(EventoCriarRequestDto eventoCriarRequestDto) throws RegistroNaoEncontradoException {
         Usuario organizador = usuarioRepository.findByIdAndStatusNot(eventoCriarRequestDto.organizadorId(),
-                                                                     EnumStatusUsuario.EXCLUIDO)
-                                               .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                        EnumStatusUsuario.EXCLUIDO)
+                .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado.!!"));
 
         validarDataEvento(eventoCriarRequestDto.data());
 
-        LocalCerimonia localCerimonia = localCerimoniaRepository.findByIdAndStatusNot(
-                                                                        eventoCriarRequestDto.localCerimonia(),
-                                                                        EnumStatusLocalCerimonia.EXCLUIDO)
-                                                                .orElseThrow(() -> new RuntimeException(
-                                                                        "Local de cerimônia não encontrado"));
+        LocalCerimonia localCerimonia = localCerimoniaRepository.findByIdAndStatusNot(eventoCriarRequestDto.localCerimonia(),
+                        EnumStatusLocalCerimonia.EXCLUIDO)
+                .orElseThrow(() -> new RuntimeException("Local de cerimônia não encontrado"));
 
         var eventoBanco = eventoRepository.findByDataAndOrganizadorAndLocalCerimoniaAndStatusNot(
                 LocalDate.parse(eventoCriarRequestDto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                         .atStartOfDay(), organizador, localCerimonia, EnumStatusEvento.EXCLUIDO);
+                        .atStartOfDay(), organizador, localCerimonia, EnumStatusEvento.EXCLUIDO);
 
         if (eventoBanco.isPresent()) {
             Evento eventoExistente = eventoBanco.get();
             Evento eventoAtualizado = atualizarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador, localCerimonia,
-                                                                   eventoExistente);
+                    eventoExistente);
             return eventoRepository.save(eventoAtualizado);
         } else {
             Evento evento = criarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador, localCerimonia);
@@ -62,9 +61,7 @@ public class EventoService {
     }
 
     // Metodo Factory para criar a instância do evento
-    private Evento criarEventoBaseadoNoTipo(EventoCriarRequestDto dto,
-                                            Usuario organizador,
-                                            LocalCerimonia localCerimonia) {
+    private Evento criarEventoBaseadoNoTipo(EventoCriarRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
 
         var tipoEvento = EnumTipoEvento.fromCodigo(dto.tipoEvento());
 
@@ -83,8 +80,9 @@ public class EventoService {
         var tipoEvento = EnumTipoEvento.fromCodigo(dto.tipoEvento());
 
         return switch (tipoEvento) {
-            case FORMATURA -> new EventoFormatura(dto, organizador, localCerimonia).atualizarEventoFromDTO(
-                    (EventoFormatura) eventoBanco, dto, organizador, localCerimonia);
+            case FORMATURA ->
+                    new EventoFormatura(dto, organizador, localCerimonia).atualizarEventoFromDTO((EventoFormatura) eventoBanco,
+                            dto, organizador, localCerimonia);
             //case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia);
             default -> throw new IllegalArgumentException("Tipo de evento inválido: " + dto.tipoEvento());
         };
@@ -96,7 +94,7 @@ public class EventoService {
 
     private Evento incrementarInscritos(Long eventoId) {
         Evento evento = eventoRepository.findById(eventoId)
-                                        .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
         if (evento.isFull()) {
             throw new RuntimeException("Evento lotado");
         }
@@ -111,9 +109,9 @@ public class EventoService {
     public void validarDataEvento(String dataString) {
         try {
             LocalDateTime dataEvento = LocalDate.parse(dataString, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                                                .atStartOfDay();
+                    .atStartOfDay();
             LocalDateTime hoje = LocalDate.now()
-                                          .atStartOfDay();
+                    .atStartOfDay();
 
             if (dataEvento.isBefore(hoje)) {
                 throw new RuntimeException("Não é possível criar evento com data no passado");

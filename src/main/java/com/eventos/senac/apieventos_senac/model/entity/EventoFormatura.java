@@ -44,12 +44,10 @@ public class EventoFormatura extends Evento {
 
     }
 
-    public EventoFormatura(EventoCriarRequestDto dto,
-                           Usuario organizador,
-                           LocalCerimonia localCerimonia) {
+    public EventoFormatura(EventoCriarRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
         super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                                         .atStartOfDay(), dto.capacidadeMaxima(), organizador, 0, localCerimonia);
+                .atStartOfDay(), dto.capacidadeMaxima(), organizador, 0, localCerimonia);
 
         // Define os campos específicos da formatura
         this.instituicao = dto.instituicao();
@@ -69,7 +67,7 @@ public class EventoFormatura extends Evento {
 
         eventoBanco.setNome(dto.nome());
         eventoBanco.setData(LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                                     .atStartOfDay());
+                .atStartOfDay());
         eventoBanco.setCapacidadeMaxima(dto.capacidadeMaxima());
         eventoBanco.setOrganizador(organizador);
         eventoBanco.setLocalCerimonia(localCerimonia);

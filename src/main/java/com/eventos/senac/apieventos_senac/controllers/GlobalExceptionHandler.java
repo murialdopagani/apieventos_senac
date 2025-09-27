@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.controllers;
 
 import com.eventos.senac.apieventos_senac.dto.ErroResponseDto;
+import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -18,21 +19,29 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErroResponseDto> handleEntityNotFound(EntityNotFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<ErroResponseDto> handleEntityNotFound(EntityNotFoundException ex,
+                                                                HttpServletRequest request) {
         ErroResponseDto erro = ErroResponseDto.of(HttpStatus.NOT_FOUND,
-                ex.getMessage() != null ? ex.getMessage() : "Recurso não encontrado", request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+                                                  ex.getMessage() != null ? ex.getMessage() : "Recurso não encontrado",
+                                                  request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(erro);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErroResponseDto> handleDataIntegrity(DataIntegrityViolationException ex, HttpServletRequest request) {
+    public ResponseEntity<ErroResponseDto> handleDataIntegrity(DataIntegrityViolationException ex,
+                                                               HttpServletRequest request) {
         ErroResponseDto erro = ErroResponseDto.of(HttpStatus.CONFLICT,
-                "Violação de integridade: " + ex.getMostSpecificCause().getMessage(), request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+                                                  "Violação de integridade: " + ex.getMostSpecificCause()
+                                                                                  .getMessage(),
+                                                  request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                             .body(erro);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErroResponseDto> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ErroResponseDto> handleValidation(MethodArgumentNotValidException ex,
+                                                            HttpServletRequest request) {
         String mensagens = ex.getBindingResult()
                              .getFieldErrors()
                              .stream()
@@ -40,26 +49,43 @@ public class GlobalExceptionHandler {
                              .collect(Collectors.joining(", "));
 
         ErroResponseDto erro = ErroResponseDto.of(HttpStatus.BAD_REQUEST, mensagens, request.getRequestURI());
-        return ResponseEntity.badRequest().body(erro);
+        return ResponseEntity.badRequest()
+                             .body(erro);
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ErroResponseDto> handleIllegalArgument(IllegalStateException ex, HttpServletRequest request) {
+    public ResponseEntity<ErroResponseDto> handleIllegalArgument(IllegalStateException ex,
+                                                                 HttpServletRequest request) {
         ErroResponseDto erro = ErroResponseDto.of(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
-        return ResponseEntity.badRequest().body(erro);
+        return ResponseEntity.badRequest()
+                             .body(erro);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErroResponseDto> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+    public ResponseEntity<ErroResponseDto> handleIllegalArgument(IllegalArgumentException ex,
+                                                                 HttpServletRequest request) {
         ErroResponseDto erro = ErroResponseDto.of(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
-        return ResponseEntity.badRequest().body(erro);
+        return ResponseEntity.badRequest()
+                             .body(erro);
+    }
+
+    @ExceptionHandler(RegistroNaoEncontradoException.class)
+    public ResponseEntity<ErroResponseDto> handleRegistroNaoEncontrado(com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException ex,
+                                                                       HttpServletRequest request) {
+        ErroResponseDto erro = ErroResponseDto.of(HttpStatus.NOT_FOUND,
+                                                  ex.getMessage() != null ? ex.getMessage() : "Registro não encontrado",
+                                                  request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(erro);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErroResponseDto> handleGeneric(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ErroResponseDto> handleGeneric(Exception ex,
+                                                         HttpServletRequest request) {
         log.error("Erro em {} {}: {}", request.getMethod(), request.getRequestURI(), ex.toString(), ex);
         var erro = ErroResponseDto.of(HttpStatus.INTERNAL_SERVER_ERROR, "Erro inesperado, tente novamente mais tarde",
-                request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(erro);
+                                      request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(erro);
     }
 }
