@@ -2,6 +2,7 @@ package com.eventos.senac.apieventos_senac.controllers;
 
 import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
 import com.eventos.senac.apieventos_senac.dto.EventoResponseDto;
+import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusEvento;
 import com.eventos.senac.apieventos_senac.repository.EventoRepository;
@@ -28,9 +29,9 @@ public class EventoController {
     private EventoRepository eventoRepository;
 
     @PostMapping
-    @Operation(summary = "Cria/Atualiza um Evento",
-            description = "Método responsável por criar/atualizar um Evento no sistema.")
-    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoCriarRequestDto eventoCriarRequestDto) {
+    @Operation(summary = "Cria/Atualizar um Evento", description = "Método responsável por criar/atualizar um Evento no sistema.")
+    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoCriarRequestDto eventoCriarRequestDto)
+    throws Exception {
 
         var eventoBanco = eventoService.criarEvento(eventoCriarRequestDto);
 
@@ -38,15 +39,24 @@ public class EventoController {
         if (eventoBanco instanceof EventoFormatura evento) {
             EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(evento);
             return ResponseEntity.status(HttpStatus.CREATED)
-                                 .body(eventoResponseDto);
+                    .body(eventoResponseDto);
         } else {
 
             // Caso o tipo de evento não seja EventoFormatura, trate de forma apropriada
             // Por exemplo, retornar um erro ou um DTO mais genérico
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                 .build();
+                    .build();
         }
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Atualizar um Evento", description = "Método responsável por atualizar um Evento por ID.")
+    public ResponseEntity<EventoResponseDto> atualizaEvento(@PathVariable Long id,
+                                                            @RequestBody EventoCriarRequestDto eventoCriarRequestDto)
+    throws Exception {
+        var eventoSave = eventoService.atualizarEvento(id, eventoCriarRequestDto);
+        return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
     }
 
     @GetMapping
@@ -55,23 +65,28 @@ public class EventoController {
 
         var eventos = eventoRepository.findAllByStatusNotOrderById(EnumStatusEvento.EXCLUIDO);
         List<EventoResponseDto> eventoResponseDto = eventos.stream()
-                                                           .map(EventoResponseDto::fromEvento)
-                                                           .collect(Collectors.toList());
+                .map(EventoResponseDto::fromEvento)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(eventoResponseDto);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Consulta de evento por id",
             description = "Método responsável por consultar um único evento por id, se não existir retorna null..!")
-    public ResponseEntity<EventoResponseDto> listarPorId(@PathVariable Long id) {
+    public ResponseEntity<EventoResponseDto> listarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
         var evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO)
-                                     .orElse(null);
-
-        if (evento == null) {
-            return ResponseEntity.notFound()
-                                 .build();
-        }
+                .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
         return ResponseEntity.ok(EventoResponseDto.fromEvento(evento));
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar evento por id", description = "Método responsável por deletar um único evento por id.")
+    public ResponseEntity<EventoResponseDto> deletarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
+        var evento = eventoRepository.findById(id)
+                .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
+        evento.setStatus(EnumStatusEvento.EXCLUIDO);
+        eventoRepository.save(evento);
+        return ResponseEntity.noContent()
+                .build();
+    }
 }

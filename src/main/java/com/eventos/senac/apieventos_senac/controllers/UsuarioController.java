@@ -2,6 +2,7 @@ package com.eventos.senac.apieventos_senac.controllers;
 
 import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
 import com.eventos.senac.apieventos_senac.dto.UsuarioResponseDto;
+import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.model.entity.Usuario;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
@@ -39,10 +40,10 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Consulta de usuário por id", description = "Método responsável por consultar um único usuário por id, se não existir retorna null..!")
-    public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
 
         var usuario = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO)
-                                       .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+                                       .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado"));
         if (usuario == null) {
             return ResponseEntity.notFound()
                                  .build();
