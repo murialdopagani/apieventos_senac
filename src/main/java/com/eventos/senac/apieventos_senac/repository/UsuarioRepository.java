@@ -15,7 +15,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByCpf_CpfAndStatusNot(String cpf, EnumStatusUsuario status);
 
-    boolean existsUsuarioByEmailContainingAndSenha(String email, String senha);
+    boolean existsUsuarioByEmailContainingAndSenhaAndStatusNot(String email, String senha, EnumStatusUsuario status);
 
     Optional<Usuario> findByIdAndStatusNot(Long id, EnumStatusUsuario status);
 
