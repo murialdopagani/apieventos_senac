@@ -28,67 +28,67 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Evento Controller", description = "Controladora responsável por gerenciar os Eventos")
 public class EventoController {
 
-  @Autowired
-  private EventoService eventoService;
+    @Autowired
+    private EventoService eventoService;
 
-  @Autowired
-  private EventoRepository eventoRepository;
+    @Autowired
+    private EventoRepository eventoRepository;
 
-  @PostMapping
-  @Operation(summary = "Cria/Atualizar um Evento", description = "Método responsável por criar/atualizar um Evento no sistema.")
-  public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoCriarRequestDto eventoCriarRequestDto)
-      throws Exception {
+    @PostMapping
+    @Operation(summary = "Cria/Atualizar um Evento", description = "Método responsável por criar/atualizar um Evento no sistema.")
+    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoCriarRequestDto eventoCriarRequestDto)
+        throws Exception {
 
-    var eventoBanco = eventoService.criarEvento(eventoCriarRequestDto);
+        var eventoBanco = eventoService.criarEvento(eventoCriarRequestDto);
 
-    // Verificação de tipo e conversão segura
-    if (eventoBanco instanceof EventoFormatura evento) {
-      EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(evento);
-      return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
-    } else {
+        // Verificação de tipo e conversão segura
+        if (eventoBanco instanceof EventoFormatura evento) {
+            EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(evento);
+            return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
+        } else {
 
-      // Caso o tipo de evento não seja EventoFormatura, trate de forma apropriada
-      // Por exemplo, retornar um erro ou um DTO mais genérico
+            // Caso o tipo de evento não seja EventoFormatura, trate de forma apropriada
+            // Por exemplo, retornar um erro ou um DTO mais genérico
 
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
-  }
 
-  @PutMapping("/{id}")
-  @Operation(summary = "Atualizar um Evento", description = "Método responsável por atualizar um Evento por ID.")
-  public ResponseEntity<EventoResponseDto> atualizaEvento(@PathVariable Long id,
-      @RequestBody EventoCriarRequestDto eventoCriarRequestDto)
-      throws Exception {
-    var eventoSave = eventoService.atualizarEvento(id, eventoCriarRequestDto);
-    return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
-  }
+    @PutMapping("/{id}")
+    @Operation(summary = "Atualizar um Evento", description = "Método responsável por atualizar um Evento por ID.")
+    public ResponseEntity<EventoResponseDto> atualizaEvento(@PathVariable Long id,
+        @RequestBody EventoCriarRequestDto eventoCriarRequestDto)
+        throws Exception {
+        var eventoSave = eventoService.atualizarEvento(id, eventoCriarRequestDto);
+        return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
+    }
 
-  @GetMapping
-  @Operation(summary = "Listar todos", description = "Método para listar todos os eventos.")
-  public ResponseEntity<List<EventoResponseDto>> listarTodos() {
+    @GetMapping
+    @Operation(summary = "Listar todos", description = "Método para listar todos os eventos.")
+    public ResponseEntity<List<EventoResponseDto>> listarTodos() {
 
-    var eventos = eventoRepository.findAllByStatusNotOrderById(EnumStatusEvento.EXCLUIDO);
-    List<EventoResponseDto> eventoResponseDto = eventos.stream().map(EventoResponseDto::fromEvento).collect(
-        Collectors.toList());
-    return ResponseEntity.ok(eventoResponseDto);
-  }
+        var eventos = eventoRepository.findAllByStatusNotOrderById(EnumStatusEvento.EXCLUIDO);
+        List<EventoResponseDto> eventoResponseDto = eventos.stream().map(EventoResponseDto::fromEvento).collect(
+            Collectors.toList());
+        return ResponseEntity.ok(eventoResponseDto);
+    }
 
-  @GetMapping("/{id}")
-  @Operation(summary = "Consulta de evento por id",
-      description = "Método responsável por consultar um único evento por id, se não existir retorna null..!")
-  public ResponseEntity<EventoResponseDto> listarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
-    var evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(
-        () -> new RegistroNaoEncontradoException("Evento não encontrado"));
-    return ResponseEntity.ok(EventoResponseDto.fromEvento(evento));
-  }
+    @GetMapping("/{id}")
+    @Operation(summary = "Consulta de evento por id",
+        description = "Método responsável por consultar um único evento por id, se não existir retorna null..!")
+    public ResponseEntity<EventoResponseDto> listarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
+        var evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(
+            () -> new RegistroNaoEncontradoException("Evento não encontrado"));
+        return ResponseEntity.ok(EventoResponseDto.fromEvento(evento));
+    }
 
-  @DeleteMapping("/{id}")
-  @Operation(summary = "Deletar evento por id", description = "Método responsável por deletar um único evento por id.")
-  public ResponseEntity<EventoResponseDto> deletarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
-    var evento = eventoRepository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
-    evento.setStatus(EnumStatusEvento.EXCLUIDO);
-    eventoRepository.save(evento);
-    return ResponseEntity.noContent().build();
-  }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar evento por id", description = "Método responsável por deletar um único evento por id.")
+    public ResponseEntity<EventoResponseDto> deletarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
+        var evento = eventoRepository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
+        evento.setStatus(EnumStatusEvento.EXCLUIDO);
+        eventoRepository.save(evento);
+        return ResponseEntity.noContent().build();
+    }
 
 }

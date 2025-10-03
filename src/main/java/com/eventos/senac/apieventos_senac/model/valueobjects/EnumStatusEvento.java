@@ -4,5 +4,7 @@ public enum EnumStatusEvento {
     ATIVO,
     CANCELADO,
     CONCLUIDO,
-    EXCLUIDO
+    EXCLUIDO,
+    BLOQUEADO
+
 }
