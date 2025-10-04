@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -90,5 +91,28 @@ public class EventoController {
         eventoRepository.save(evento);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}/cancelar")
+    @Operation(summary = "Cancelar um evento por id", description = "Método responsável por cancelar um único evento por id.")
+    public ResponseEntity<EventoResponseDto> atualizarBloquerar(@PathVariable Long id) throws RegistroNaoEncontradoException {
+
+        var evento =  eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(() ->
+            new RegistroNaoEncontradoException("Evento não encontrado"));
+        evento.setStatus(EnumStatusEvento.CANCELADO);
+        eventoRepository.save(evento);
+        return ResponseEntity.ok(EventoResponseDto.fromEvento(evento));
+    }
+
+    @PatchMapping("/{id}/ativar")
+    @Operation(summary = "Ativar um evento por id", description = "Método responsável por ativar um único evento por id.")
+    public ResponseEntity<EventoResponseDto> atualizarAtivar(@PathVariable Long id) throws RegistroNaoEncontradoException {
+
+        var evento =  eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(() ->
+            new RegistroNaoEncontradoException("Evento não encontrado"));
+        evento.setStatus(EnumStatusEvento.ATIVO);
+        eventoRepository.save(evento);
+        return ResponseEntity.ok(EventoResponseDto.fromEvento(evento));
+    }
+
 
 }

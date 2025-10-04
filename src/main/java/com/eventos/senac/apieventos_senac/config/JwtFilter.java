@@ -48,9 +48,10 @@ public class JwtFilter extends OncePerRequestFilter {
         return;
       }
     } else {
-
+      // Adicionando log para facilitar diagnóstico
+      System.out.println("Authorization header ausente ou inválido: " + header);
       response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-      response.getWriter().write("Token não informado");
+      response.getWriter().write("Token não informado ou formato inválido");
       //filterChain.doFilter(request, response);
       return;
     }

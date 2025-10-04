@@ -2,11 +2,12 @@ package com.eventos.senac.apieventos_senac.dto;
 
 import com.eventos.senac.apieventos_senac.model.entity.Evento;
 import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
+import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusEvento;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record EventoResponseDto(Long id, String nome, String data, int capacidadeMaxima, int inscritos, Long organizadorId,
-                                String tipoEvento,
+                                String tipoEvento, EnumStatusEvento status,
 
                                 //Campos específicos de formatura
                                 String instituicao, String curso, int anoFormatura, String grauAcademico, int numeroFormandos,
@@ -22,8 +23,9 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
         int inscritos = evento.getInscritos();
         Long organizadorId = evento.getOrganizador().getId();
         String localCerimonia = evento.getLocalCerimonia() != null ? evento.getLocalCerimonia().getNome() : null;
+        EnumStatusEvento status = evento.getStatus();
 
-        // Obter o tipo através da anotação @DiscriminatorValue
+        // Obter o tipo através da anotaç��o @DiscriminatorValue
         String tipoEvento = evento.getClass().getSimpleName().toString();
 
         // Campos específicos (default null)
@@ -48,7 +50,7 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
         }
         // else if (evento instanceof OutroTipoEvento ote) { ... }
 
-        return new EventoResponseDto(id, nome, data, capacidadeMaxima, inscritos, organizadorId, tipoEvento, instituicao, curso,
+        return new EventoResponseDto(id, nome, data, capacidadeMaxima, inscritos, organizadorId, tipoEvento, status, instituicao, curso,
                 anoFormatura, grauAcademico, numeroFormandos, paraninfo, orador, temCerimonialista, localCerimonia);
     }
 
