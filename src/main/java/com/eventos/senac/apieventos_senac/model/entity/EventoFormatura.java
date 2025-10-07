@@ -1,6 +1,6 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.EventoCriarRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

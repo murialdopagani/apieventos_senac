@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.services;
 
-import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.EventoFormaturaRequestDto;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.exception.ValidacoesRegraNegocioException;
 import com.eventos.senac.apieventos_senac.model.entity.Evento;

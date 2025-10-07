@@ -1,6 +1,6 @@
 package com.eventos.senac.apieventos_senac.model.entity;
 
-import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.UsuarioCriarRequestDto;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
 import jakarta.persistence.Column;

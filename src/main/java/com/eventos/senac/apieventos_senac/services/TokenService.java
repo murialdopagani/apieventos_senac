@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.eventos.senac.apieventos_senac.dto.LoginRequestDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.LoginRequestDto;
 import com.eventos.senac.apieventos_senac.model.entity.Token;
 import com.eventos.senac.apieventos_senac.model.entity.Usuario;
 import com.eventos.senac.apieventos_senac.repository.TokenRepository;

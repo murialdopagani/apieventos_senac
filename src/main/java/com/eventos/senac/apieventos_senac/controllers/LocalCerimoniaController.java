@@ -1,7 +1,7 @@
 package com.eventos.senac.apieventos_senac.controllers;
 
-import com.eventos.senac.apieventos_senac.dto.LocalCerimoniaCriarRequestDto;
-import com.eventos.senac.apieventos_senac.dto.LocalCerimoniaResponseDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.LocalCerimoniaCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.responseDto.LocalCerimoniaResponseDto;
 import com.eventos.senac.apieventos_senac.model.entity.LocalCerimonia;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cnpj;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusLocalCerimonia;

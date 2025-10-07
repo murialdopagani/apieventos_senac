@@ -1,7 +1,7 @@
 package com.eventos.senac.apieventos_senac.controllers;
 
-import com.eventos.senac.apieventos_senac.dto.UsuarioCriarRequestDto;
-import com.eventos.senac.apieventos_senac.dto.UsuarioResponseDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.UsuarioCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.responseDto.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.model.entity.Usuario;
 import com.eventos.senac.apieventos_senac.model.valueobjects.Cpf;

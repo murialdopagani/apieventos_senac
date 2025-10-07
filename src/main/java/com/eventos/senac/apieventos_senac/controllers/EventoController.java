@@ -1,8 +1,10 @@
 package com.eventos.senac.apieventos_senac.controllers;
 
-import com.eventos.senac.apieventos_senac.dto.EventoCriarRequestDto;
-import com.eventos.senac.apieventos_senac.dto.EventoResponseDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.EventoFormaturaRequestDto;
+import com.eventos.senac.apieventos_senac.dto.responseDto.EventoResponseDto;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
+import com.eventos.senac.apieventos_senac.model.entity.Evento;
 import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusEvento;
 import com.eventos.senac.apieventos_senac.repository.EventoRepository;
@@ -35,10 +37,12 @@ public class EventoController {
     @Autowired
     private EventoRepository eventoRepository;
 
-    @PostMapping
-    @Operation(summary = "Cria/Atualizar um Evento", description = "Método responsável por criar/atualizar um Evento no sistema.")
-    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoCriarRequestDto eventoCriarRequestDto)
+    @PostMapping("/formatura")
+    @Operation(summary = "Cria/Atualizar um Evento Formatura", description = "Método responsável por criar/atualizar um Evento Formatura no sistema.")
+    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoFormaturaRequestDto eventoFormaturaDto)
         throws Exception {
+
+        EventoCriarRequestDto eventoCriarRequestDto = EventoCriarRequestDto.fromFormaturaDto(eventoFormaturaDto);
 
         var eventoBanco = eventoService.criarEvento(eventoCriarRequestDto);
 
@@ -96,7 +100,7 @@ public class EventoController {
     @Operation(summary = "Cancelar um evento por id", description = "Método responsável por cancelar um único evento por id.")
     public ResponseEntity<EventoResponseDto> atualizarBloquerar(@PathVariable Long id) throws RegistroNaoEncontradoException {
 
-        var evento =  eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(() ->
+        var evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(() ->
             new RegistroNaoEncontradoException("Evento não encontrado"));
         evento.setStatus(EnumStatusEvento.CANCELADO);
         eventoRepository.save(evento);
@@ -107,7 +111,7 @@ public class EventoController {
     @Operation(summary = "Ativar um evento por id", description = "Método responsável por ativar um único evento por id.")
     public ResponseEntity<EventoResponseDto> atualizarAtivar(@PathVariable Long id) throws RegistroNaoEncontradoException {
 
-        var evento =  eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(() ->
+        var evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(() ->
             new RegistroNaoEncontradoException("Evento não encontrado"));
         evento.setStatus(EnumStatusEvento.ATIVO);
         eventoRepository.save(evento);

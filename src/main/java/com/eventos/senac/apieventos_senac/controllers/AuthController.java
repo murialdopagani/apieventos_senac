@@ -1,7 +1,7 @@
 package com.eventos.senac.apieventos_senac.controllers;
 
-import com.eventos.senac.apieventos_senac.dto.LoginRequestDto;
-import com.eventos.senac.apieventos_senac.dto.LoginResponseDto;
+import com.eventos.senac.apieventos_senac.dto.requestDto.LoginRequestDto;
+import com.eventos.senac.apieventos_senac.dto.responseDto.LoginResponseDto;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusUsuario;
 import com.eventos.senac.apieventos_senac.repository.UsuarioRepository;
 import com.eventos.senac.apieventos_senac.services.TokenService;
