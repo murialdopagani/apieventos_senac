@@ -2,7 +2,7 @@ package com.eventos.senac.apieventos_senac.dto.requestDto;
 
 public record EventoFormaturaRequestDto(
     //atributos comuns da classe pai
-    int tipoEvento,
+    //int tipoEvento,
     String nome,
     String data,
     int capacidadeMaxima,

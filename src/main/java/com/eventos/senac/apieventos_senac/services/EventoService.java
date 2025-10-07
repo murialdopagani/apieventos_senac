@@ -1,11 +1,11 @@
 package com.eventos.senac.apieventos_senac.services;
 
 import com.eventos.senac.apieventos_senac.dto.requestDto.EventoCriarRequestDto;
-import com.eventos.senac.apieventos_senac.dto.requestDto.EventoFormaturaRequestDto;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.exception.ValidacoesRegraNegocioException;
 import com.eventos.senac.apieventos_senac.model.entity.Evento;
 import com.eventos.senac.apieventos_senac.model.entity.EventoFormatura;
+import com.eventos.senac.apieventos_senac.model.entity.EventoPalestra;
 import com.eventos.senac.apieventos_senac.model.entity.LocalCerimonia;
 import com.eventos.senac.apieventos_senac.model.entity.Usuario;
 import com.eventos.senac.apieventos_senac.model.valueobjects.EnumStatusEvento;
@@ -39,12 +39,10 @@ public class EventoService {
 
         validarDataEvento(eventoCriarRequestDto.data());
 
-        Usuario organizador = usuarioRepository.findByIdAndStatusNot(
-                eventoCriarRequestDto.organizadorId(), EnumStatusUsuario.EXCLUIDO)
+        Usuario organizador = buscarUsuarioNoBanco(eventoCriarRequestDto.organizadorId())
             .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado" + ".!!"));
 
-        LocalCerimonia localCerimonia = localCerimoniaRepository.findByIdAndStatusNot(
-            eventoCriarRequestDto.localCerimoniaId(), EnumStatusLocalCerimonia.EXCLUIDO).orElseThrow(
+        LocalCerimonia localCerimonia = buscarLocalCerimoniaNoBanco(eventoCriarRequestDto.localCerimoniaId()).orElseThrow(
             () -> new RegistroNaoEncontradoException("Local de" + " cerimônia não encontrado"));
 
         var eventoBanco = buscarEventoNoBanco(eventoCriarRequestDto.data(), organizador,
@@ -68,19 +66,18 @@ public class EventoService {
 
         validarDataEvento(eventoCriarRequestDto.data());
 
-        Usuario organizador = usuarioRepository.findByIdAndStatusNot(
-                eventoCriarRequestDto.organizadorId(), EnumStatusUsuario.EXCLUIDO)
-            .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado" + ".!!"));
+        Usuario organizador = buscarUsuarioNoBanco(eventoCriarRequestDto.organizadorId()).orElseThrow(
+            () -> new RegistroNaoEncontradoException("Usuário não encontrado.!!"));
 
-        LocalCerimonia localCerimonia = localCerimoniaRepository.findByIdAndStatusNot(
-            eventoCriarRequestDto.localCerimoniaId(), EnumStatusLocalCerimonia.EXCLUIDO).orElseThrow(
-            () -> new RegistroNaoEncontradoException("Local de" + " cerimônia não encontrado"));
+        LocalCerimonia localCerimonia = buscarLocalCerimoniaNoBanco(eventoCriarRequestDto.localCerimoniaId()).orElseThrow(
+            () -> new RegistroNaoEncontradoException("Local de cerimônia não encontrado"));
 
         var eventoBancoChek = buscarEventoNoBanco(eventoCriarRequestDto.data(), organizador,
             localCerimonia);
+
         if (eventoBancoChek.isPresent() && !(eventoBancoChek.get().getId() == eventoBancoId.getId())) {
             throw new ValidacoesRegraNegocioException(
-                "Já existe um evento cadastrado com essa data, organizador e local de " + "cerimônia.");
+                "Já existe um evento cadastrado com essa data, organizador e local de cerimônia.");
         } else {
             Evento eventoAtualizado = atualizarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador,
                 localCerimonia, eventoBancoId);
@@ -96,7 +93,7 @@ public class EventoService {
 
         return switch (tipoEvento) {
             case FORMATURA -> new EventoFormatura(dto, organizador, localCerimonia);
-            //case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia);
+            case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia);
             default -> throw new IllegalArgumentException("Tipo de evento inválido: " + dto.tipoEvento());
         };
     }
@@ -109,7 +106,8 @@ public class EventoService {
         return switch (tipoEvento) {
             case FORMATURA -> new EventoFormatura(dto, organizador, localCerimonia).atualizarEventoFromDTO(
                 (EventoFormatura) eventoBanco, dto, organizador, localCerimonia);
-            //case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia);
+            case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia).atualizarEventoFromDTO(
+                (EventoPalestra)  eventoBanco, dto, organizador, localCerimonia);
             default -> throw new IllegalArgumentException("Tipo de evento inválido: " + dto.tipoEvento());
         };
     }
@@ -153,4 +151,15 @@ public class EventoService {
         // Retorna o primeiro, se houver duplicidade, pode lançar exceção ou tratar conforme regra
         return eventoBanco.isEmpty() ? Optional.empty() : Optional.of(eventoBanco.get(0));
     }
+
+
+    private Optional<Usuario> buscarUsuarioNoBanco(Long id) {
+        return usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO);
+    }
+
+    private Optional<LocalCerimonia> buscarLocalCerimoniaNoBanco(Long id) {
+        return localCerimoniaRepository.findByIdAndStatusNot(id, EnumStatusLocalCerimonia.EXCLUIDO);
+
+    }
+
 }
