@@ -1,4 +1,4 @@
-package com.eventos.senac.apieventos_senac.application.dto.requestDto;
+package com.eventos.senac.apieventos_senac.application.dto.evento;
 
 public record EventoFormaturaRequestDto(
     //atributos comuns da classe pai

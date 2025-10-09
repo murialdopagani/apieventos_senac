@@ -1,6 +1,6 @@
-package com.eventos.senac.apieventos_senac.application.dto.requestDto;
+package com.eventos.senac.apieventos_senac.application.dto.evento;
 
-public record EventoCriarRequestDto(
+public record EventoRequestDto(
     int tipoEvento,
     String nome,
     String data,
@@ -31,8 +31,8 @@ public record EventoCriarRequestDto(
 
 ) {
 
-    public static EventoCriarRequestDto fromFormaturaDto(EventoFormaturaRequestDto dto) {
-        return new EventoCriarRequestDto(
+    public static EventoRequestDto fromFormaturaDto(EventoFormaturaRequestDto dto) {
+        return new EventoRequestDto(
             //dto.tipoEvento(),
             1, //tipoEvento fixo para Formatura
             dto.nome(),
@@ -62,8 +62,8 @@ public record EventoCriarRequestDto(
         );
     }
 
-    public static EventoCriarRequestDto fromPalestraDto(EventoPalestraRequestDto dto) {
-        return new EventoCriarRequestDto(
+    public static EventoRequestDto fromPalestraDto(EventoPalestraRequestDto dto) {
+        return new EventoRequestDto(
             //dto.tipoEvento(),
             2, //tipoEvento fixo para Palestra
             dto.nome(),

@@ -1,56 +1,82 @@
 package com.eventos.senac.apieventos_senac.domain.valueobjects;
 
-public record Cpf(String cpf) {
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Data;
 
-    public Cpf {
-        if (cpf == null) {
-            throw new IllegalArgumentException("CPF não pode ser nulo");
-        }
+@Data
+public class CPF {
 
-        String cpfLimpo = cpf.replaceAll("\\D", "");
+    private final String cpf;
 
-        if (!validarCpf(cpfLimpo)) {
-            throw new IllegalArgumentException("CPF inválido");
-        }
-
-        cpf = cpfLimpo;
+    public CPF() {
+        this.cpf = "";
     }
 
+    public CPF(String cpf) {
+        if (cpf == null || !isCPFValido(cpf)) {
+            throw new IllegalArgumentException("CPF Invalido");
+        }
+        this.cpf = cpf.replaceAll("[^0-9]", "");
+    }
+
+
+    @JsonValue
     public String getNumero() {
         return cpf;
-    }
-    
-
-    public static boolean validarCpf(String cpf) {
-        if (cpf == null || cpf.length() != 11) {
-            return false;
-        }
-
-        if (cpf.chars().distinct().count() == 1) {
-            return false;
-        }
-
-        // Calcula primeiro dígito verificador
-        int sum = 0;
-        for (int i = 0; i < 9; i++) {
-            sum += (cpf.charAt(i) - '0') * (10 - i);
-        }
-        int d1 = sum % 11;
-        d1 = d1 < 2 ? 0 : 11 - d1;
-
-        // Calcula segundo dígito verificador
-        sum = 0;
-        for (int i = 0; i < 10; i++) {
-            sum += (cpf.charAt(i) - '0') * (11 - i);
-        }
-        int d2 = sum % 11;
-        d2 = d2 < 2 ? 0 : 11 - d2;
-
-        return d1 == (cpf.charAt(9) - '0') && d2 == (cpf.charAt(10) - '0');
     }
 
     @Override
     public String toString() {
-        return cpf;
+        return this.cpf;
+    }
+
+    public boolean isCPFValido(String cpf) {
+        String cpfNumeros = cpf.replaceAll("[^0-9]", "");
+        if (cpfNumeros.length() != 11 || cpfNumeros.matches("(\\d)\\1{10}")) {
+            return false;
+        }
+        return validaDigitoVerificadorCpf(cpfNumeros);
+    }
+
+    public boolean validaDigitoVerificadorCpf(String cpf) {
+        try {
+            int soma = 0;
+            int peso = 10;
+
+            // Calcula o primeiro dígito verificador
+            for (int i = 0; i < 9; i++) {
+                int num = Character.getNumericValue(cpf.charAt(i));
+                soma += num * peso--;
+            }
+
+            int primeiroDigito = 11 - (soma % 11);
+            if (primeiroDigito >= 10) {
+                primeiroDigito = 0;
+            }
+
+            // Verifica o primeiro dígito
+            if (primeiroDigito != Character.getNumericValue(cpf.charAt(9))) {
+                return false;
+            }
+
+            // Calcula o segundo dígito verificador
+            soma = 0;
+            peso = 11;
+            for (int i = 0; i < 10; i++) {
+                int num = Character.getNumericValue(cpf.charAt(i));
+                soma += num * peso--;
+            }
+
+            int segundoDigito = 11 - (soma % 11);
+            if (segundoDigito >= 10) {
+                segundoDigito = 0;
+            }
+
+            // Verifica o segundo dígito
+            return segundoDigito == Character.getNumericValue(cpf.charAt(10));
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.eventos.senac.apieventos_senac.presentation;
 
-import com.eventos.senac.apieventos_senac.application.dto.requestDto.LocalCerimoniaCriarRequestDto;
-import com.eventos.senac.apieventos_senac.application.dto.responseDto.LocalCerimoniaResponseDto;
+import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCerimoniaCriarRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCerimoniaResponseDto;
 import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.Cnpj;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusLocalCerimonia;

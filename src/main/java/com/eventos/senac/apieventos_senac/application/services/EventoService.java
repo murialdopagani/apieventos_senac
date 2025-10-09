@@ -1,6 +1,6 @@
 package com.eventos.senac.apieventos_senac.application.services;
 
-import com.eventos.senac.apieventos_senac.application.dto.requestDto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.exception.ValidacoesRegraNegocioException;
 import com.eventos.senac.apieventos_senac.domain.entity.Evento;
@@ -35,58 +35,58 @@ public class EventoService {
     @Autowired
     private LocalCerimoniaRepository localCerimoniaRepository;
 
-    public Evento criarEvento(EventoCriarRequestDto eventoCriarRequestDto) {
+    public Evento criarEvento(EventoRequestDto eventoRequestDto) {
 
-        validarDataEvento(eventoCriarRequestDto.data());
+        validarDataEvento(eventoRequestDto.data());
 
-        Usuario organizador = buscarUsuarioNoBanco(eventoCriarRequestDto.organizadorId())
+        Usuario organizador = buscarUsuarioNoBanco(eventoRequestDto.organizadorId())
             .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado" + ".!!"));
 
-        LocalCerimonia localCerimonia = buscarLocalCerimoniaNoBanco(eventoCriarRequestDto.localCerimoniaId()).orElseThrow(
+        LocalCerimonia localCerimonia = buscarLocalCerimoniaNoBanco(eventoRequestDto.localCerimoniaId()).orElseThrow(
             () -> new RegistroNaoEncontradoException("Local de" + " cerimônia não encontrado"));
 
-        var eventoBanco = buscarEventoNoBanco(eventoCriarRequestDto.data(), organizador,
+        var eventoBanco = buscarEventoNoBanco(eventoRequestDto.data(), organizador,
             localCerimonia);
 
         if (eventoBanco.isPresent()) {
             Evento eventoExistente = eventoBanco.get();
-            Evento eventoAtualizado = atualizarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador,
+            Evento eventoAtualizado = atualizarEventoBaseadoNoTipo(eventoRequestDto, organizador,
                 localCerimonia, eventoExistente);
             return eventoRepository.save(eventoAtualizado);
         } else {
-            Evento evento = criarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador, localCerimonia);
+            Evento evento = criarEventoBaseadoNoTipo(eventoRequestDto, organizador, localCerimonia);
             return eventoRepository.save(evento);
         }
     }
 
-    public Evento atualizarEvento(Long id, EventoCriarRequestDto eventoCriarRequestDto) {
+    public Evento atualizarEvento(Long id, EventoRequestDto eventoRequestDto) {
 
         var eventoBancoId = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO)
             .orElseThrow(() -> new RuntimeException("Evento não encontrado"));
 
-        validarDataEvento(eventoCriarRequestDto.data());
+        validarDataEvento(eventoRequestDto.data());
 
-        Usuario organizador = buscarUsuarioNoBanco(eventoCriarRequestDto.organizadorId()).orElseThrow(
+        Usuario organizador = buscarUsuarioNoBanco(eventoRequestDto.organizadorId()).orElseThrow(
             () -> new RegistroNaoEncontradoException("Usuário não encontrado.!!"));
 
-        LocalCerimonia localCerimonia = buscarLocalCerimoniaNoBanco(eventoCriarRequestDto.localCerimoniaId()).orElseThrow(
+        LocalCerimonia localCerimonia = buscarLocalCerimoniaNoBanco(eventoRequestDto.localCerimoniaId()).orElseThrow(
             () -> new RegistroNaoEncontradoException("Local de cerimônia não encontrado"));
 
-        var eventoBancoChek = buscarEventoNoBanco(eventoCriarRequestDto.data(), organizador,
+        var eventoBancoChek = buscarEventoNoBanco(eventoRequestDto.data(), organizador,
             localCerimonia);
 
         if (eventoBancoChek.isPresent() && !(eventoBancoChek.get().getId() == eventoBancoId.getId())) {
             throw new ValidacoesRegraNegocioException(
                 "Já existe um evento cadastrado com essa data, organizador e local de cerimônia.");
         } else {
-            Evento eventoAtualizado = atualizarEventoBaseadoNoTipo(eventoCriarRequestDto, organizador,
+            Evento eventoAtualizado = atualizarEventoBaseadoNoTipo(eventoRequestDto, organizador,
                 localCerimonia, eventoBancoId);
             return eventoRepository.save(eventoAtualizado);
         }
     }
 
     // Metodo Factory para criar a instância do evento
-    private Evento criarEventoBaseadoNoTipo(EventoCriarRequestDto dto, Usuario organizador,
+    private Evento criarEventoBaseadoNoTipo(EventoRequestDto dto, Usuario organizador,
         LocalCerimonia localCerimonia) {
 
         var tipoEvento = EnumTipoEvento.fromCodigo(dto.tipoEvento());
@@ -99,7 +99,7 @@ public class EventoService {
     }
 
     // Metodo Factory para atualizar um evento
-    private Evento atualizarEventoBaseadoNoTipo(EventoCriarRequestDto dto, Usuario organizador,
+    private Evento atualizarEventoBaseadoNoTipo(EventoRequestDto dto, Usuario organizador,
         LocalCerimonia localCerimonia, Evento eventoBanco) {
         var tipoEvento = EnumTipoEvento.fromCodigo(dto.tipoEvento());
 

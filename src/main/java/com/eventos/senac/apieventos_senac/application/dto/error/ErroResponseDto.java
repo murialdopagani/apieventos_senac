@@ -1,4 +1,4 @@
-package com.eventos.senac.apieventos_senac.application.dto.responseDto;
+package com.eventos.senac.apieventos_senac.application.dto.error;
 
 import org.springframework.http.HttpStatus;
 

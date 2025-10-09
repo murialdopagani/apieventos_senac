@@ -1,20 +1,23 @@
 package com.eventos.senac.apieventos_senac.presentation;
 
-import com.eventos.senac.apieventos_senac.application.dto.requestDto.UsuarioCriarRequestDto;
-import com.eventos.senac.apieventos_senac.application.dto.responseDto.UsuarioResponseDto;
+import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioCriarRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.application.services.UsuarioService;
-import com.eventos.senac.apieventos_senac.domain.repository.UsuarioRepository;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/usuario")
@@ -24,9 +27,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
     @GetMapping
     @Operation(summary = "Listar todos", description = "Método para listar todos os usuário.")
     public ResponseEntity<List<UsuarioResponseDto>> listarTodos() {
@@ -35,20 +35,19 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Consulta de usuário por id",
-            description = "Método responsável por consultar um único usuário por id, se não existir retorna null..!")
+        description = "Método responsável por consultar um único usuário por id, se não existir retorna null..!")
     public ResponseEntity<UsuarioResponseDto> buscarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
 
-        var usuario = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO)
-                                       .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado"));
+        var usuario = usuarioService.buscarPorId(id);
         if (usuario == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(UsuarioResponseDto.fromUsuario(usuario));
+        return ResponseEntity.ok(usuario);
     }
 
     @PostMapping
     @Operation(summary = "Criar/Atualiza usuario", description = "Método resposável por criar um usuário")
-    public ResponseEntity<UsuarioResponseDto> criarUsuario(@RequestBody UsuarioCriarRequestDto usuarioRequestDto) {
+    public ResponseEntity<UsuarioResponseDto> criarUsuario(@RequestBody UsuarioCriarRequestDto usuarioRequestDto) throws Exception {
         var usuarioSalvo = usuarioService.salvarUsuario(usuarioRequestDto);
         return ResponseEntity.ok(usuarioSalvo);
     }
@@ -56,62 +55,36 @@ public class UsuarioController {
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar um Usuário", description = "Método responsável por atualizar um Usuário no banco de dados.")
     public ResponseEntity<UsuarioResponseDto> atulizarUsuario(@PathVariable Long id,
-                                                              @RequestBody UsuarioCriarRequestDto usuarioRequestDto) {
+        @RequestBody UsuarioCriarRequestDto usuarioRequestDto) throws Exception {
 
-        var usuarioBanco = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO).orElse(null);
-
-        if (usuarioBanco == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        var usuarioSave = usuarioBanco.atualizarUsuarioFromDTO(usuarioBanco, usuarioRequestDto);
-
-        usuarioRepository.save(usuarioSave);
-        UsuarioResponseDto usuarioResponseDto = UsuarioResponseDto.fromUsuario(usuarioSave);
-
-        return ResponseEntity.ok(usuarioResponseDto);
+        var usuarioBanco = usuarioService.atualizarUsuario(id, usuarioRequestDto);
+        return ResponseEntity.ok(usuarioBanco);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete de usuário!", description = "Método responsavel por deletar um usuario")
-    public ResponseEntity<UsuarioResponseDto> deletarUsuario(@PathVariable Long id) {
-
-        var usuario = usuarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
-                "Usuário não encontrado com id ->" + id));
-
-        usuario.setStatus(EnumStatusUsuario.EXCLUIDO);
-        usuarioRepository.save(usuario);
-
-        return ResponseEntity.ok(UsuarioResponseDto.fromUsuario(usuario));
+    public ResponseEntity<UsuarioResponseDto> deletarUsuario(@PathVariable Long id) throws Exception {
+        var usuario = usuarioService.deletarUsuario(id);
+        return ResponseEntity.ok(usuario);
     }
 
     @PatchMapping("/{id}/bloquear")
     @Operation(summary = "Bloqueio de usuário!", description = "Método responsavel por Bloquear um usuario")
-    public ResponseEntity<UsuarioResponseDto> atualizarBloquear(@PathVariable Long id) {
-
-        var usuario = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO).orElse(null);
+    public ResponseEntity<UsuarioResponseDto> atualizarBloquear(@PathVariable Long id) throws Exception {
+        var usuario = usuarioService.bloquearUsuario(id);
         if (usuario == null) {
             return ResponseEntity.notFound().build();
         }
-
-        usuario.setStatus(EnumStatusUsuario.BLOQUEADO);
-        usuarioRepository.save(usuario);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(usuario);
     }
 
     @PatchMapping("/{id}/desbloquear")
     @Operation(summary = "Desbloqueio de usuário!", description = "Método responsavel por Desbloquear um usuario")
-    public ResponseEntity<UsuarioResponseDto> atualizarDesbloquear(@PathVariable Long id) {
-
-        var usuario = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO).orElse(null);
+    public ResponseEntity<UsuarioResponseDto> atualizarDesbloquear(@PathVariable Long id) throws Exception {
+        var usuario = usuarioService.desbloquearUsuario(id);
         if (usuario == null) {
             return ResponseEntity.notFound().build();
         }
-
-        usuario.setStatus(EnumStatusUsuario.ATIVO);
-        usuarioRepository.save(usuario);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(usuario);
     }
 }

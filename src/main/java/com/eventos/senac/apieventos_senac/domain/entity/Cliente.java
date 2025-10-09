@@ -1,6 +1,6 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
-import com.eventos.senac.apieventos_senac.domain.valueobjects.Cpf;
+import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +15,7 @@ public class Cliente extends Usuario {
     public Cliente() {
     }
 
-    public Cliente(Long id, String nome, String email, String senha, Cpf cpf, BigDecimal valorConsumido, String telefone) {
+    public Cliente(Long id, String nome, String email, String senha, CPF cpf, BigDecimal valorConsumido, String telefone) {
         super(id, nome, email, senha, cpf, telefone);
         this.setValorConsumido(valorConsumido);
     }

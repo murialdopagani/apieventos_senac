@@ -1,7 +1,7 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
-import com.eventos.senac.apieventos_senac.application.dto.requestDto.UsuarioCriarRequestDto;
-import com.eventos.senac.apieventos_senac.domain.valueobjects.Cpf;
+import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioCriarRequestDto;
+import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -33,7 +33,7 @@ public class Usuario {
     private String senha;
 
     @Embedded
-    private Cpf cpf;
+    private CPF cpf;
 
     private String telefone;
 
@@ -46,7 +46,7 @@ public class Usuario {
         this.nome = usuarioDto.nome();
         this.email = usuarioDto.email();
         this.senha = usuarioDto.senha();
-        this.cpf = new Cpf(usuarioDto.cpf());
+        this.cpf = new CPF(usuarioDto.cpf());
         this.telefone = usuarioDto.telefone();
         this.status = EnumStatusUsuario.ATIVO;
     }
@@ -55,7 +55,7 @@ public class Usuario {
                    String nome,
                    String email,
                    String senha,
-                   Cpf cpf,
+                   CPF cpf,
                    String telefone) {
         this.setId(id);
         this.setNome(nome);
@@ -67,7 +67,7 @@ public class Usuario {
 
     public Usuario atualizarUsuarioFromDTO(Usuario usuarioBanco,
                                            UsuarioCriarRequestDto dto) {
-        usuarioBanco.setCpf(new Cpf(dto.cpf()));
+        usuarioBanco.setCpf(new CPF(dto.cpf()));
         usuarioBanco.setNome(dto.nome());
         usuarioBanco.setSenha(dto.senha());
         usuarioBanco.setEmail(dto.email());

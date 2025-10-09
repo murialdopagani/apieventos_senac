@@ -1,6 +1,6 @@
 package com.eventos.senac.apieventos_senac.presentation;
 
-import com.eventos.senac.apieventos_senac.application.dto.responseDto.ErroResponseDto;
+import com.eventos.senac.apieventos_senac.application.dto.error.ErroResponseDto;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.exception.ValidacoesRegraNegocioException;
 import jakarta.persistence.EntityNotFoundException;

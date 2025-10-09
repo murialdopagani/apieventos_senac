@@ -1,6 +1,6 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
-import com.eventos.senac.apieventos_senac.application.dto.requestDto.LocalCerimoniaCriarRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCerimoniaCriarRequestDto;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.Cnpj;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusLocalCerimonia;
 import jakarta.persistence.*;

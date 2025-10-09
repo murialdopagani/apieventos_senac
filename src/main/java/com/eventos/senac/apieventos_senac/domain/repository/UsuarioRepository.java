@@ -2,11 +2,10 @@ package com.eventos.senac.apieventos_senac.domain.repository;
 
 import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusUsuario;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
@@ -19,7 +18,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Optional<Usuario> findByIdAndStatusNot(Long id, EnumStatusUsuario status);
 
-    List<Usuario> findAllByStatusNot(EnumStatusUsuario status);
+    List<Usuario> findAllByStatusNotOrderById(EnumStatusUsuario status);
 
     Optional<Usuario> findByEmail(String email);
 

@@ -1,6 +1,6 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
-import com.eventos.senac.apieventos_senac.application.dto.requestDto.EventoCriarRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -54,7 +54,7 @@ public class EventoPalestra extends Evento {
 
     }
 
-    public EventoPalestra(EventoCriarRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia){
+    public EventoPalestra(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia){
         // Chama o construtor da classe pai que já existe
         super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
             .atStartOfDay(), dto.capacidadeMaxima(), organizador, 0, localCerimonia);
@@ -74,7 +74,7 @@ public class EventoPalestra extends Evento {
     }
 
     public EventoPalestra atualizarEventoFromDTO(EventoPalestra eventoBanco,
-                                                 EventoCriarRequestDto dto,
+                                                 EventoRequestDto dto,
                                                  Usuario organizador,
                                                  LocalCerimonia localCerimonia) {
 

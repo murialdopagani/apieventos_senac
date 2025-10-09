@@ -1,4 +1,4 @@
-package com.eventos.senac.apieventos_senac.application.dto.responseDto;
+package com.eventos.senac.apieventos_senac.application.dto.evento;
 
 import com.eventos.senac.apieventos_senac.domain.entity.Evento;
 import com.eventos.senac.apieventos_senac.domain.entity.EventoFormatura;

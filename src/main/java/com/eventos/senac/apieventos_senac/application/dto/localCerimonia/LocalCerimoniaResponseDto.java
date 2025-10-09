@@ -1,4 +1,4 @@
-package com.eventos.senac.apieventos_senac.application.dto.responseDto;
+package com.eventos.senac.apieventos_senac.application.dto.localCerimonia;
 
 import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
 

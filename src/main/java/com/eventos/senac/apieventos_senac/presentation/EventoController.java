@@ -1,9 +1,9 @@
 package com.eventos.senac.apieventos_senac.presentation;
 
-import com.eventos.senac.apieventos_senac.application.dto.requestDto.EventoCriarRequestDto;
-import com.eventos.senac.apieventos_senac.application.dto.requestDto.EventoFormaturaRequestDto;
-import com.eventos.senac.apieventos_senac.application.dto.requestDto.EventoPalestraRequestDto;
-import com.eventos.senac.apieventos_senac.application.dto.responseDto.EventoResponseDto;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoFormaturaRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoPalestraRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoResponseDto;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
@@ -40,8 +40,8 @@ public class EventoController {
     @Operation(summary = "Cria/Atualizar um Evento Formatura", description = "Método responsável por criar/atualizar um Evento Formatura no sistema.")
     public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoFormaturaRequestDto eventoFormaturaDto)
         throws Exception {
-        EventoCriarRequestDto eventoCriarRequestDto = EventoCriarRequestDto.fromFormaturaDto(eventoFormaturaDto);
-        var eventoBanco = eventoService.criarEvento(eventoCriarRequestDto);
+        EventoRequestDto eventoRequestDto = EventoRequestDto.fromFormaturaDto(eventoFormaturaDto);
+        var eventoBanco = eventoService.criarEvento(eventoRequestDto);
         EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoBanco);
         return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
     }
@@ -52,8 +52,8 @@ public class EventoController {
     public ResponseEntity<EventoResponseDto> atualizaEventoFormatura(@PathVariable Long id,
         @RequestBody EventoFormaturaRequestDto eventoFormaturaDto)
         throws Exception {
-        EventoCriarRequestDto eventoCriarRequestDto = EventoCriarRequestDto.fromFormaturaDto(eventoFormaturaDto);
-        var eventoSave = eventoService.atualizarEvento(id, eventoCriarRequestDto);
+        EventoRequestDto eventoRequestDto = EventoRequestDto.fromFormaturaDto(eventoFormaturaDto);
+        var eventoSave = eventoService.atualizarEvento(id, eventoRequestDto);
         return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
     }
 
@@ -61,8 +61,8 @@ public class EventoController {
     @Operation(summary = "Cria/Atualizar um Evento Palestra", description = "Método responsável por criar/atualizar um Evento Palestra no sistema.")
     public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoPalestraRequestDto eventoPalestraDto)
         throws Exception {
-        EventoCriarRequestDto eventoCriarRequestDto = EventoCriarRequestDto.fromPalestraDto(eventoPalestraDto);
-        var eventoBanco = eventoService.criarEvento(eventoCriarRequestDto);
+        EventoRequestDto eventoRequestDto = EventoRequestDto.fromPalestraDto(eventoPalestraDto);
+        var eventoBanco = eventoService.criarEvento(eventoRequestDto);
         EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoBanco);
         return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
     }
@@ -72,8 +72,8 @@ public class EventoController {
     public ResponseEntity<EventoResponseDto> atualizaEventoPalestra(@PathVariable Long id,
         @RequestBody EventoPalestraRequestDto eventoPalestraDto)
         throws Exception {
-        EventoCriarRequestDto eventoCriarRequestDto = EventoCriarRequestDto.fromPalestraDto(eventoPalestraDto);
-        var eventoSave = eventoService.atualizarEvento(id, eventoCriarRequestDto);
+        EventoRequestDto eventoRequestDto = EventoRequestDto.fromPalestraDto(eventoPalestraDto);
+        var eventoSave = eventoService.atualizarEvento(id, eventoRequestDto);
         return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
     }
 
