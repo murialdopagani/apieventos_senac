@@ -3,23 +3,27 @@ package com.eventos.senac.apieventos_senac.application.dto.evento;
 import com.eventos.senac.apieventos_senac.domain.entity.Evento;
 import com.eventos.senac.apieventos_senac.domain.entity.EventoFormatura;
 import com.eventos.senac.apieventos_senac.domain.entity.EventoPalestra;
+import com.eventos.senac.apieventos_senac.domain.entity.EventoShow;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.math.BigDecimal;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record EventoResponseDto(Long id, String nome, String data, int capacidadeMaxima, int inscritos, String organizador,
-                                String tipoEvento, EnumStatusEvento status,
+                                int duracaoMinutos, BigDecimal precoIngresso, String localCerimonia, EnumStatusEvento status,
+                                String tipoEvento,
 
                                 //Campos específicos de formatura
                                 String instituicao, String curso, int anoFormatura, String grauAcademico, int numeroFormandos,
-                                String paraninfo, String orador, Boolean temCerimonialista, String localCerimonia,
+                                String paraninfo, String orador, Boolean temCerimonialista,
 
                                 //Campos específicos de palestra
-                                String palestrante, String tituloPalestra, String tema, String categoria, int duracaoMinutos,
-                                String biografiaPalestrante,
-                                int tempoPerguntas, Boolean certificado, String objetivosAprendizagem, Boolean gratuita,
-                                BigDecimal precoInscricao
+                                String palestrante, String tituloPalestra, String tema, String categoria,
+                                String biografiaPalestrante, int tempoPerguntas, Boolean certificado, String objetivosAprendizagem,
+                                Boolean gratuita,
+
+                                //Campos específicos de show
+                                String artista, String generoMusical, int idadeMinima, BigDecimal cacheArtista
 
 ) {
 
@@ -32,7 +36,9 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
         int capacidadeMaxima = evento.getCapacidadeMaxima();
         int inscritos = evento.getInscritos();
         String organizador = evento.getOrganizador().getNome();
-        String localCerimonia = evento.getLocalCerimonia() != null ? evento.getLocalCerimonia().getNome() : null;
+        Integer duracaoMinutos = evento.getDuracaoMinutos();
+        BigDecimal precoIngresso = evento.getPrecoIngresso();
+        String localCerimonia = evento.getLocalCerimonia().getNome();
         EnumStatusEvento status = evento.getStatus();
 
         // Obter o tipo através da anotaç��o @DiscriminatorValue
@@ -53,13 +59,17 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
         String tituloPalestra = null;
         String tema = null;
         String categoria = null; // "Tecnologia", "Saúde", "Educação", "Negócios", etc.
-        Integer duracaoMinutos = 0;
         String biografiaPalestrante = null;
         Integer tempoPerguntas = 0;
         Boolean certificado = true;
         String objetivosAprendizagem = null;
         Boolean gratuita = false;
-        BigDecimal precoInscricao = BigDecimal.ZERO;
+
+        //Campo específicos show (default null)
+        String artista = null;
+        String generoMusical = null;
+        Integer idadeMinima = 0;
+        BigDecimal cacheArtista = BigDecimal.ZERO;
 
         if (evento instanceof EventoFormatura ef) {
             instituicao = ef.getInstituicao();
@@ -77,22 +87,26 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
             tituloPalestra = ep.getTituloPalestra();
             tema = ep.getTema();
             categoria = ep.getCategoria();
-            duracaoMinutos = ep.getDuracaoMinutos();
             biografiaPalestrante = ep.getBiografiaPalestrante();
             tempoPerguntas = ep.getTempoPerguntas();
             certificado = ep.isCertificado();
             objetivosAprendizagem = ep.getObjetivosAprendizagem();
             gratuita = ep.isGratuita();
-            precoInscricao = ep.getPrecoInscricao();
         }
 
+        if (evento instanceof EventoShow eventoShow) {
+            artista = eventoShow.getArtista();
+            generoMusical = eventoShow.getGeneroMusical();
+            idadeMinima = eventoShow.getIdadeMinima();
+            cacheArtista = eventoShow.getCacheArtista();
+        }
         // else if (evento instanceof OutroTipoEvento ote) { ... }
 
-        return new EventoResponseDto(id, nome, data, capacidadeMaxima, inscritos, organizador, tipoEvento, status, instituicao,
-            curso, anoFormatura, grauAcademico, numeroFormandos, paraninfo, orador, temCerimonialista, localCerimonia, palestrante,
-            tituloPalestra, tema, categoria, duracaoMinutos, biografiaPalestrante, tempoPerguntas, certificado,
-            objetivosAprendizagem,
-            gratuita, precoInscricao);
+        return new EventoResponseDto(id, nome, data, capacidadeMaxima, inscritos, organizador, duracaoMinutos,
+            precoIngresso, localCerimonia, status, tipoEvento, instituicao, curso, anoFormatura,
+            grauAcademico, numeroFormandos, paraninfo, orador, temCerimonialista, palestrante,
+            tituloPalestra, tema, categoria, biografiaPalestrante, tempoPerguntas, certificado,
+            objetivosAprendizagem, gratuita, artista, generoMusical, idadeMinima, cacheArtista);
     }
 
 }

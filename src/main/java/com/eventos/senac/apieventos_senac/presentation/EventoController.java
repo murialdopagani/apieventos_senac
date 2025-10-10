@@ -4,6 +4,7 @@ import com.eventos.senac.apieventos_senac.application.dto.evento.EventoFormatura
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoPalestraRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoResponseDto;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoShowRequestDto;
 import com.eventos.senac.apieventos_senac.application.services.EventoService;
 import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
@@ -45,7 +46,6 @@ public class EventoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
     }
 
-
     @PutMapping("/formatura/{id}")
     @Operation(summary = "Atualiza um Evento Formatura por ID", description = "Método responsável por atualizar um Evento Formatura por ID.")
     public ResponseEntity<EventoResponseDto> atualizaEventoFormatura(@PathVariable Long id,
@@ -72,6 +72,26 @@ public class EventoController {
         @RequestBody EventoPalestraRequestDto eventoPalestraDto)
         throws Exception {
         EventoRequestDto eventoRequestDto = EventoRequestDto.fromPalestraDto(eventoPalestraDto);
+        var eventoSave = eventoService.atualizarEvento(id, eventoRequestDto);
+        return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
+    }
+
+    @PostMapping("/show")
+    @Operation(summary = "Cria/Atualizar um Evento Show", description = "Método responsável por criar/atualizar um Evento Show no sistema.")
+    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoShowRequestDto eventoShowDto)
+        throws Exception {
+        EventoRequestDto eventoRequestDto = EventoRequestDto.fromShowDto(eventoShowDto);
+        var eventoBanco = eventoService.criarEvento(eventoRequestDto);
+        EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoBanco);
+        return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
+    }
+
+    @PutMapping("/show/{id}")
+    @Operation(summary = "Atualiza um Evento Show por ID", description = "Método responsável por atualizar um Evento Show por ID.")
+    public ResponseEntity<EventoResponseDto> atualizaEventoShow(@PathVariable Long id,
+        @RequestBody EventoShowRequestDto eventoShowDto)
+        throws Exception {
+        EventoRequestDto eventoRequestDto = EventoRequestDto.fromShowDto(eventoShowDto);
         var eventoSave = eventoService.atualizarEvento(id, eventoRequestDto);
         return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
     }
@@ -104,24 +124,16 @@ public class EventoController {
 
     @PatchMapping("/{id}/cancelar")
     @Operation(summary = "Cancelar um evento por ID", description = "Método responsável por cancelar um único evento por id.")
-    public ResponseEntity<EventoResponseDto> atualizarBloquerar(@PathVariable Long id) throws RegistroNaoEncontradoException {
-
-        var evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(() ->
-            new RegistroNaoEncontradoException("Evento não encontrado"));
-        evento.setStatus(EnumStatusEvento.CANCELADO);
-        eventoRepository.save(evento);
-        return ResponseEntity.ok(EventoResponseDto.fromEvento(evento));
+    public ResponseEntity<EventoResponseDto> cancelar(@PathVariable Long id) throws RegistroNaoEncontradoException {
+        var evento = eventoService.cancelar(id);
+        return ResponseEntity.ok(evento);
     }
 
     @PatchMapping("/{id}/ativar")
     @Operation(summary = "Ativar um evento por ID", description = "Método responsável por ativar um único evento por id.")
     public ResponseEntity<EventoResponseDto> atualizarAtivar(@PathVariable Long id) throws RegistroNaoEncontradoException {
-
-        var evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(() ->
-            new RegistroNaoEncontradoException("Evento não encontrado"));
-        evento.setStatus(EnumStatusEvento.ATIVO);
-        eventoRepository.save(evento);
-        return ResponseEntity.ok(EventoResponseDto.fromEvento(evento));
+        var evento = eventoService.ativar(id);
+        return ResponseEntity.ok(evento);
     }
 
 

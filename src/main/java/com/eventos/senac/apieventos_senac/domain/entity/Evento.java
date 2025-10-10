@@ -2,6 +2,7 @@ package com.eventos.senac.apieventos_senac.domain.entity;
 
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,12 @@ public class Evento {
     @Column(nullable = false)
     private int inscritos = 0;
 
+    @Column
+    private int duracaoMinutos;
+
+    @Column
+    private BigDecimal precoIngresso = BigDecimal.ZERO;
+
     @ManyToOne
     @JoinColumn(name = "organizador_id", nullable = false, foreignKey = @ForeignKey(name = "fk_evento_organizador"))
     private Usuario organizador;
@@ -52,6 +59,8 @@ public class Evento {
                   int capacidadeMaxima,
                   Usuario organizador,
                   int inscritos,
+                  int duracaoMinutos,
+                  BigDecimal precoIngresso,
                   LocalCerimonia localCerimonia) {
         this.id = id;
         this.nome = nome;
@@ -59,6 +68,8 @@ public class Evento {
         this.capacidadeMaxima = capacidadeMaxima;
         this.organizador = organizador;
         this.inscritos = inscritos;
+        this.duracaoMinutos = duracaoMinutos;
+        this.precoIngresso = precoIngresso;
         this.localCerimonia = localCerimonia;
     }
 

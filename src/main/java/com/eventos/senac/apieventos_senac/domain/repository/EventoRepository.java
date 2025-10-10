@@ -26,4 +26,6 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
                                                                            Usuario organizador,
                                                                            LocalCerimonia localCerimonia,
                                                                            EnumStatusEvento statusEvento);
+
+    Optional<Evento> findByIdAndStatus(Long id, EnumStatusEvento enumStatusEvento);
 }

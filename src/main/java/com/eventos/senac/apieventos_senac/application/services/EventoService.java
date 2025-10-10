@@ -2,10 +2,10 @@ package com.eventos.senac.apieventos_senac.application.services;
 
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoResponseDto;
-import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.domain.entity.Evento;
 import com.eventos.senac.apieventos_senac.domain.entity.EventoFormatura;
 import com.eventos.senac.apieventos_senac.domain.entity.EventoPalestra;
+import com.eventos.senac.apieventos_senac.domain.entity.EventoShow;
 import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
 import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
 import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -112,6 +111,23 @@ public class EventoService {
         }
     }
 
+    public EventoResponseDto cancelar(Long id) {
+        var evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(() ->
+            new RegistroNaoEncontradoException("Evento não encontrado"));
+        evento.setStatus(EnumStatusEvento.CANCELADO);
+        eventoRepository.save(evento);
+        return EventoResponseDto.fromEvento(evento);
+    }
+
+    public EventoResponseDto ativar(Long id) {
+        var evento = eventoRepository.findByIdAndStatus(id, EnumStatusEvento.CANCELADO).orElseThrow(() ->
+            new RegistroNaoEncontradoException("Evento não encontrado"));
+        evento.setStatus(EnumStatusEvento.ATIVO);
+        eventoRepository.save(evento);
+        return EventoResponseDto.fromEvento(evento);
+    }
+
+
     // Metodo Factory para criar a instância do evento
     private Evento criarEventoBaseadoNoTipo(EventoRequestDto dto, Usuario organizador,
         LocalCerimonia localCerimonia) {
@@ -121,6 +137,7 @@ public class EventoService {
         return switch (tipoEvento) {
             case FORMATURA -> new EventoFormatura(dto, organizador, localCerimonia);
             case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia);
+            case SHOW -> new EventoShow(dto, organizador, localCerimonia);
             default -> throw new IllegalArgumentException("Tipo de evento inválido: " + dto.tipoEvento());
         };
     }
@@ -135,11 +152,11 @@ public class EventoService {
                 (EventoFormatura) eventoBanco, dto, organizador, localCerimonia);
             case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia).atualizarEventoFromDTO(
                 (EventoPalestra) eventoBanco, dto, organizador, localCerimonia);
+            case SHOW -> new EventoShow(dto, organizador, localCerimonia).atualizarEventoFromDTO(
+                (EventoShow) eventoBanco, dto, organizador, localCerimonia);
             default -> throw new IllegalArgumentException("Tipo de evento inválido: " + dto.tipoEvento());
         };
     }
-
-
 
 
     private Evento incrementarInscritos(Long eventoId) {
@@ -172,9 +189,13 @@ public class EventoService {
         var dataEvento = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
             .atStartOfDay();
 
-        var eventoBanco = eventoRepository.findByDataAndOrganizadorAndLocalCerimoniaAndStatusNotOrderById(
+        List<Evento> eventoBanco = eventoRepository.findByDataAndOrganizadorAndLocalCerimoniaAndStatusNotOrderById(
             dataEvento, organizador, localCerimonia, EnumStatusEvento.EXCLUIDO);
         // Retorna o primeiro, se houver duplicidade, pode lançar exceção ou tratar conforme regra
+
+        if (eventoBanco.size() > 1) {
+            throw new ValidacoesRegraNegocioException("Mais de um evento encontrado para os mesmos dados.");
+        }
         return eventoBanco.isEmpty() ? Optional.empty() : Optional.of(eventoBanco.get(0));
     }
 

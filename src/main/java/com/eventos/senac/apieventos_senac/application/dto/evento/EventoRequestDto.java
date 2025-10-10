@@ -1,5 +1,7 @@
 package com.eventos.senac.apieventos_senac.application.dto.evento;
 
+import java.math.BigDecimal;
+
 public record EventoRequestDto(
     int tipoEvento,
     String nome,
@@ -7,6 +9,9 @@ public record EventoRequestDto(
     int capacidadeMaxima,
     Long organizadorId,
     Long localCerimoniaId,
+    int duracaoMinutos,
+    BigDecimal precoIngresso,
+
     //campos específicos para Formatura
     String instituicao,
     String curso,
@@ -16,18 +21,23 @@ public record EventoRequestDto(
     String paraninfo,
     String orador,
     boolean temCerimonialista,
+
     // campos específicos para Palestra
     String palestrante,
     String tituloPalestra,
     String tema,
     String categoria, // "Tecnologia", "Saúde", "Educação", "Negócios", etc.
-    int duracaoMinutos,
     String biografiaPalestrante,
     int tempoPerguntas,
     boolean certificado,
     String objetivosAprendizagem,
     boolean gratuita,
-    String precoInscricao
+
+    //Campos específicos para Show
+    String artista,
+    String generoMusical,
+    int idadeMinima,
+    BigDecimal cacheArtista
 
 ) {
 
@@ -40,6 +50,8 @@ public record EventoRequestDto(
             dto.capacidadeMaxima(),
             dto.organizadorId(),
             dto.localCerimoniaId(),
+            dto.duracaoMinutos(),
+            dto.precoIngresso(),
             dto.instituicao(),
             dto.curso(),
             dto.anoFormatura(),
@@ -52,13 +64,15 @@ public record EventoRequestDto(
             null, //tituloPalestra
             null, //tema
             null, //categoria
-            0,    //duracaoMinutos
             null, //biografiaPalestrante
             0,    //tempoPerguntas
             false, //certificado
             null, //objetivosAprendizagem
             false, //gratuita
-            null  //precoInscricao
+            null, //artista
+            null, //generoMusical
+            0,    //idadeMinima
+            null  //cacheArtista
         );
     }
 
@@ -71,6 +85,8 @@ public record EventoRequestDto(
             dto.capacidadeMaxima(),
             dto.organizadorId(),
             dto.localCerimoniaId(),
+            dto.duracaoMinutos(),
+            dto.precoIngresso(),
             null, //instituicao
             null, //curso
             0,    //anoFormatura
@@ -83,17 +99,52 @@ public record EventoRequestDto(
             dto.tituloPalestra(),
             dto.tema(),
             dto.categoria(),
-            dto.duracaoMinutos(),
             dto.biografiaPalestrante(),
             dto.tempoPerguntas(),
             dto.certificado(),
             dto.objetivosAprendizagem(),
             dto.gratuita(),
-            dto.precoInscricao()
+            null, //artista
+            null, //generoMusical
+            0,    //idadeMinima
+            null  //cacheArtista
         );
     }
 
-
+    public static EventoRequestDto fromShowDto(EventoShowRequestDto dto) {
+        return new EventoRequestDto(
+            //dto.tipoEvento(),
+            3, //tipoEvento fixo para Palestra
+            dto.nome(),
+            dto.data(),
+            dto.capacidadeMaxima(),
+            dto.organizadorId(),
+            dto.localCerimoniaId(),
+            dto.duracaoMinutos(),
+            dto.precoIngresso(),
+            null, //instituicao
+            null, //curso
+            0,    //anoFormatura
+            null, //grauAcademico
+            0,    //numeroFormandos
+            null, //paraninfo
+            null, //orador
+            false, //temCerimonialista
+            null, //palestrante
+            null, //tituloPalestra
+            null, //tema
+            null, //categoria
+            null, //biografiaPalestrante
+            0,    //tempoPerguntas
+            false, //certificado
+            null, //objetivosAprendizagem
+            false, //gratuita
+            dto.artista(),
+            dto.generoMusical(),
+            dto.idadeMinima(),
+            dto.cacheArtista()
+        );
+    }
 
 }
 

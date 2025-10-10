@@ -2,7 +2,7 @@ package com.eventos.senac.apieventos_senac.application.dto.evento;
 
 import java.math.BigDecimal;
 
-public record EventoFormaturaRequestDto(
+public record EventoShowRequestDto(
     //atributos comuns da classe pai
     //int tipoEvento,
     String nome,
@@ -13,14 +13,11 @@ public record EventoFormaturaRequestDto(
     int duracaoMinutos,
     BigDecimal precoIngresso,
 
-    //atributos especificos da classe filha (Formatura)
-    String instituicao,
-    String curso,
-    int anoFormatura,
-    String grauAcademico,
-    int numeroFormandos,
-    String paraninfo,
-    String orador,
-    boolean temCerimonialista) {
+    //atributos especificos da classe filha (Show)
+    String artista,
+    String generoMusical,
+    int idadeMinima,
+    BigDecimal cacheArtista
+) {
 
 }

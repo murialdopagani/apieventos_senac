@@ -4,12 +4,11 @@ import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDt
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.math.BigDecimal;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -30,9 +29,6 @@ public class EventoPalestra extends Evento {
     private String categoria; // "Tecnologia", "Saúde", "Educação", "Negócios", etc.
 
     @Column
-    private int duracaoMinutos;
-
-    @Column
     private String biografiaPalestrante;
 
     @Column
@@ -47,42 +43,41 @@ public class EventoPalestra extends Evento {
     @Column
     private boolean gratuita;
 
-    @Column
-    private BigDecimal precoInscricao;
 
     public EventoPalestra() {
 
     }
 
-    public EventoPalestra(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia){
+    public EventoPalestra(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
         super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            .atStartOfDay(), dto.capacidadeMaxima(), organizador, 0, localCerimonia);
+            .atStartOfDay(), dto.capacidadeMaxima(), organizador, 0,dto.duracaoMinutos(), dto.precoIngresso(), localCerimonia);
 
         // Define os campos específicos da palestra
         this.palestrante = dto.palestrante();
         this.tituloPalestra = dto.tituloPalestra();
         this.tema = dto.tema();
         this.categoria = dto.categoria();
-        this.duracaoMinutos = dto.duracaoMinutos();
         this.biografiaPalestrante = dto.biografiaPalestrante();
         this.tempoPerguntas = dto.tempoPerguntas();
         this.certificado = dto.certificado();
         this.objetivosAprendizagem = dto.objetivosAprendizagem();
         this.gratuita = dto.gratuita();
-        this.precoInscricao = dto.precoInscricao() != null ? new BigDecimal(dto.precoInscricao()) : BigDecimal.ZERO;
     }
 
     public EventoPalestra atualizarEventoFromDTO(EventoPalestra eventoBanco,
-                                                 EventoRequestDto dto,
-                                                 Usuario organizador,
-                                                 LocalCerimonia localCerimonia) {
+        EventoRequestDto dto,
+        Usuario organizador,
+        LocalCerimonia localCerimonia) {
+
 
         eventoBanco.setNome(dto.nome());
         eventoBanco.setData(LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
             .atStartOfDay());
         eventoBanco.setCapacidadeMaxima(dto.capacidadeMaxima());
         eventoBanco.setOrganizador(organizador);
+        eventoBanco.setDuracaoMinutos(dto.duracaoMinutos());
+        eventoBanco.setPrecoIngresso(dto.precoIngresso());
         eventoBanco.setLocalCerimonia(localCerimonia);
 
         // Atualiza os campos específicos da palestra
@@ -90,13 +85,11 @@ public class EventoPalestra extends Evento {
         eventoBanco.setTituloPalestra(dto.tituloPalestra());
         eventoBanco.setTema(dto.tema());
         eventoBanco.setCategoria(dto.categoria());
-        eventoBanco.setDuracaoMinutos(dto.duracaoMinutos());
         eventoBanco.setBiografiaPalestrante(dto.biografiaPalestrante());
         eventoBanco.setTempoPerguntas(dto.tempoPerguntas());
         eventoBanco.setCertificado(dto.certificado());
         eventoBanco.setObjetivosAprendizagem(dto.objetivosAprendizagem());
         eventoBanco.setGratuita(dto.gratuita());
-        eventoBanco.setPrecoInscricao(dto.precoInscricao() != null ? new BigDecimal(dto.precoInscricao()) : BigDecimal.ZERO);
         return eventoBanco;
     }
 

@@ -1,5 +1,7 @@
 package com.eventos.senac.apieventos_senac.application.dto.evento;
 
+import java.math.BigDecimal;
+
 public record EventoPalestraRequestDto(
     //atributos comuns da classe pai
     //int tipoEvento,
@@ -8,18 +10,19 @@ public record EventoPalestraRequestDto(
     int capacidadeMaxima,
     Long organizadorId,
     Long localCerimoniaId,
+    int duracaoMinutos,
+    BigDecimal precoIngresso,
 
     //atributos especificos da classe filha (Palestra)
     String palestrante,
     String tituloPalestra,
     String tema,
     String categoria, // "Tecnologia", "Saúde", "Educação", "Negócios", etc.
-    int duracaoMinutos,
     String biografiaPalestrante,
     int tempoPerguntas,
     boolean certificado,
     String objetivosAprendizagem,
-    boolean gratuita,
-    String precoInscricao) {
+    boolean gratuita
+    ) {
 
 }
