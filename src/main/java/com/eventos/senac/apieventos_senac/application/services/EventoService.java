@@ -1,26 +1,30 @@
 package com.eventos.senac.apieventos_senac.application.services;
 
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
-import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
-import com.eventos.senac.apieventos_senac.exception.ValidacoesRegraNegocioException;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoResponseDto;
+import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.domain.entity.Evento;
 import com.eventos.senac.apieventos_senac.domain.entity.EventoFormatura;
 import com.eventos.senac.apieventos_senac.domain.entity.EventoPalestra;
 import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
 import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
+import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
+import com.eventos.senac.apieventos_senac.domain.repository.LocalCerimoniaRepository;
+import com.eventos.senac.apieventos_senac.domain.repository.UsuarioRepository;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusLocalCerimonia;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusUsuario;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumTipoEvento;
-import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
-import com.eventos.senac.apieventos_senac.domain.repository.LocalCerimoniaRepository;
-import com.eventos.senac.apieventos_senac.domain.repository.UsuarioRepository;
+import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
+import com.eventos.senac.apieventos_senac.exception.ValidacoesRegraNegocioException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +38,29 @@ public class EventoService {
 
     @Autowired
     private LocalCerimoniaRepository localCerimoniaRepository;
+
+    public List<EventoResponseDto> listarEventos() {
+        return eventoRepository.findAllByStatusNotOrderById(EnumStatusEvento.EXCLUIDO)
+            .stream()
+            .map(EventoResponseDto::fromEvento)
+            .collect(Collectors.toList());
+    }
+
+    public EventoResponseDto buscarEventoPorId(Long id) {
+        return eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO)
+            .stream()
+            .map(EventoResponseDto::fromEvento)
+            .findFirst()
+            .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
+    }
+
+    public EventoResponseDto deletarEventoPorId(Long id) {
+        Evento evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO)
+            .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
+        evento.setStatus(EnumStatusEvento.EXCLUIDO);
+        eventoRepository.save(evento);
+        return EventoResponseDto.fromEvento(evento);
+    }
 
     public Evento criarEvento(EventoRequestDto eventoRequestDto) {
 
@@ -107,14 +134,13 @@ public class EventoService {
             case FORMATURA -> new EventoFormatura(dto, organizador, localCerimonia).atualizarEventoFromDTO(
                 (EventoFormatura) eventoBanco, dto, organizador, localCerimonia);
             case PALESTRA -> new EventoPalestra(dto, organizador, localCerimonia).atualizarEventoFromDTO(
-                (EventoPalestra)  eventoBanco, dto, organizador, localCerimonia);
+                (EventoPalestra) eventoBanco, dto, organizador, localCerimonia);
             default -> throw new IllegalArgumentException("Tipo de evento inválido: " + dto.tipoEvento());
         };
     }
 
-    private List<Evento> listarTodosEventos() {
-        return eventoRepository.findAllByOrderByDataAsc();
-    }
+
+
 
     private Evento incrementarInscritos(Long eventoId) {
         Evento evento = eventoRepository.findById(eventoId)

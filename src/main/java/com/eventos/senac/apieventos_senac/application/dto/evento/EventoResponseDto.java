@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.math.BigDecimal;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record EventoResponseDto(Long id, String nome, String data, int capacidadeMaxima, int inscritos, Long organizadorId,
+public record EventoResponseDto(Long id, String nome, String data, int capacidadeMaxima, int inscritos, String organizador,
                                 String tipoEvento, EnumStatusEvento status,
 
                                 //Campos específicos de formatura
@@ -31,7 +31,7 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
         String data = evento.getData() != null ? evento.getData().toString() : null;
         int capacidadeMaxima = evento.getCapacidadeMaxima();
         int inscritos = evento.getInscritos();
-        Long organizadorId = evento.getOrganizador().getId();
+        String organizador = evento.getOrganizador().getNome();
         String localCerimonia = evento.getLocalCerimonia() != null ? evento.getLocalCerimonia().getNome() : null;
         EnumStatusEvento status = evento.getStatus();
 
@@ -88,7 +88,7 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
 
         // else if (evento instanceof OutroTipoEvento ote) { ... }
 
-        return new EventoResponseDto(id, nome, data, capacidadeMaxima, inscritos, organizadorId, tipoEvento, status, instituicao,
+        return new EventoResponseDto(id, nome, data, capacidadeMaxima, inscritos, organizador, tipoEvento, status, instituicao,
             curso, anoFormatura, grauAcademico, numeroFormandos, paraninfo, orador, temCerimonialista, localCerimonia, palestrante,
             tituloPalestra, tema, categoria, duracaoMinutos, biografiaPalestrante, tempoPerguntas, certificado,
             objetivosAprendizagem,

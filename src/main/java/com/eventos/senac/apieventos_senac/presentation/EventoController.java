@@ -1,17 +1,16 @@
 package com.eventos.senac.apieventos_senac.presentation;
 
-import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoFormaturaRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoPalestraRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoResponseDto;
-import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
-import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
-import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
 import com.eventos.senac.apieventos_senac.application.services.EventoService;
+import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
+import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
+import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,29 +79,27 @@ public class EventoController {
     @GetMapping
     @Operation(summary = "Listar todos", description = "Método para listar todos os eventos.")
     public ResponseEntity<List<EventoResponseDto>> listarTodos() {
-
-        var eventos = eventoRepository.findAllByStatusNotOrderById(EnumStatusEvento.EXCLUIDO);
-        List<EventoResponseDto> eventoResponseDto = eventos.stream().map(EventoResponseDto::fromEvento).collect(
-            Collectors.toList());
-        return ResponseEntity.ok(eventoResponseDto);
+        return ResponseEntity.ok(eventoService.listarEventos());
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Consulta de evento por ID",
-        description = "Método responsável por consultar um único evento por id, se não existir retorna null..!")
+    @Operation(summary = "Consulta de evento por ID", description = "Método responsável por consultar um único evento por id, se não existir retorna null..!")
     public ResponseEntity<EventoResponseDto> listarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
-        var evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO).orElseThrow(
-            () -> new RegistroNaoEncontradoException("Evento não encontrado"));
-        return ResponseEntity.ok(EventoResponseDto.fromEvento(evento));
+        var evento = eventoService.buscarEventoPorId(id);
+        if (evento == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(evento);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar evento por ID", description = "Método responsável por deletar um único evento por id.")
     public ResponseEntity<EventoResponseDto> deletarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
-        var evento = eventoRepository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
-        evento.setStatus(EnumStatusEvento.EXCLUIDO);
-        eventoRepository.save(evento);
-        return ResponseEntity.noContent().build();
+        var evento = eventoService.deletarEventoPorId(id);
+        if (evento == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(evento);
     }
 
     @PatchMapping("/{id}/cancelar")
