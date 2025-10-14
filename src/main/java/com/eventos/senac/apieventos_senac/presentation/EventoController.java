@@ -5,7 +5,16 @@ import com.eventos.senac.apieventos_senac.application.dto.evento.EventoPalestraR
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoResponseDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoShowRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoWorkshopRequestDto;
 import com.eventos.senac.apieventos_senac.application.services.EventoService;
+import com.eventos.senac.apieventos_senac.application.services.LocalCerimoniaService;
+import com.eventos.senac.apieventos_senac.application.services.UsuarioService;
+import com.eventos.senac.apieventos_senac.domain.entity.EventoFormatura;
+import com.eventos.senac.apieventos_senac.domain.entity.EventoPalestra;
+import com.eventos.senac.apieventos_senac.domain.entity.EventoShow;
+import com.eventos.senac.apieventos_senac.domain.entity.EventoWorkshop;
+import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
+import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
 import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
@@ -34,14 +43,24 @@ public class EventoController {
     private EventoService eventoService;
 
     @Autowired
-    private EventoRepository eventoRepository;
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private LocalCerimoniaService localCerimoniaService;
 
     @PostMapping("/formatura")
-    @Operation(summary = "Cria/Atualizar um Evento Formatura", description = "Método responsável por criar/atualizar um Evento Formatura no sistema.")
+    @Operation(summary = "Cria um Evento Formatura", description = "Método responsável por criar um Evento Formatura no sistema.")
     public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoFormaturaRequestDto eventoFormaturaDto)
         throws Exception {
-        EventoRequestDto eventoRequestDto = EventoRequestDto.fromFormaturaDto(eventoFormaturaDto);
-        var eventoBanco = eventoService.criarEvento(eventoRequestDto);
+        Usuario organizador = eventoService.buscarUsuarioNoBanco(eventoFormaturaDto.organizadorId()).orElseThrow(
+            () -> new RegistroNaoEncontradoException("Usuário não encontrado.!!"));
+
+        LocalCerimonia localCerimonia = eventoService.buscarLocalCerimoniaNoBanco(eventoFormaturaDto.localCerimoniaId()).orElseThrow(
+            () -> new RegistroNaoEncontradoException("Local de cerimônia não encontrado"));
+
+        EventoFormatura eventoFormatura = new EventoFormatura(eventoFormaturaDto, organizador, localCerimonia);
+
+        var eventoBanco = eventoService.criarEvento(eventoFormatura);
         EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoBanco);
         return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
     }
@@ -51,50 +70,88 @@ public class EventoController {
     public ResponseEntity<EventoResponseDto> atualizaEventoFormatura(@PathVariable Long id,
         @RequestBody EventoFormaturaRequestDto eventoFormaturaDto)
         throws Exception {
-        EventoRequestDto eventoRequestDto = EventoRequestDto.fromFormaturaDto(eventoFormaturaDto);
-        var eventoSave = eventoService.atualizarEvento(id, eventoRequestDto);
+
+        var organizador = usuarioService.buscarPorIdObj(eventoFormaturaDto.organizadorId());
+        LocalCerimonia localCerimonia = localCerimoniaService.buscarPorIdObj(eventoFormaturaDto.localCerimoniaId());
+
+        EventoFormatura eventoFormatura = new EventoFormatura(eventoFormaturaDto, organizador, localCerimonia);
+
+        var eventoSave = eventoService.atualizarEvento(id, eventoFormatura);
         return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
     }
 
-    @PostMapping("/palestra")
-    @Operation(summary = "Cria/Atualizar um Evento Palestra", description = "Método responsável por criar/atualizar um Evento Palestra no sistema.")
-    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoPalestraRequestDto eventoPalestraDto)
-        throws Exception {
-        EventoRequestDto eventoRequestDto = EventoRequestDto.fromPalestraDto(eventoPalestraDto);
-        var eventoBanco = eventoService.criarEvento(eventoRequestDto);
-        EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoBanco);
-        return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
-    }
+//    @PostMapping("/palestra")
+//    @Operation(summary = "Cria um Evento Palestra", description = "Método responsável por criar um Evento Palestra no sistema.")
+//    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoPalestraRequestDto eventoPalestraDto)
+//        throws Exception {
+//        Usuario organizador = eventoService.buscarUsuarioNoBanco(eventoPalestraDto.organizadorId()).orElseThrow(
+//            () -> new RegistroNaoEncontradoException("Usuário não encontrado.!!"));
+//
+//        LocalCerimonia localCerimonia = eventoService.buscarLocalCerimoniaNoBanco(eventoPalestraDto.localCerimoniaId()).orElseThrow(
+//            () -> new RegistroNaoEncontradoException("Local de cerimônia não encontrado"));
+//
+//        EventoPalestra eventoPalestra = new EventoPalestra(eventoPalestraDto, organizador, localCerimonia);
+//
+//        var eventoBanco = eventoService.criarEvento(eventoPalestra);
+//        EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoBanco);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
+//    }
 
-    @PutMapping("/palestra/{id}")
-    @Operation(summary = "Atualiza um Evento Paletra por ID", description = "Método responsável por atualizar um Evento Palestra por ID.")
-    public ResponseEntity<EventoResponseDto> atualizaEventoPalestra(@PathVariable Long id,
-        @RequestBody EventoPalestraRequestDto eventoPalestraDto)
-        throws Exception {
-        EventoRequestDto eventoRequestDto = EventoRequestDto.fromPalestraDto(eventoPalestraDto);
-        var eventoSave = eventoService.atualizarEvento(id, eventoRequestDto);
-        return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
-    }
+//    @PutMapping("/palestra/{id}")
+//    @Operation(summary = "Atualiza um Evento Paletra por ID", description = "Método responsável por atualizar um Evento Palestra por ID.")
+//    public ResponseEntity<EventoResponseDto> atualizaEventoPalestra(@PathVariable Long id,
+//        @RequestBody EventoPalestraRequestDto eventoPalestraDto)
+//        throws Exception {
+//        EventoRequestDto eventoRequestDto = EventoRequestDto.fromPalestraDto(eventoPalestraDto);
+//        var eventoSave = eventoService.atualizarEvento(id, eventoRequestDto);
+//        return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
+//    }
 
-    @PostMapping("/show")
-    @Operation(summary = "Cria/Atualizar um Evento Show", description = "Método responsável por criar/atualizar um Evento Show no sistema.")
-    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoShowRequestDto eventoShowDto)
-        throws Exception {
-        EventoRequestDto eventoRequestDto = EventoRequestDto.fromShowDto(eventoShowDto);
-        var eventoBanco = eventoService.criarEvento(eventoRequestDto);
-        EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoBanco);
-        return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
-    }
+//    @PostMapping("/show")
+//    @Operation(summary = "Cria um Evento Show", description = "Método responsável por criar um Evento Show no sistema.")
+//    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoShowRequestDto eventoShowDto)
+//        throws Exception {
+//        Usuario organizador = eventoService.buscarUsuarioNoBanco(eventoShowDto.organizadorId()).orElseThrow(
+//            () -> new RegistroNaoEncontradoException("Usuário não encontrado.!!"));
+//
+//        LocalCerimonia localCerimonia = eventoService.buscarLocalCerimoniaNoBanco(eventoShowDto.localCerimoniaId()).orElseThrow(
+//            () -> new RegistroNaoEncontradoException("Local de cerimônia não encontrado"));
+//
+//        EventoShow eventoShow = new EventoShow(eventoShowDto, organizador, localCerimonia);
+//
+//        var eventoBanco = eventoService.criarEvento(eventoShow);
+//        EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoBanco);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
+//    }
 
-    @PutMapping("/show/{id}")
-    @Operation(summary = "Atualiza um Evento Show por ID", description = "Método responsável por atualizar um Evento Show por ID.")
-    public ResponseEntity<EventoResponseDto> atualizaEventoShow(@PathVariable Long id,
-        @RequestBody EventoShowRequestDto eventoShowDto)
-        throws Exception {
-        EventoRequestDto eventoRequestDto = EventoRequestDto.fromShowDto(eventoShowDto);
-        var eventoSave = eventoService.atualizarEvento(id, eventoRequestDto);
-        return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
-    }
+//    @PutMapping("/show/{id}")
+//    @Operation(summary = "Atualiza um Evento Show por ID", description = "Método responsável por atualizar um Evento Show por ID.")
+//    public ResponseEntity<EventoResponseDto> atualizaEventoShow(@PathVariable Long id,
+//        @RequestBody EventoShowRequestDto eventoShowDto)
+//        throws Exception {
+//        EventoRequestDto eventoRequestDto = EventoRequestDto.fromShowDto(eventoShowDto);
+//        var eventoSave = eventoService.atualizarEvento(id, eventoRequestDto);
+//        return ResponseEntity.ok(EventoResponseDto.fromEvento(eventoSave));
+//    }
+
+//    @PostMapping("/workshop")
+//    @Operation(summary = "Cria um Evento Workshop", description = "Método responsável por criar um Evento Workshop no sistema.")
+//    public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoWorkshopRequestDto eventoWorkshopDto)
+//        throws Exception {
+//        Usuario organizador = eventoService.buscarUsuarioNoBanco(eventoWorkshopDto.organizadorId()).orElseThrow(
+//            () -> new RegistroNaoEncontradoException("Usuário não encontrado.!!"));
+//
+//        LocalCerimonia localCerimonia = eventoService.buscarLocalCerimoniaNoBanco(eventoWorkshopDto.localCerimoniaId()).orElseThrow(
+//            () -> new RegistroNaoEncontradoException("Local de cerimônia não encontrado"));
+//
+//        EventoWorkshop eventoWorkshop = new EventoWorkshop(eventoWorkshopDto, organizador, localCerimonia);
+//
+//        var eventoBanco = eventoService.criarEvento(eventoWorkshop);
+//        EventoResponseDto eventoResponseDto = EventoResponseDto.fromEvento(eventoBanco);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(eventoResponseDto);
+//    }
+
+
 
     @GetMapping
     @Operation(summary = "Listar todos", description = "Método para listar todos os eventos.")

@@ -1,7 +1,7 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
 import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCerimoniaCriarRequestDto;
-import com.eventos.senac.apieventos_senac.domain.valueobjects.Cnpj;
+import com.eventos.senac.apieventos_senac.domain.valueobjects.CNPJ;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusLocalCerimonia;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class LocalCerimonia {
     private String nome;
 
     @Embedded
-    private Cnpj cnpj;
+    private CNPJ cnpj;
 
     @Column(nullable = false)
     private String endereco;
@@ -41,14 +41,14 @@ public class LocalCerimonia {
 
     public LocalCerimonia(LocalCerimoniaCriarRequestDto localCerimonaDto) {
         this.nome = localCerimonaDto.nome();
-        this.cnpj = new Cnpj(localCerimonaDto.cnpj());
+        this.cnpj = new CNPJ(localCerimonaDto.cnpj());
         this.endereco = localCerimonaDto.endereco();
         this.capacidade = localCerimonaDto.capacidade();
     }
 
     public LocalCerimonia atualizarLocalCerimoniaFromDto(LocalCerimonia localCerimoniaBanco, LocalCerimoniaCriarRequestDto dto) {
         localCerimoniaBanco.setNome(dto.nome());
-        localCerimoniaBanco.setCnpj(new Cnpj(dto.cnpj()));
+        localCerimoniaBanco.setCnpj(new CNPJ(dto.cnpj()));
         localCerimoniaBanco.setEndereco(dto.endereco());
         localCerimoniaBanco.setCapacidade(dto.capacidade());
         return localCerimoniaBanco;

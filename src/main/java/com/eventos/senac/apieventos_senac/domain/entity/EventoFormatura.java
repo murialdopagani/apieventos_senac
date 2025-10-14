@@ -1,14 +1,14 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoFormaturaRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -44,10 +44,10 @@ public class EventoFormatura extends Evento {
 
     }
 
-    public EventoFormatura(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
+    public EventoFormatura(EventoFormaturaRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
-        super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            .atStartOfDay(), dto.capacidadeMaxima(), organizador, 0,dto.duracaoMinutos(), dto.precoIngresso(), localCerimonia);
+        super(null, dto.nome(), LocalDateTime.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+            dto.capacidadeMaxima(), organizador, 0, dto.duracaoMinutos(), dto.precoIngresso(), localCerimonia);
 
         // Define os campos específicos da formatura
         this.instituicao = dto.instituicao();
@@ -60,27 +60,23 @@ public class EventoFormatura extends Evento {
         this.temCerimonialista = dto.temCerimonialista();
     }
 
-    public EventoFormatura atualizarEventoFromDTO(EventoFormatura eventoBanco,
-                                                  EventoRequestDto dto,
-                                                  Usuario organizador,
-                                                  LocalCerimonia localCerimonia) {
+    public EventoFormatura atualizarEventoFromDTO(EventoFormatura eventoBanco,EventoFormatura eventoDto) {
 
-        eventoBanco.setNome(dto.nome());
-        eventoBanco.setData(LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                .atStartOfDay());
-        eventoBanco.setCapacidadeMaxima(dto.capacidadeMaxima());
-        eventoBanco.setOrganizador(organizador);
-        eventoBanco.setDuracaoMinutos(dto.duracaoMinutos());
-        eventoBanco.setPrecoIngresso(dto.precoIngresso());
-        eventoBanco.setLocalCerimonia(localCerimonia);
-        eventoBanco.setInstituicao(dto.instituicao());
-        eventoBanco.setCurso(dto.curso());
-        eventoBanco.setAnoFormatura(dto.anoFormatura());
-        eventoBanco.setGrauAcademico(dto.grauAcademico());
-        eventoBanco.setNumeroFormandos(dto.numeroFormandos());
-        eventoBanco.setParaninfo(dto.paraninfo());
-        eventoBanco.setOrador(dto.orador());
-        eventoBanco.setTemCerimonialista(dto.temCerimonialista());
+        eventoBanco.setNome(eventoDto.getNome());
+        eventoBanco.setData(eventoDto.getData());
+        eventoBanco.setCapacidadeMaxima(eventoDto.getCapacidadeMaxima());
+        eventoBanco.setOrganizador(eventoDto.getOrganizador());
+        eventoBanco.setDuracaoMinutos(eventoDto.getDuracaoMinutos());
+        eventoBanco.setPrecoIngresso(eventoDto.getPrecoIngresso());
+        eventoBanco.setLocalCerimonia(eventoDto.getLocalCerimonia());
+        eventoBanco.setInstituicao(eventoDto.getInstituicao());
+        eventoBanco.setCurso(eventoDto.getCurso());
+        eventoBanco.setAnoFormatura(eventoDto.getAnoFormatura());
+        eventoBanco.setGrauAcademico(eventoDto.getGrauAcademico());
+        eventoBanco.setNumeroFormandos(eventoDto.getNumeroFormandos());
+        eventoBanco.setParaninfo(eventoDto.getParaninfo());
+        eventoBanco.setOrador(eventoDto.getOrador());
+        eventoBanco.setTemCerimonialista(eventoDto.isTemCerimonialista());
 
         return eventoBanco;
     }

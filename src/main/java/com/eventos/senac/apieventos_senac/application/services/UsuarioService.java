@@ -33,6 +33,14 @@ public class UsuarioService {
             .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado"));
     }
 
+    public Usuario buscarPorIdObj(Long id) {
+        return usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO)
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado"));
+    }
+
+
     public UsuarioResponseDto salvarUsuario(UsuarioCriarRequestDto usuarioRequestDto) {
         var usuario = usuarioRepository.findByCpf_CpfAndStatusNot(String.valueOf(new CPF(usuarioRequestDto.cpf())),
             EnumStatusUsuario.EXCLUIDO).orElse(new Usuario(usuarioRequestDto));

@@ -3,7 +3,7 @@ package com.eventos.senac.apieventos_senac.presentation;
 import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCerimoniaCriarRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCerimoniaResponseDto;
 import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
-import com.eventos.senac.apieventos_senac.domain.valueobjects.Cnpj;
+import com.eventos.senac.apieventos_senac.domain.valueobjects.CNPJ;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusLocalCerimonia;
 import com.eventos.senac.apieventos_senac.domain.repository.LocalCerimoniaRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +31,7 @@ public class LocalCerimoniaController {
 
         try {
             var localCerimoniaBanco = localCerimoniaRepository.findByCnpj_CnpjAndStatusNot(
-                                                                      String.valueOf(new Cnpj(requestDto.cnpj())), EnumStatusLocalCerimonia.EXCLUIDO)
+                                                                      String.valueOf(new CNPJ(requestDto.cnpj())), EnumStatusLocalCerimonia.EXCLUIDO)
                                                               .orElse(new LocalCerimonia(requestDto));
 
             if (localCerimoniaBanco.getId() != null) {

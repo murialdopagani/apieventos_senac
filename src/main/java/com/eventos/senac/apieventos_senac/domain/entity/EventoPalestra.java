@@ -1,11 +1,12 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
+import com.eventos.senac.apieventos_senac.application.dto.evento.EventoPalestraRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,10 +49,10 @@ public class EventoPalestra extends Evento {
 
     }
 
-    public EventoPalestra(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
+    public EventoPalestra(EventoPalestraRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
-        super(null, dto.nome(), LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            .atStartOfDay(), dto.capacidadeMaxima(), organizador, 0,dto.duracaoMinutos(), dto.precoIngresso(), localCerimonia);
+        super(null, dto.nome(), LocalDateTime.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+            dto.capacidadeMaxima(), organizador, 0, dto.duracaoMinutos(), dto.precoIngresso(), localCerimonia);
 
         // Define os campos específicos da palestra
         this.palestrante = dto.palestrante();
@@ -65,31 +66,25 @@ public class EventoPalestra extends Evento {
         this.gratuita = dto.gratuita();
     }
 
-    public EventoPalestra atualizarEventoFromDTO(EventoPalestra eventoBanco,
-        EventoRequestDto dto,
-        Usuario organizador,
-        LocalCerimonia localCerimonia) {
-
-
-        eventoBanco.setNome(dto.nome());
-        eventoBanco.setData(LocalDate.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            .atStartOfDay());
-        eventoBanco.setCapacidadeMaxima(dto.capacidadeMaxima());
-        eventoBanco.setOrganizador(organizador);
-        eventoBanco.setDuracaoMinutos(dto.duracaoMinutos());
-        eventoBanco.setPrecoIngresso(dto.precoIngresso());
-        eventoBanco.setLocalCerimonia(localCerimonia);
+    public EventoPalestra atualizarEventoFromDTO(EventoPalestra eventoBanco, EventoPalestra eventoDto) {
+        eventoBanco.setNome(eventoDto.getNome());
+        eventoBanco.setData(eventoDto.getData());
+        eventoBanco.setCapacidadeMaxima(eventoDto.getCapacidadeMaxima());
+        eventoBanco.setOrganizador(eventoDto.getOrganizador());
+        eventoBanco.setDuracaoMinutos(eventoDto.getDuracaoMinutos());
+        eventoBanco.setPrecoIngresso(eventoDto.getPrecoIngresso());
+        eventoBanco.setLocalCerimonia(eventoDto.getLocalCerimonia());
 
         // Atualiza os campos específicos da palestra
-        eventoBanco.setPalestrante(dto.palestrante());
-        eventoBanco.setTituloPalestra(dto.tituloPalestra());
-        eventoBanco.setTema(dto.tema());
-        eventoBanco.setCategoria(dto.categoria());
-        eventoBanco.setBiografiaPalestrante(dto.biografiaPalestrante());
-        eventoBanco.setTempoPerguntas(dto.tempoPerguntas());
-        eventoBanco.setCertificado(dto.certificado());
-        eventoBanco.setObjetivosAprendizagem(dto.objetivosAprendizagem());
-        eventoBanco.setGratuita(dto.gratuita());
+        eventoBanco.setPalestrante(eventoDto.getPalestrante());
+        eventoBanco.setTituloPalestra(eventoDto.getTituloPalestra());
+        eventoBanco.setTema(eventoDto.getTema());
+        eventoBanco.setCategoria(eventoDto.getCategoria());
+        eventoBanco.setBiografiaPalestrante(eventoDto.getBiografiaPalestrante());
+        eventoBanco.setTempoPerguntas(eventoDto.getTempoPerguntas());
+        eventoBanco.setCertificado(eventoDto.isCertificado());
+        eventoBanco.setObjetivosAprendizagem(eventoDto.getObjetivosAprendizagem());
+        eventoBanco.setGratuita(eventoDto.isGratuita());
         return eventoBanco;
     }
 

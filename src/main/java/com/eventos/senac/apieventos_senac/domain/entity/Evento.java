@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 @DiscriminatorColumn(name = "tipoEventos", discriminatorType = DiscriminatorType.INTEGER)
 public class Evento {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_eventos")
@@ -95,6 +95,10 @@ public class Evento {
 
     public boolean isPast() {
         return data.isBefore(LocalDateTime.now());
+    }
+
+    public String getDataFormatada() {
+        return data.format(FORMATTER);
     }
 
 }

@@ -4,12 +4,11 @@ import com.eventos.senac.apieventos_senac.domain.entity.Evento;
 import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
 import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Long> {
@@ -22,10 +21,17 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
 
     Object findByData(LocalDateTime data);
 
-    List<Evento> findByDataAndOrganizadorAndLocalCerimoniaAndStatusNotOrderById(LocalDateTime localDateTime,
-                                                                           Usuario organizador,
-                                                                           LocalCerimonia localCerimonia,
-                                                                           EnumStatusEvento statusEvento);
+    List<Evento> findByDataAndLocalCerimoniaAndStatusNotOrderById(LocalDateTime localDate,
+        LocalCerimonia localCerimonia,
+        EnumStatusEvento statusEvento);
+
+    List<Evento> findByDataBetweenAndLocalCerimoniaAndStatusNotOrderById(
+        LocalDateTime dataIni,
+        LocalDateTime dataFim,
+        LocalCerimonia localCerimonia,
+        EnumStatusEvento status
+    );
+
 
     Optional<Evento> findByIdAndStatus(Long id, EnumStatusEvento enumStatusEvento);
 }
