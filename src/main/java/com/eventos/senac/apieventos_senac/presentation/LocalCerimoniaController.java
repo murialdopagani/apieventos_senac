@@ -2,96 +2,75 @@ package com.eventos.senac.apieventos_senac.presentation;
 
 import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCerimoniaCriarRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCerimoniaResponseDto;
-import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
-import com.eventos.senac.apieventos_senac.domain.valueobjects.CNPJ;
-import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusLocalCerimonia;
-import com.eventos.senac.apieventos_senac.domain.repository.LocalCerimoniaRepository;
+import com.eventos.senac.apieventos_senac.application.services.LocalCerimoniaService;
+import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/localCerimonia")
-@Tag(name = "Local Cerimônia Controller", description = "Controladora responsável por gerenciar os Locais de Cerimônia")
+@Tag(name = "Local Cerimônia Controller", description = "Controladora responsável por gerenciar os Locais de Cerimônias")
 public class LocalCerimoniaController {
 
     @Autowired
-    private LocalCerimoniaRepository localCerimoniaRepository;
+    private LocalCerimoniaService localCerimoniaService;
 
     @PostMapping
-    @Operation(summary = "Criar Local Cerimônia", description = "Método para criar um novo local de cerimônia.")
-    public ResponseEntity<?> criarLocalCerimonia(@RequestBody @Validated LocalCerimoniaCriarRequestDto requestDto) {
-
-        try {
-            var localCerimoniaBanco = localCerimoniaRepository.findByCnpj_CnpjAndStatusNot(
-                                                                      String.valueOf(new CNPJ(requestDto.cnpj())), EnumStatusLocalCerimonia.EXCLUIDO)
-                                                              .orElse(new LocalCerimonia(requestDto));
-
-            if (localCerimoniaBanco.getId() != null) {
-                localCerimoniaBanco = localCerimoniaBanco.atualizarLocalCerimoniaFromDto(localCerimoniaBanco, requestDto);
-            }
-
-            localCerimoniaRepository.save(localCerimoniaBanco);
-            var localCerimoniaResponseDto = LocalCerimoniaResponseDto.fromLocalCerimonia(localCerimoniaBanco);
-
-            return ResponseEntity.status(HttpStatus.OK).body(localCerimoniaResponseDto);
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-
-        } catch (Exception e) {
-            System.err.println("Erro ao salvar/atualizar um local de cerimonia: " + e.getMessage());
-            return ResponseEntity.badRequest().body(e.getMessage());
-
-        }
-
+    @Operation(summary = "Cria/Atualiza Local Cerimônias", description = "Método para criar ou atualizar um local de cerimônias.")
+    public ResponseEntity<LocalCerimoniaResponseDto> criarLocalCerimonia(
+        @RequestBody @Validated LocalCerimoniaCriarRequestDto requestDto) throws Exception {
+        LocalCerimoniaResponseDto localCerimonia = localCerimoniaService.salvarLocalCerimonia(requestDto);
+        return ResponseEntity.ok(localCerimonia);
     }
 
     @GetMapping
-    @Operation(summary = "Listar todos", description = "Método para listar todos os locais de cerimônia.")
-    public ResponseEntity<?> listarTodos() {
-        try {
-            var localCerimonia = localCerimoniaRepository.findAllByStatusNot(EnumStatusLocalCerimonia.EXCLUIDO);
-            List<LocalCerimoniaResponseDto> localCerimoniaResponseDto = localCerimonia.stream()
-                                                                                      .map(LocalCerimoniaResponseDto::fromLocalCerimonia)
-                                                                                      .collect(Collectors.toList());
-            return ResponseEntity.ok(localCerimoniaResponseDto);
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+    @Operation(summary = "Listar todos", description = "Método para listar todos os locais de cerimônias.")
+    public ResponseEntity<List<LocalCerimoniaResponseDto>> listarTodos() {
+        return ResponseEntity.ok(localCerimoniaService.listarTodos());
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Consulta de local de cerimônia por id",
-            description = "Método responsável por consultar um único local de cerimônia por id, se não existir retorna null..!")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
-
-        try {
-            var localCerimoniaBanco = localCerimoniaRepository.findByIdAndStatusNot(id, EnumStatusLocalCerimonia.EXCLUIDO)
-                                                              .orElse(null);
-            if (localCerimoniaBanco == null) {
-                return ResponseEntity.notFound().build();
-            }
-            var localCerimoniaResponseDto = LocalCerimoniaResponseDto.fromLocalCerimonia(localCerimoniaBanco);
-            return ResponseEntity.ok(localCerimoniaResponseDto);
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    @Operation(summary = "Consulta de local de cerimônias por id",
+        description = "Método responsável por consultar um único local de cerimônias por id, se não existir retorna null..!")
+    public ResponseEntity<LocalCerimoniaResponseDto> buscarPorId(@PathVariable Long id) throws RegistroNaoEncontradoException {
+        var localCerimoniaResponseDto = localCerimoniaService.buscarPorId(id);
+        if (localCerimoniaResponseDto == null) {
+            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(localCerimoniaResponseDto);
+
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete local de cerimônias !", description = "Método responsavel por deletar um local de cerimônias ")
+    public ResponseEntity<?> deletarLocalCerimonia(@PathVariable Long id) throws Exception {
+        return localCerimoniaService.excluirLocalCerimonia(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
 
+    @PatchMapping("/{id}/bloquear")
+    @Operation(summary = "Bloqueiolocal de cerimônias !", description = "Método responsavel por Bloquear local de cerimônias !")
+    public ResponseEntity<?> bloquearLocalCerimonia(@PathVariable Long id) throws Exception {
+        return localCerimoniaService.bloquearLocalCerimonia(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}/desbloquear")
+    @Operation(summary = "Desbloqueio local de cerimônias !", description = "Método responsavel por Desbloquear local de cerimônias !")
+    public ResponseEntity<?> desbloquearLocalCerimonia(@PathVariable Long id) throws Exception {
+        return localCerimoniaService.desbloquearLocalCerimonia(id) ? ResponseEntity.ok().build()
+            : ResponseEntity.notFound().build();
+    }
 
 }

@@ -4,11 +4,15 @@ import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCe
 import com.eventos.senac.apieventos_senac.domain.valueobjects.CNPJ;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusLocalCerimonia;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@Table(name = "tb_localCerimonia")
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "tb_local_cerimonia")
 public class LocalCerimonia {
 
     @Id
@@ -27,16 +31,9 @@ public class LocalCerimonia {
     @Column(nullable = false)
     private int capacidade;
 
+    @Column
     private EnumStatusLocalCerimonia status = EnumStatusLocalCerimonia.ATIVO;
 
-    public LocalCerimonia() {
-    }
-
-    public LocalCerimonia(String nome, String endereco, int capacidade) {
-        this.nome = nome;
-        this.endereco = endereco;
-        this.capacidade = capacidade;
-    }
 
     public LocalCerimonia(LocalCerimoniaCriarRequestDto localCerimonaDto) {
         this.nome = localCerimonaDto.nome();
