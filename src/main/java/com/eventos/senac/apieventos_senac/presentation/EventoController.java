@@ -52,11 +52,9 @@ public class EventoController {
     @Operation(summary = "Cria um Evento Formatura", description = "Método responsável por criar um Evento Formatura no sistema.")
     public ResponseEntity<EventoResponseDto> criarEvento(@RequestBody EventoFormaturaRequestDto eventoFormaturaDto)
         throws Exception {
-        Usuario organizador = eventoService.buscarUsuarioNoBanco(eventoFormaturaDto.organizadorId()).orElseThrow(
-            () -> new RegistroNaoEncontradoException("Usuário não encontrado.!!"));
 
-        LocalCerimonia localCerimonia = eventoService.buscarLocalCerimoniaNoBanco(eventoFormaturaDto.localCerimoniaId()).orElseThrow(
-            () -> new RegistroNaoEncontradoException("Local de cerimônia não encontrado"));
+        Usuario organizador = usuarioService.buscarPorIdObj(eventoFormaturaDto.organizadorId());
+        LocalCerimonia localCerimonia = localCerimoniaService.buscarPorIdObj(eventoFormaturaDto.localCerimoniaId());
 
         EventoFormatura eventoFormatura = new EventoFormatura(eventoFormaturaDto, organizador, localCerimonia);
 
@@ -71,7 +69,7 @@ public class EventoController {
         @RequestBody EventoFormaturaRequestDto eventoFormaturaDto)
         throws Exception {
 
-        var organizador = usuarioService.buscarPorIdObj(eventoFormaturaDto.organizadorId());
+        Usuario organizador = usuarioService.buscarPorIdObj(eventoFormaturaDto.organizadorId());
         LocalCerimonia localCerimonia = localCerimoniaService.buscarPorIdObj(eventoFormaturaDto.localCerimoniaId());
 
         EventoFormatura eventoFormatura = new EventoFormatura(eventoFormaturaDto, organizador, localCerimonia);

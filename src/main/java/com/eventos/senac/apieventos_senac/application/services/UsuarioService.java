@@ -57,24 +57,30 @@ public class UsuarioService {
         return new UsuarioResponseDto(usuarioRepository.save(usuario));
     }
 
-    public UsuarioResponseDto deletarUsuario(Long id) {
-        var usuario = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO)
+    public boolean excluirUsuario(Long id) {
+        var usuario = usuarioRepository.findById(id)
             .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado"));
-        usuario.setStatus(EnumStatusUsuario.EXCLUIDO);
-        return new UsuarioResponseDto(usuarioRepository.save(usuario));
+        alterarStatusUsuario(usuario, EnumStatusUsuario.EXCLUIDO);
+        return true;
     }
 
-    public UsuarioResponseDto desbloquearUsuario(Long id) {
+
+    public boolean desbloquearUsuario(Long id) {
         var usuario = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO)
             .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado"));
-        usuario.setStatus(EnumStatusUsuario.ATIVO);
-        return new UsuarioResponseDto(usuarioRepository.save(usuario));
+        alterarStatusUsuario(usuario, EnumStatusUsuario.ATIVO);
+        return true;
     }
 
-    public UsuarioResponseDto bloquearUsuario(Long id) {
+    public boolean bloquearUsuario(Long id) {
         var usuario = usuarioRepository.findByIdAndStatusNot(id, EnumStatusUsuario.EXCLUIDO)
             .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado"));
-        usuario.setStatus(EnumStatusUsuario.BLOQUEADO);
-        return new UsuarioResponseDto(usuarioRepository.save(usuario));
+        alterarStatusUsuario(usuario, EnumStatusUsuario.BLOQUEADO);
+        return true;
+    }
+
+    private void alterarStatusUsuario(Usuario usuario, EnumStatusUsuario statusUsuario) {
+        usuario.setStatus(statusUsuario);
+        usuarioRepository.save(usuario);
     }
 }

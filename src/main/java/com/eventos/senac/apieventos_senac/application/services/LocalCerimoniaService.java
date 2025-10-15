@@ -8,6 +8,7 @@ import com.eventos.senac.apieventos_senac.domain.repository.LocalCerimoniaReposi
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusLocalCerimonia;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusUsuario;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,15 @@ public class LocalCerimoniaService {
             .stream()
             .map(LocalCerimoniaResponseDto::new)
             .findFirst()
-            .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado"));
+            .orElseThrow(() -> new RegistroNaoEncontradoException("Local de cerimonias não encontrado"));
     }
 
     public LocalCerimonia buscarPorIdObj(Long id) {
         return localCerimoniaRepository.findByIdAndStatusNot(id, EnumStatusLocalCerimonia.EXCLUIDO)
             .stream()
             .findFirst()
-            .orElseThrow(() -> new RegistroNaoEncontradoException("Usuário não encontrado"));
+            .orElseThrow(() -> new RegistroNaoEncontradoException("Local de cerimonias não encontrado"));
     }
+
+
 }

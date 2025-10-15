@@ -3,12 +3,16 @@ package com.eventos.senac.apieventos_senac.domain.entity;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_eventos")
 @SequenceGenerator(name = "seq_eventos", sequenceName = "seq_eventos", allocationSize = 1, initialValue = 1)
@@ -49,9 +53,6 @@ public class Evento {
     private LocalCerimonia localCerimonia;
 
     private EnumStatusEvento status = EnumStatusEvento.ATIVO;
-
-    public Evento() {
-    }
 
     public Evento(Long id,
                   String nome,

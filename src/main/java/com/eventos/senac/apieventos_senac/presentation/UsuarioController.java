@@ -61,30 +61,25 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioBanco);
     }
 
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete de usuário!", description = "Método responsavel por deletar um usuario")
-    public ResponseEntity<UsuarioResponseDto> deletarUsuario(@PathVariable Long id) throws Exception {
-        var usuario = usuarioService.deletarUsuario(id);
-        return ResponseEntity.ok(usuario);
+    public ResponseEntity<?> deletarUsuario(@PathVariable Long id) throws Exception {
+        return usuarioService.excluirUsuario(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
+
 
     @PatchMapping("/{id}/bloquear")
     @Operation(summary = "Bloqueio de usuário!", description = "Método responsavel por Bloquear um usuario")
-    public ResponseEntity<UsuarioResponseDto> atualizarBloquear(@PathVariable Long id) throws Exception {
-        var usuario = usuarioService.bloquearUsuario(id);
-        if (usuario == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(usuario);
+    public ResponseEntity<?> atualizarBloquear(@PathVariable Long id)  throws Exception {
+
+        return usuarioService.bloquearUsuario(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/{id}/desbloquear")
     @Operation(summary = "Desbloqueio de usuário!", description = "Método responsavel por Desbloquear um usuario")
-    public ResponseEntity<UsuarioResponseDto> atualizarDesbloquear(@PathVariable Long id) throws Exception {
-        var usuario = usuarioService.desbloquearUsuario(id);
-        if (usuario == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(usuario);
+    public ResponseEntity<?> atualizarDesbloquear(@PathVariable Long id)  throws Exception {
+
+        return usuarioService.desbloquearUsuario(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 }
