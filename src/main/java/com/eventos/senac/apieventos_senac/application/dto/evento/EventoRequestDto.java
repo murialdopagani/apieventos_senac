@@ -40,6 +40,9 @@ public record EventoRequestDto(
     int idadeMinima,
     BigDecimal cacheArtista
 
+    //Campos específicos para Workshop
+    //Já tem palestrante, tema, categoria e certificado
+
 ) {
 
     public static EventoRequestDto fromFormaturaDto(EventoFormaturaRequestDto dto) {
@@ -144,6 +147,41 @@ public record EventoRequestDto(
             dto.generoMusical(),
             dto.idadeMinima(),
             dto.cacheArtista()
+        );
+    }
+
+    public static EventoRequestDto fromWorkshopDto(EventoWorkshopRequestDto dto) {
+        return new EventoRequestDto(
+            //dto.tipoEvento(),
+            4, //tipoEvento fixo para Palestra
+            dto.nome(),
+            dto.data(),
+            dto.capacidadeMaxima(),
+            dto.organizadorId(),
+            dto.localCerimoniaId(),
+            dto.duracaoMinutos(),
+            dto.precoIngresso(),
+            null, //instituicao
+            null, //curso
+            0,    //anoFormatura
+            null, //grauAcademico
+            0,    //numeroFormandos
+            null, //paraninfo
+            null, //orador
+            false, //temCerimonialista
+            dto.palestrante(),
+            null, //tituloPalestra
+            dto.tema(),
+            dto.categoria(),
+            null, //biografiaPalestrante
+            0,    //tempoPerguntas
+            dto.certificado(),
+            null, //objetivosAprendizagem
+            false, //gratuita
+            null, //artista
+            null, //generoMusical
+            0,    //idadeMinima
+            null  //cacheArtista
         );
     }
 

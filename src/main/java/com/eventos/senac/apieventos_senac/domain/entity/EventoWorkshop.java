@@ -2,58 +2,62 @@ package com.eventos.senac.apieventos_senac.domain.entity;
 
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoWorkshopRequestDto;
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @DiscriminatorValue("4")
 public class EventoWorkshop extends Evento {
 
-    private String instrutor;
+    @Column
+    private String palestrante;
 
+    @Column
     private String tema;
 
+    @Column
     private String categoria; // "Tecnologia", "Arte", "Culinária", "Negócios", etc.
 
+    @Column
     private boolean certificado;
 
-    public EventoWorkshop() {
-        super();
-    }
-
-    public EventoWorkshop(EventoWorkshopRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
+    public EventoWorkshop(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
         super(null, dto.nome(), LocalDateTime.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
             dto.capacidadeMaxima(), organizador, 0, dto.duracaoMinutos(), dto.precoIngresso(), localCerimonia);
 
         // Define os campos específicos do EventoWorkshop
-        this.instrutor = dto.instrutor();
+        this.palestrante = dto.palestrante();
         this.tema = dto.tema();
         this.categoria = dto.categoria();
         this.certificado = dto.certificado();
     }
 
-    public EventoWorkshop atualizarEventoFromDTO(EventoWorkshop eventoBanco, EventoWorkshopRequestDto dto, Usuario organizador,
-        LocalCerimonia localCerimonia) {
-        eventoBanco.setNome(dto.nome());
-        eventoBanco.setData(LocalDateTime.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        eventoBanco.setCapacidadeMaxima(dto.capacidadeMaxima());
-        eventoBanco.setOrganizador(organizador);
-        eventoBanco.setDuracaoMinutos(dto.duracaoMinutos());
-        eventoBanco.setPrecoIngresso(dto.precoIngresso());
-        eventoBanco.setLocalCerimonia(localCerimonia);
+    public EventoWorkshop atualizarEventoFromDTO(EventoWorkshop eventoBanco, EventoWorkshop eventoDto) {
+        eventoBanco.setNome(eventoDto.getNome());
+        eventoBanco.setData(eventoDto.getData());
+        eventoBanco.setCapacidadeMaxima(eventoDto.getCapacidadeMaxima());
+        eventoBanco.setOrganizador(eventoDto.getOrganizador());
+        eventoBanco.setDuracaoMinutos(eventoDto.getDuracaoMinutos());
+        eventoBanco.setPrecoIngresso(eventoDto.getPrecoIngresso());
+        eventoBanco.setLocalCerimonia(eventoDto.getLocalCerimonia());
 
         // Atualiza os campos específicos do EventoShow
-        eventoBanco.setInstrutor(dto.instrutor());
-        eventoBanco.setTema(dto.tema());
-        eventoBanco.setCategoria(dto.categoria());
-        eventoBanco.setCertificado(dto.certificado());
+        eventoBanco.setPalestrante(eventoDto.getPalestrante());
+        eventoBanco.setTema(eventoDto.getTema());
+        eventoBanco.setCategoria(eventoDto.getCategoria());
+        eventoBanco.setCertificado(eventoDto.isCertificado());
         return eventoBanco;
     }
 

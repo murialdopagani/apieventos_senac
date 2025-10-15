@@ -8,10 +8,14 @@ import jakarta.persistence.Entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @DiscriminatorValue("2")
@@ -45,11 +49,7 @@ public class EventoPalestra extends Evento {
     private boolean gratuita;
 
 
-    public EventoPalestra() {
-
-    }
-
-    public EventoPalestra(EventoPalestraRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
+    public EventoPalestra(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
         super(null, dto.nome(), LocalDateTime.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
             dto.capacidadeMaxima(), organizador, 0, dto.duracaoMinutos(), dto.precoIngresso(), localCerimonia);

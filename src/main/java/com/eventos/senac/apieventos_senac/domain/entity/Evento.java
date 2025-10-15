@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_eventos")
-@SequenceGenerator(name = "seq_eventos", sequenceName = "seq_eventos", allocationSize = 1, initialValue = 1)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipoEventos", discriminatorType = DiscriminatorType.INTEGER)
 public class Evento {
@@ -23,7 +22,7 @@ public class Evento {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_eventos")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

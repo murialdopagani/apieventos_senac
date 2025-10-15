@@ -9,11 +9,10 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tb_localCerimonia")
-@SequenceGenerator(name = "seq_localCerimonia", sequenceName = "seq_localCerimonia", allocationSize = 1, initialValue = 1)
 public class LocalCerimonia {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_localCerimonia")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

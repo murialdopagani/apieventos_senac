@@ -9,10 +9,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @DiscriminatorValue("3")
@@ -30,11 +34,7 @@ public class EventoShow extends Evento {
     @Column
     private BigDecimal cacheArtista = BigDecimal.ZERO;
 
-    public EventoShow() {
-        super();
-    }
-
-    public EventoShow(EventoShowRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
+    public EventoShow(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
         super(null, dto.nome(), LocalDateTime.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
             dto.capacidadeMaxima(), organizador, 0, dto.duracaoMinutos(), dto.precoIngresso(), localCerimonia);
@@ -46,21 +46,20 @@ public class EventoShow extends Evento {
         this.cacheArtista = dto.cacheArtista();
     }
 
-    public EventoShow atualizarEventoFromDTO(EventoShow eventoBanco, EventoRequestDto dto, Usuario organizador,
-        LocalCerimonia localCerimonia) {
-        eventoBanco.setNome(dto.nome());
-        eventoBanco.setData(LocalDateTime.parse(dto.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        eventoBanco.setCapacidadeMaxima(dto.capacidadeMaxima());
-        eventoBanco.setOrganizador(organizador);
-        eventoBanco.setDuracaoMinutos(dto.duracaoMinutos());
-        eventoBanco.setPrecoIngresso(dto.precoIngresso());
-        eventoBanco.setLocalCerimonia(localCerimonia);
+    public EventoShow atualizarEventoFromDTO(EventoShow eventoBanco, EventoShow eventoDto) {
+        eventoBanco.setNome(eventoDto.getNome());
+        eventoBanco.setData(eventoDto.getData());
+        eventoBanco.setCapacidadeMaxima(eventoDto.getCapacidadeMaxima());
+        eventoBanco.setOrganizador(eventoDto.getOrganizador());
+        eventoBanco.setDuracaoMinutos(eventoDto.getDuracaoMinutos());
+        eventoBanco.setPrecoIngresso(eventoDto.getPrecoIngresso());
+        eventoBanco.setLocalCerimonia(eventoDto.getLocalCerimonia());
 
         // Atualiza os campos específicos do EventoShow
-        eventoBanco.setArtista(dto.artista());
-        eventoBanco.setGeneroMusical(dto.generoMusical());
-        eventoBanco.setIdadeMinima(dto.idadeMinima());
-        eventoBanco.setCacheArtista(dto.cacheArtista());
+        eventoBanco.setArtista(eventoDto.getArtista());
+        eventoBanco.setGeneroMusical(eventoDto.getGeneroMusical());
+        eventoBanco.setIdadeMinima(eventoDto.getIdadeMinima());
+        eventoBanco.setCacheArtista(eventoDto.getCacheArtista());
         return eventoBanco;
     }
 

@@ -14,7 +14,7 @@ public record EventoWorkshopRequestDto(
     BigDecimal precoIngresso,
 
     //atributos especificos da classe filha (Workshop)
-    String instrutor,
+    String palestrante,
     String tema,
     String categoria, // "Tecnologia", "Arte", "Culinária", "Negócios", etc.
     boolean certificado
