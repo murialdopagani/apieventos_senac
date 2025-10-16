@@ -1,9 +1,9 @@
 package com.eventos.senac.apieventos_senac.domain.valueobjects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Data;
 
-@Data
+
+//@Data
 public class CNPJ {
 
     private final String cnpj;
@@ -71,5 +71,7 @@ public class CNPJ {
     }
 
 
-
+    public String getCnpj() {
+        return cnpj;
+    }
 }
