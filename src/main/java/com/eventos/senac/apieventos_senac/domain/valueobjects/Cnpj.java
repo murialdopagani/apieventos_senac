@@ -2,8 +2,6 @@ package com.eventos.senac.apieventos_senac.domain.valueobjects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-
-//@Data
 public class CNPJ {
 
     private final String cnpj;
@@ -61,7 +59,7 @@ public class CNPJ {
 
             return d1 == (cnpj.charAt(12) - '0') && d2 == (cnpj.charAt(13) - '0');
         } catch (Exception e) {
-           return false;
+            return false;
         }
     }
 
@@ -74,4 +72,5 @@ public class CNPJ {
     public String getCnpj() {
         return cnpj;
     }
+
 }

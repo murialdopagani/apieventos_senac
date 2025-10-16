@@ -2,9 +2,7 @@ package com.eventos.senac.apieventos_senac.domain.valueobjects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-//@Data
 public class CPF {
-
     private final String cpf;
 
     public CPF() {
