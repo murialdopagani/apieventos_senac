@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.NoArgsConstructor;
 
-@Data
+//@Data
 @Entity
 @Table(name = "tb_eventos")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -104,4 +104,83 @@ public class Evento {
         return data.format(FORMATTER);
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public LocalDateTime getData() {
+        return data;
+    }
+
+    public void setData(LocalDateTime data) {
+        this.data = data;
+    }
+
+    public int getCapacidadeMaxima() {
+        return capacidadeMaxima;
+    }
+
+    public void setCapacidadeMaxima(int capacidadeMaxima) {
+        this.capacidadeMaxima = capacidadeMaxima;
+    }
+
+    public int getInscritos() {
+        return inscritos;
+    }
+
+    public void setInscritos(int inscritos) {
+        this.inscritos = inscritos;
+    }
+
+    public int getDuracaoMinutos() {
+        return duracaoMinutos;
+    }
+
+    public void setDuracaoMinutos(int duracaoMinutos) {
+        this.duracaoMinutos = duracaoMinutos;
+    }
+
+    public BigDecimal getPrecoIngresso() {
+        return precoIngresso;
+    }
+
+    public void setPrecoIngresso(BigDecimal precoIngresso) {
+        this.precoIngresso = precoIngresso;
+    }
+
+    public Usuario getOrganizador() {
+        return organizador;
+    }
+
+    public void setOrganizador(Usuario organizador) {
+        this.organizador = organizador;
+    }
+
+    public LocalCerimonia getLocalCerimonia() {
+        return localCerimonia;
+    }
+
+    public void setLocalCerimonia(LocalCerimonia localCerimonia) {
+        this.localCerimonia = localCerimonia;
+    }
+
+    public EnumStatusEvento getStatus() {
+        return status;
+    }
+
+    public void setStatus(EnumStatusEvento status) {
+        this.status = status;
+    }
 }

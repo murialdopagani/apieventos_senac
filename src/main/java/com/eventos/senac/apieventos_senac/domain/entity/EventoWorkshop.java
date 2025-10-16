@@ -12,8 +12,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
+//@Data
+//@EqualsAndHashCode(callSuper = true)
 @Entity
 @DiscriminatorValue("4")
 public class EventoWorkshop extends Evento {
@@ -62,4 +62,36 @@ public class EventoWorkshop extends Evento {
         return eventoBanco;
     }
 
+
+    public String getPalestrante() {
+        return palestrante;
+    }
+
+    public void setPalestrante(String palestrante) {
+        this.palestrante = palestrante;
+    }
+
+    public String getTema() {
+        return tema;
+    }
+
+    public void setTema(String tema) {
+        this.tema = tema;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public boolean isCertificado() {
+        return certificado;
+    }
+
+    public void setCertificado(boolean certificado) {
+        this.certificado = certificado;
+    }
 }

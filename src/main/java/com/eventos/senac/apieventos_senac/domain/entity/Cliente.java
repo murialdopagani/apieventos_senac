@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
-@Data
+//@Data
 @EqualsAndHashCode(callSuper = true)
 public class Cliente extends Usuario {
 
@@ -27,4 +27,12 @@ public class Cliente extends Usuario {
         return respota;
     }
 
+
+    public BigDecimal getValorConsumido() {
+        return valorConsumido;
+    }
+
+    public void setValorConsumido(BigDecimal valorConsumido) {
+        this.valorConsumido = valorConsumido;
+    }
 }

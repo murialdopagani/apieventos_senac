@@ -4,7 +4,7 @@ import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
+//@Data
 @EqualsAndHashCode(callSuper = true)
 public class Administrador extends Usuario {
 
@@ -19,4 +19,12 @@ public class Administrador extends Usuario {
         return "Eu sou " + this.getNome() + " administrador e tenho acesso " + (this.acessoIrrestrito ? "Irrestrito" : "Nenhum!");
     }
 
+
+    public boolean isAcessoIrrestrito() {
+        return acessoIrrestrito;
+    }
+
+    public void setAcessoIrrestrito(boolean acessoIrrestrito) {
+        this.acessoIrrestrito = acessoIrrestrito;
+    }
 }
