@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Entity
 @Table(name = "tb_local_cerimonia")
 public class LocalCerimonia {
@@ -51,8 +50,53 @@ public class LocalCerimonia {
 
     }
 
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public CNPJ getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(CNPJ cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public void setCapacidade(int capacidade) {
+        this.capacidade = capacidade;
+    }
+
+    public EnumStatusLocalCerimonia getStatus() {
+        return status;
+    }
+
+    public void setStatus(EnumStatusLocalCerimonia status) {
+        this.status = status;
+    }
+
     public int getCapacidade() {
         return capacidade;
     }
-
 }

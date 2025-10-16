@@ -60,19 +60,19 @@ public class Evento {
                   String nome,
                   LocalDateTime data,
                   int capacidadeMaxima,
-                  Usuario organizador,
                   int inscritos,
                   int duracaoMinutos,
                   BigDecimal precoIngresso,
+                  Usuario organizador,
                   LocalCerimonia localCerimonia) {
         this.id = id;
         this.nome = nome;
         this.data = data;
         this.capacidadeMaxima = capacidadeMaxima;
-        this.organizador = organizador;
         this.inscritos = inscritos;
         this.duracaoMinutos = duracaoMinutos;
         this.precoIngresso = precoIngresso;
+        this.organizador = organizador;
         this.localCerimonia = localCerimonia;
     }
 
