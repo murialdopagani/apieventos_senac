@@ -11,8 +11,6 @@ import java.time.format.DateTimeFormatter;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "tb_eventos")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -51,7 +49,11 @@ public class Evento {
     @JoinColumn(name = "local_cerimonia_id", nullable = false, foreignKey = @ForeignKey(name = "fk_evento_localCerimonia"))
     private LocalCerimonia localCerimonia;
 
+    @Column
     private EnumStatusEvento status = EnumStatusEvento.ATIVO;
+
+    public Evento() {
+    }
 
     public Evento(Long id,
                   String nome,

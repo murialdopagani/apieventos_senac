@@ -13,9 +13,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
+@Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @DiscriminatorValue("2")
@@ -49,78 +47,6 @@ public class EventoPalestra extends Evento {
     private boolean gratuita;
 
     public EventoPalestra() {
-    }
-
-    public String getPalestrante() {
-        return palestrante;
-    }
-
-    public void setPalestrante(String palestrante) {
-        this.palestrante = palestrante;
-    }
-
-    public String getTituloPalestra() {
-        return tituloPalestra;
-    }
-
-    public void setTituloPalestra(String tituloPalestra) {
-        this.tituloPalestra = tituloPalestra;
-    }
-
-    public String getTema() {
-        return tema;
-    }
-
-    public void setTema(String tema) {
-        this.tema = tema;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getBiografiaPalestrante() {
-        return biografiaPalestrante;
-    }
-
-    public void setBiografiaPalestrante(String biografiaPalestrante) {
-        this.biografiaPalestrante = biografiaPalestrante;
-    }
-
-    public int getTempoPerguntas() {
-        return tempoPerguntas;
-    }
-
-    public void setTempoPerguntas(int tempoPerguntas) {
-        this.tempoPerguntas = tempoPerguntas;
-    }
-
-    public boolean isCertificado() {
-        return certificado;
-    }
-
-    public void setCertificado(boolean certificado) {
-        this.certificado = certificado;
-    }
-
-    public String getObjetivosAprendizagem() {
-        return objetivosAprendizagem;
-    }
-
-    public void setObjetivosAprendizagem(String objetivosAprendizagem) {
-        this.objetivosAprendizagem = objetivosAprendizagem;
-    }
-
-    public boolean isGratuita() {
-        return gratuita;
-    }
-
-    public void setGratuita(boolean gratuita) {
-        this.gratuita = gratuita;
     }
 
     public EventoPalestra(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
