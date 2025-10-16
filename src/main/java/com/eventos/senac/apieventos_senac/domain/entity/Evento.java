@@ -49,6 +49,7 @@ public class Evento {
     @JoinColumn(name = "local_cerimonia_id", nullable = false, foreignKey = @ForeignKey(name = "fk_evento_localCerimonia"))
     private LocalCerimonia localCerimonia;
 
+
     @Column
     private EnumStatusEvento status = EnumStatusEvento.ATIVO;
 
