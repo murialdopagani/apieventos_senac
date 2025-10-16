@@ -66,25 +66,25 @@ public class EventoPalestra extends Evento {
         this.gratuita = dto.gratuita();
     }
 
-    public EventoPalestra atualizarEventoFromDTO(EventoPalestra eventoBanco, EventoRequestDto eventoDto) {
-//        eventoBanco.setNome(eventoDto.getNome());
-//        eventoBanco.setData(eventoDto.getData());
-//        eventoBanco.setCapacidadeMaxima(eventoDto.getCapacidadeMaxima());
-//        eventoBanco.setOrganizador(eventoDto.getOrganizador());
-//        eventoBanco.setDuracaoMinutos(eventoDto.getDuracaoMinutos());
-//        eventoBanco.setPrecoIngresso(eventoDto.getPrecoIngresso());
-//        eventoBanco.setLocalCerimonia(eventoDto.getLocalCerimonia());
-//
-//        // Atualiza os campos específicos da palestra
-//        eventoBanco.setPalestrante(eventoDto.getPalestrante());
-//        eventoBanco.setTituloPalestra(eventoDto.getTituloPalestra());
-//        eventoBanco.setTema(eventoDto.getTema());
-//        eventoBanco.setCategoria(eventoDto.getCategoria());
-//        eventoBanco.setBiografiaPalestrante(eventoDto.getBiografiaPalestrante());
-//        eventoBanco.setTempoPerguntas(eventoDto.getTempoPerguntas());
-//        eventoBanco.setCertificado(eventoDto.isCertificado());
-//        eventoBanco.setObjetivosAprendizagem(eventoDto.getObjetivosAprendizagem());
-//        eventoBanco.setGratuita(eventoDto.isGratuita());
+    public EventoPalestra atualizarEventoFromDTO(EventoPalestra eventoBanco, EventoPalestra eventoDto) {
+        eventoBanco.setNome(eventoDto.getNome());
+        eventoBanco.setData(eventoDto.getData());
+        eventoBanco.setCapacidadeMaxima(eventoDto.getCapacidadeMaxima());
+        eventoBanco.setOrganizador(eventoDto.getOrganizador());
+        eventoBanco.setDuracaoMinutos(eventoDto.getDuracaoMinutos());
+        eventoBanco.setPrecoIngresso(eventoDto.getPrecoIngresso());
+        eventoBanco.setLocalCerimonia(eventoDto.getLocalCerimonia());
+
+        // Atualiza os campos específicos da palestra
+        eventoBanco.setPalestrante(eventoDto.getPalestrante());
+        eventoBanco.setTituloPalestra(eventoDto.getTituloPalestra());
+        eventoBanco.setTema(eventoDto.getTema());
+        eventoBanco.setCategoria(eventoDto.getCategoria());
+        eventoBanco.setBiografiaPalestrante(eventoDto.getBiografiaPalestrante());
+        eventoBanco.setTempoPerguntas(eventoDto.getTempoPerguntas());
+        eventoBanco.setCertificado(eventoDto.isCertificado());
+        eventoBanco.setObjetivosAprendizagem(eventoDto.getObjetivosAprendizagem());
+        eventoBanco.setGratuita(eventoDto.isGratuita());
         return eventoBanco;
     }
 
