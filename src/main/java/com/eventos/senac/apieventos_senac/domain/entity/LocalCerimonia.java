@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "tb_local_cerimonia")
 public class LocalCerimonia {
@@ -34,6 +32,8 @@ public class LocalCerimonia {
     @Column
     private EnumStatusLocalCerimonia status = EnumStatusLocalCerimonia.ATIVO;
 
+    public LocalCerimonia() {
+    }
 
     public LocalCerimonia(LocalCerimoniaCriarRequestDto localCerimonaDto) {
         this.nome = localCerimonaDto.nome();

@@ -15,8 +15,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @DiscriminatorValue("3")
@@ -33,6 +31,9 @@ public class EventoShow extends Evento {
 
     @Column
     private BigDecimal cacheArtista = BigDecimal.ZERO;
+
+    public EventoShow() {
+    }
 
     public EventoShow(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe

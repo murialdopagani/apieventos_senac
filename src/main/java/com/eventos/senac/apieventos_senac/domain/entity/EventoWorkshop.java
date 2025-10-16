@@ -13,8 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @DiscriminatorValue("4")
@@ -31,6 +29,9 @@ public class EventoWorkshop extends Evento {
 
     @Column
     private boolean certificado;
+
+    public EventoWorkshop() {
+    }
 
     public EventoWorkshop(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
