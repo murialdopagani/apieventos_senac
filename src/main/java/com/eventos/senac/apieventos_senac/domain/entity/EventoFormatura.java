@@ -6,9 +6,13 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-//@Data
-//@EqualsAndHashCode(callSuper = true)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @DiscriminatorValue("1")
 public class EventoFormatura extends Evento {
@@ -37,8 +41,6 @@ public class EventoFormatura extends Evento {
     @Column
     private boolean temCerimonialista = true;
 
-    public EventoFormatura() {
-    }
 
     public EventoFormatura(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
@@ -77,67 +79,4 @@ public class EventoFormatura extends Evento {
         return eventoBanco;
     }
 
-    public String getInstituicao() {
-        return instituicao;
-    }
-
-    public void setInstituicao(String instituicao) {
-        this.instituicao = instituicao;
-    }
-
-    public String getCurso() {
-        return curso;
-    }
-
-    public void setCurso(String curso) {
-        this.curso = curso;
-    }
-
-    public Integer getAnoFormatura() {
-        return anoFormatura;
-    }
-
-    public void setAnoFormatura(Integer anoFormatura) {
-        this.anoFormatura = anoFormatura;
-    }
-
-    public String getGrauAcademico() {
-        return grauAcademico;
-    }
-
-    public void setGrauAcademico(String grauAcademico) {
-        this.grauAcademico = grauAcademico;
-    }
-
-    public int getNumeroFormandos() {
-        return numeroFormandos;
-    }
-
-    public void setNumeroFormandos(int numeroFormandos) {
-        this.numeroFormandos = numeroFormandos;
-    }
-
-    public String getParaninfo() {
-        return paraninfo;
-    }
-
-    public void setParaninfo(String paraninfo) {
-        this.paraninfo = paraninfo;
-    }
-
-    public String getOrador() {
-        return orador;
-    }
-
-    public void setOrador(String orador) {
-        this.orador = orador;
-    }
-
-    public boolean isTemCerimonialista() {
-        return temCerimonialista;
-    }
-
-    public void setTemCerimonialista(boolean temCerimonialista) {
-        this.temCerimonialista = temCerimonialista;
-    }
 }
