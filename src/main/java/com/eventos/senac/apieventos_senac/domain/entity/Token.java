@@ -4,10 +4,17 @@ import jakarta.persistence.*;
 
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-//@Data
 @Entity
 @Table(name = "tb_token")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class Token {
 
     @Id
@@ -22,38 +29,5 @@ public class Token {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    public Token() {
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public LocalDateTime getDataExpiracao() {
-        return dataExpiracao;
-    }
-
-    public void setDataExpiracao(LocalDateTime dataExpiracao) {
-        this.dataExpiracao = dataExpiracao;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
 }

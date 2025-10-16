@@ -9,11 +9,18 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-//@Data
-//@EqualsAndHashCode(callSuper = true)
+
 @Entity
 @DiscriminatorValue("3")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class EventoShow extends Evento {
 
     @Column
@@ -28,8 +35,6 @@ public class EventoShow extends Evento {
     @Column
     private BigDecimal cacheArtista = BigDecimal.ZERO;
 
-    public EventoShow() {
-    }
 
     public EventoShow(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
@@ -60,35 +65,5 @@ public class EventoShow extends Evento {
         return eventoBanco;
     }
 
-    public String getArtista() {
-        return artista;
-    }
 
-    public void setArtista(String artista) {
-        this.artista = artista;
-    }
-
-    public String getGeneroMusical() {
-        return generoMusical;
-    }
-
-    public void setGeneroMusical(String generoMusical) {
-        this.generoMusical = generoMusical;
-    }
-
-    public int getIdadeMinima() {
-        return idadeMinima;
-    }
-
-    public void setIdadeMinima(int idadeMinima) {
-        this.idadeMinima = idadeMinima;
-    }
-
-    public BigDecimal getCacheArtista() {
-        return cacheArtista;
-    }
-
-    public void setCacheArtista(BigDecimal cacheArtista) {
-        this.cacheArtista = cacheArtista;
-    }
 }

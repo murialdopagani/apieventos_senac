@@ -1,9 +1,16 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 //@Entity
 //@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@EqualsAndHashCode(callSuper=false)
 public class Inscricao {
 
     // @Id
@@ -57,59 +64,5 @@ public class Inscricao {
         return "Cancelado".equalsIgnoreCase(statusPresenca);
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Evento getEvento() {
-        return evento;
-    }
-
-    public void setEvento(Evento evento) {
-        this.evento = evento;
-    }
-
-    public LocalDateTime getDataInscricao() {
-        return dataInscricao;
-    }
-
-    public void setDataInscricao(LocalDateTime dataInscricao) {
-        this.dataInscricao = dataInscricao;
-    }
-
-    public String getObservacao() {
-        return observacao;
-    }
-
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
-    }
-
-    public String getStatusPresenca() {
-        return statusPresenca;
-    }
-
-    public void setStatusPresenca(String statusPresenca) {
-        this.statusPresenca = statusPresenca;
-    }
-
-    public String getTipoIngresso() {
-        return tipoIngresso;
-    }
-
-    public void setTipoIngresso(String tipoIngresso) {
-        this.tipoIngresso = tipoIngresso;
-    }
 }

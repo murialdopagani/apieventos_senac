@@ -8,12 +8,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@EqualsAndHashCode(callSuper=false)
 @DiscriminatorValue("1")
 public class EventoFormatura extends Evento {
 

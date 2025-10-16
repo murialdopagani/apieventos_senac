@@ -7,11 +7,17 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-//@Data
-//@EqualsAndHashCode(callSuper = true)
 @Entity
 @DiscriminatorValue("4")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class EventoWorkshop extends Evento {
 
     @Column
@@ -25,9 +31,6 @@ public class EventoWorkshop extends Evento {
 
     @Column
     private boolean certificado;
-
-    public EventoWorkshop() {
-    }
 
     public EventoWorkshop(EventoRequestDto dto, Usuario organizador, LocalCerimonia localCerimonia) {
         // Chama o construtor da classe pai que já existe
@@ -58,36 +61,4 @@ public class EventoWorkshop extends Evento {
         return eventoBanco;
     }
 
-
-    public String getPalestrante() {
-        return palestrante;
-    }
-
-    public void setPalestrante(String palestrante) {
-        this.palestrante = palestrante;
-    }
-
-    public String getTema() {
-        return tema;
-    }
-
-    public void setTema(String tema) {
-        this.tema = tema;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public boolean isCertificado() {
-        return certificado;
-    }
-
-    public void setCertificado(boolean certificado) {
-        this.certificado = certificado;
-    }
 }
