@@ -9,9 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import lombok.Data;
 
 //@Data
 @Entity
@@ -51,11 +49,11 @@ public class Usuario {
     }
 
     public Usuario(Long id,
-                   String nome,
-                   String email,
-                   String senha,
-                   CPF cpf,
-                   String telefone) {
+        String nome,
+        String email,
+        String senha,
+        CPF cpf,
+        String telefone) {
         this.setId(id);
         this.setNome(nome);
         this.setCpf(cpf);
@@ -65,7 +63,7 @@ public class Usuario {
     }
 
     public Usuario atualizarUsuarioFromDTO(Usuario usuarioBanco,
-                                           UsuarioCriarRequestDto dto) {
+        UsuarioCriarRequestDto dto) {
         usuarioBanco.setCpf(new CPF(dto.cpf()));
         usuarioBanco.setNome(dto.nome());
         usuarioBanco.setSenha(dto.senha());

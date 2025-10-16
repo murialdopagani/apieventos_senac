@@ -1,11 +1,9 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
 import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 //@Data
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 public class Administrador extends Usuario {
 
     private boolean acessoIrrestrito;
@@ -27,4 +25,6 @@ public class Administrador extends Usuario {
     public void setAcessoIrrestrito(boolean acessoIrrestrito) {
         this.acessoIrrestrito = acessoIrrestrito;
     }
+
+
 }

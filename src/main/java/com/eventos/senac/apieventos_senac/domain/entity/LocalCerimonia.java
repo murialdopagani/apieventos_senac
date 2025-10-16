@@ -4,9 +4,6 @@ import com.eventos.senac.apieventos_senac.application.dto.localCerimonia.LocalCe
 import com.eventos.senac.apieventos_senac.domain.valueobjects.CNPJ;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusLocalCerimonia;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 //@Data
 @Entity

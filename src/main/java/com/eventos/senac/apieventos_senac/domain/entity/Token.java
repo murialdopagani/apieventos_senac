@@ -1,7 +1,7 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 
 import java.time.LocalDateTime;
 

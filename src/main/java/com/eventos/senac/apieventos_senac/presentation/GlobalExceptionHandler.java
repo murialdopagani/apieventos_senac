@@ -7,7 +7,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.format.DateTimeParseException;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -73,7 +71,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErroResponseDto> handleGeneric(Exception ex, HttpServletRequest request) {
-        log.error("Erro em {} {}: {}", request.getMethod(), request.getRequestURI(), ex.toString(), ex);
+        //log.error("Erro em {} {}: {}", request.getMethod(), request.getRequestURI(), ex.toString(), ex);
         var erro = ErroResponseDto.of(HttpStatus.INTERNAL_SERVER_ERROR, "Erro inesperado, tente novamente mais tarde",
             request.getRequestURI());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -95,5 +93,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest()
             .body(erro);
     }
+
+
 
 }

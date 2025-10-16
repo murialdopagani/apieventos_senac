@@ -1,13 +1,11 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
 import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
 //@Data
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 public class Cliente extends Usuario {
 
     private BigDecimal valorConsumido;
@@ -35,4 +33,6 @@ public class Cliente extends Usuario {
     public void setValorConsumido(BigDecimal valorConsumido) {
         this.valorConsumido = valorConsumido;
     }
+
+
 }

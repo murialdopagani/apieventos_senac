@@ -3,12 +3,9 @@ package com.eventos.senac.apieventos_senac.domain.entity;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import lombok.NoArgsConstructor;
 
 //@Data
 @Entity

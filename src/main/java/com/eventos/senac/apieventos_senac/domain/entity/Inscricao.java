@@ -1,7 +1,5 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
 
 //@Entity
