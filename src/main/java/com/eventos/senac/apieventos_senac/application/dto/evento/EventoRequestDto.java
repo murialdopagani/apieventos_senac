@@ -8,10 +8,11 @@ public record EventoRequestDto(
     String nome,
     String data,
     int capacidadeMaxima,
-    Long organizadorId,
-    Long localCerimoniaId,
+    int inscritos,
     int duracaoMinutos,
     BigDecimal precoIngresso,
+    Long organizadorId,
+    Long localCerimoniaId,
 
     //campos específicos para Formatura
     String instituicao,
@@ -52,10 +53,11 @@ public record EventoRequestDto(
             dto.nome(),
             dto.data(),
             dto.capacidadeMaxima(),
-            dto.organizadorId(),
-            dto.localCerimoniaId(),
+            0, //inscritos
             dto.duracaoMinutos(),
             dto.precoIngresso(),
+            dto.organizadorId(),
+            dto.localCerimoniaId(),
             dto.instituicao(),
             dto.curso(),
             dto.anoFormatura(),
@@ -87,10 +89,11 @@ public record EventoRequestDto(
             dto.nome(),
             dto.data(),
             dto.capacidadeMaxima(),
-            dto.organizadorId(),
-            dto.localCerimoniaId(),
+            0, //inscritos
             dto.duracaoMinutos(),
             dto.precoIngresso(),
+            dto.organizadorId(),
+            dto.localCerimoniaId(),
             null, //instituicao
             null, //curso
             0,    //anoFormatura
@@ -122,10 +125,11 @@ public record EventoRequestDto(
             dto.nome(),
             dto.data(),
             dto.capacidadeMaxima(),
-            dto.organizadorId(),
-            dto.localCerimoniaId(),
+            0, //inscritos
             dto.duracaoMinutos(),
             dto.precoIngresso(),
+            dto.organizadorId(),
+            dto.localCerimoniaId(),
             null, //instituicao
             null, //curso
             0,    //anoFormatura
@@ -157,10 +161,11 @@ public record EventoRequestDto(
             dto.nome(),
             dto.data(),
             dto.capacidadeMaxima(),
-            dto.organizadorId(),
-            dto.localCerimoniaId(),
+            0, //inscritos
             dto.duracaoMinutos(),
             dto.precoIngresso(),
+            dto.organizadorId(),
+            dto.localCerimoniaId(),
             null, //instituicao
             null, //curso
             0,    //anoFormatura
