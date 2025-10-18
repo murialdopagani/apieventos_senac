@@ -1,67 +1,74 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
+import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusPresenca;
+import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumTipoIngresso;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-//@Entity
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@EqualsAndHashCode(callSuper=false)
+@Entity
+@Table(name = "tb_inscricao", uniqueConstraints = @UniqueConstraint(columnNames = {"evento_id", "usuario_id"}))
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class Inscricao {
 
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    // @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "evento_id", nullable = false)
     private Evento evento;
 
-    private LocalDateTime dataInscricao;
+    @Column
+    private LocalDateTime dataInscricao = LocalDateTime.now();
 
+    @Column
     private String observacao;
 
-    private String statusPresenca; // Ex: "Confirmado", "Pendente", "Cancelado"
+    @Column
+    private EnumStatusPresenca statusPresenca = EnumStatusPresenca.PENDENTE;
 
-    private String tipoIngresso; // Ex: "VIP", "Normal", etc.
+    @Column
+    private EnumTipoIngresso tipoIngresso;
 
-    public Inscricao() {
-        this.dataInscricao = LocalDateTime.now();
-        this.statusPresenca = "Pendente"; // Padrão ao criar uma inscrição
-    }
 
-    public Inscricao(Long id,
-                     Usuario usuario,
-                     Evento evento,
-                     LocalDateTime dataInscricao,
-                     String observacao,
-                     String statusPresenca,
-                     String tipoIngresso) {
-        this.id = id;
-        this.usuario = usuario;
-        this.evento = evento;
-        this.dataInscricao = dataInscricao != null ? dataInscricao : LocalDateTime.now();
-        this.observacao = observacao;
-        this.statusPresenca = statusPresenca != null ? statusPresenca : "Pendente";
-        this.tipoIngresso = tipoIngresso;
-    }
-
+    // Verifica se a inscrição está como CONFIRMADO
     public boolean isConfirmed() {
-        return "Confirmado".equalsIgnoreCase(statusPresenca);
+        return EnumStatusPresenca.CONFIRMADO.equals(this.statusPresenca);
     }
 
+    // Verifica se a inscrição está como PENDENTE
     public boolean isPending() {
-        return "Pendente".equalsIgnoreCase(statusPresenca);
+        return EnumStatusPresenca.PENDENTE.equals(this.statusPresenca);
     }
 
+    // Verifica se a inscrição está como CANCELADO
     public boolean isCancelled() {
-        return "Cancelado".equalsIgnoreCase(statusPresenca);
+        return EnumStatusPresenca.CANCELADO.equals(this.statusPresenca);
+    }
+
+    // Método utilitário para marcar a inscrição como confirmada
+    public void confirm() {
+        this.statusPresenca = EnumStatusPresenca.CONFIRMADO;
     }
 
 
