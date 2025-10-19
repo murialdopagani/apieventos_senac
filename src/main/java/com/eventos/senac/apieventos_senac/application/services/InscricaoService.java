@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.application.services;
 
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoResponseDto;
+import com.eventos.senac.apieventos_senac.application.dto.inscricao.InscricaoRequestDto;
 import com.eventos.senac.apieventos_senac.domain.entity.Evento;
 import com.eventos.senac.apieventos_senac.domain.entity.Inscricao;
 import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
@@ -32,21 +33,18 @@ public class InscricaoService {
      * a validação para o domínio (Evento.inscrever).
      * Retorna o EventoResponseDto atualizado.
      */
-    @Transactional
-    public EventoResponseDto inscrever(Long eventoId, Long usuarioId) {
-        Usuario usuario = usuarioService.buscarPorIdObj(usuarioId);
+    public EventoResponseDto inscrever(InscricaoRequestDto inscricaoRequestDto) {
+        Usuario usuario = usuarioService.buscarPorIdObj(inscricaoRequestDto.usuarioId());
 
-        Evento evento = eventoRepository.findById(eventoId)
+        Evento evento = eventoRepository.findById(inscricaoRequestDto.eventoId())
             .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
 
         // checa duplicata no banco
-        if (inscricaoRepository.findByEventoIdAndUsuarioId(eventoId, usuarioId).isPresent()) {
+        if (inscricaoRepository.findByEventoIdAndUsuarioId(inscricaoRequestDto.eventoId(), inscricaoRequestDto.usuarioId()).isPresent()) {
             throw new ValidacoesRegraNegocioException("Participante já inscrito neste evento");
         }
 
-        Inscricao inscricao = new Inscricao();
-        inscricao.setUsuario(usuario);
-        inscricao.setDataInscricao(LocalDateTime.now());
+        Inscricao inscricao = new Inscricao(inscricaoRequestDto, usuario, evento);
 
         try {
             evento.inscrever(inscricao); // validações de domínio (lotação, data, duplicatas na coleção)
@@ -57,7 +55,7 @@ public class InscricaoService {
         }
 
         // retorna DTO atualizado
-        Evento refreshed = eventoRepository.findById(eventoId).orElse(evento);
+        Evento refreshed = eventoRepository.findById(inscricaoRequestDto.eventoId()).orElse(evento);
         return new EventoResponseDto(refreshed);
     }
 

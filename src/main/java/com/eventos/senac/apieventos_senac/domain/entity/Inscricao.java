@@ -1,5 +1,6 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
+import com.eventos.senac.apieventos_senac.application.dto.inscricao.InscricaoRequestDto;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusPresenca;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumTipoIngresso;
 import jakarta.persistence.Column;
@@ -42,7 +43,7 @@ public class Inscricao {
     private LocalDateTime dataInscricao = LocalDateTime.now();
 
     @Column
-    private String observacao;
+    private String codigoPromocional;
 
     @Column
     private EnumStatusPresenca statusPresenca = EnumStatusPresenca.PENDENTE;
@@ -50,6 +51,13 @@ public class Inscricao {
     @Column
     private EnumTipoIngresso tipoIngresso;
 
+
+    public Inscricao(InscricaoRequestDto requestDto, Usuario usuario, Evento evento) {
+        this.usuario = usuario;
+        this.evento = evento;
+        this.codigoPromocional = requestDto.codigoPromocional();
+        this.tipoIngresso = requestDto.tipoIngresso();
+    }
 
     // Verifica se a inscrição está como CONFIRMADO
     public boolean isConfirmed() {

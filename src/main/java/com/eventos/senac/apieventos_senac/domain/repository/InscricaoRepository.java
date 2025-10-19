@@ -5,11 +5,14 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface InscricaoRepository extends JpaRepository<Inscricao, Long> {
 
-    @Query("select i from Inscricao i where i.evento.id = :eventoId and i.usuario.id = :usuarioId")
-    Optional<Inscricao> findByEventoIdAndUsuarioId(@Param("eventoId") Long eventoId, @Param("usuarioId") Long usuarioId);
+//    @Query("select i from Inscricao i where i.evento.id = :eventoId and i.usuario.id = :usuarioId")
+//    Optional<Inscricao> findByEventoIdAndUsuarioId(@Param("eventoId") Long eventoId, @Param("usuarioId") Long usuarioId);
 
+    Optional<Inscricao> findByEventoIdAndUsuarioId(Long eventoId, Long usuarioId);
 }
 
