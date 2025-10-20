@@ -1,20 +1,36 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.FutureOrPresent;
 import java.math.BigDecimal;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import java.util.ArrayList;
-import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.constraints.FutureOrPresent;
 
 @Entity
 @Table(name = "tb_eventos")
@@ -23,7 +39,7 @@ import jakarta.validation.constraints.FutureOrPresent;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class Evento {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -51,6 +67,9 @@ public class Evento {
     private int inscritos = 0;
 
     @Column
+    private int inscritosConfirmado = 0;
+
+    @Column
     private int duracaoMinutos;
 
     @Column
@@ -74,34 +93,17 @@ public class Evento {
     @ToString.Exclude
     private List<Inscricao> inscricoes = new ArrayList<>();
 
-    // Helper para manter ambos os lados do relacionamento
-    public void addInscricao(Inscricao inscricao) {
-        if (inscricao == null) return;
-        if (!this.inscricoes.contains(inscricao)) {
-            this.inscricoes.add(inscricao);
-            inscricao.setEvento(this);
-            this.inscritos = this.inscricoes.size();
-        }
-    }
-
-    public void removeInscricao(Inscricao inscricao) {
-        if (inscricao == null) return;
-        if (this.inscricoes.remove(inscricao)) {
-            inscricao.setEvento(null);
-            this.inscritos = this.inscricoes.size();
-        }
-    }
-
     // Regra de negócio: cria evento garantindo que a data não seja no passado
     public Evento(Long id,
-                  String nome,
-                  LocalDateTime data,
-                  int capacidadeMaxima,
-                  int inscritos,
-                  int duracaoMinutos,
-                  BigDecimal precoIngresso,
-                  Usuario organizador,
-                  LocalCerimonia localCerimonia) {
+        String nome,
+        LocalDateTime data,
+        int capacidadeMaxima,
+        int inscritos,
+        int inscritosConfirmado,
+        int duracaoMinutos,
+        BigDecimal precoIngresso,
+        Usuario organizador,
+        LocalCerimonia localCerimonia) {
         if (data != null && data.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Data do evento não pode ser no passado");
         }
@@ -110,15 +112,19 @@ public class Evento {
         this.data = data;
         this.capacidadeMaxima = capacidadeMaxima;
         this.inscritos = inscritos;
+        this.inscritosConfirmado = inscritosConfirmado;
         this.duracaoMinutos = duracaoMinutos;
         this.precoIngresso = precoIngresso;
         this.organizador = organizador;
         this.localCerimonia = localCerimonia;
     }
 
-    // Regra de negócio: inscrever participante
+
+    // Regra de negócio: inscrever participantes
     public void inscrever(Inscricao inscricao) {
-        if (inscricao == null) throw new IllegalArgumentException("Inscrição não pode ser nula");
+        if (inscricao == null) {
+            throw new IllegalArgumentException("Inscrição não pode ser nula");
+        }
         if (this.isPast()) {
             throw new IllegalStateException("Não é possível inscrever: evento com data no passado");
         }
@@ -128,32 +134,85 @@ public class Evento {
         // evita duplicatas: verifica por usuario.id quando disponível
         final Long novoUsuarioId = inscricao.getUsuario() != null ? inscricao.getUsuario().getId() : null;
 
-        boolean exists = this.inscricoes.stream().anyMatch(i -> {
-            Long existingUserId = i.getUsuario() != null ? i.getUsuario().getId() : null;
-            if (existingUserId == null || novoUsuarioId == null) {
-                return i.equals(inscricao); // fallback para equals
-            }
-            return novoUsuarioId.equals(existingUserId);
-        });
+        boolean existe;
+        if (novoUsuarioId == null) {
+            // Se a nova inscrição não tem usuário, a única opção é comparar pelo objeto.
+            existe = this.inscricoes.stream().anyMatch(existente -> existente.equals(inscricao));
+        } else {
+            // Se a nova inscrição tem usuário, a prioridade é verificar pelo ID do usuário.
+            existe = this.inscricoes.stream()
+                .map(Inscricao::getUsuario)         // Pega o usuário de cada inscrição existente
+                .filter(Objects::nonNull)           // Descarta as que não têm usuário
+                .map(Usuario::getId)                // Pega o ID do usuário
+                .anyMatch(id -> id != null && id.equals(novoUsuarioId)); // Compara com o novo ID
+        }
 
-        if (exists) {
+        if (existe) {
             throw new IllegalStateException("Inscrição já existe para este participante neste evento");
         }
-        // marca data da inscrição se disponível
+
         inscricao.setDataInscricao(LocalDateTime.now());
         this.addInscricao(inscricao);
     }
 
-    @PrePersist
-    @PreUpdate
-    private void validateDateNotPast() {
-        if (this.data != null && this.data.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("Data do evento não pode ser no passado");
+    public void addInscricao(Inscricao inscricao) {
+        if (inscricao == null) {
+            return;
+        }
+        if (!this.inscricoes.contains(inscricao)) {
+            this.inscricoes.add(inscricao);
+            inscricao.setEvento(this);
+            this.inscritos = this.inscricoes.size();
         }
     }
 
+
+    // Remove inscrição e ajusta os contadores.
+    public void removeInscricao(Inscricao inscricao) {
+        if (inscricao == null) {
+            return;
+        }
+
+        if (this.inscricoes.remove(inscricao)) {
+            inscricao.setEvento(null);
+            this.inscritos = this.inscricoes.size();
+            if (inscricao.isConfirmada() && this.inscritosConfirmado > 0) {
+                this.inscritosConfirmado--;
+            }
+        }
+    }
+
+
+    /**
+     * Confirma presença da inscrição e atualiza o contador de inscritos confirmados.
+     */
+    public void confirmarPresenca(Inscricao inscricao) {
+        if (inscricao == null) {
+            throw new IllegalArgumentException("Inscrição não pode ser nula");
+        }
+        if (!this.inscricoes.contains(inscricao)) {
+            throw new IllegalStateException("Inscrição não pertence a este evento");
+        }
+        if (inscricao.isConfirmada()) {
+            return; // já confirmada
+        }
+        if (isFull()) {
+            throw new IllegalStateException("Capacidade máxima atingida para confirmações");
+        }
+        this.inscritosConfirmado++;
+    }
+
+
+    // Recalcula ambos os contadores a partir da coleção.
+    public void recomputeContadores() {
+        this.inscritos = this.inscricoes.size();
+        this.inscritosConfirmado = (int) this.inscricoes.stream()
+            .filter(Inscricao::isConfirmada)
+            .count();
+    }
+
     public boolean isFull() {
-        return inscritos >= capacidadeMaxima;
+        return inscritosConfirmado >= capacidadeMaxima;
     }
 
     public boolean isFuture() {

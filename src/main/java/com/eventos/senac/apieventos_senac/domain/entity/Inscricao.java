@@ -49,7 +49,7 @@ public class Inscricao {
     private EnumStatusPresenca statusPresenca = EnumStatusPresenca.PENDENTE;
 
     @Column
-    private EnumTipoIngresso tipoIngresso;
+    private EnumTipoIngresso tipoIngresso = EnumTipoIngresso.NORMAL;
 
 
     public Inscricao(InscricaoRequestDto requestDto, Usuario usuario, Evento evento) {
@@ -60,23 +60,18 @@ public class Inscricao {
     }
 
     // Verifica se a inscrição está como CONFIRMADO
-    public boolean isConfirmed() {
+    public boolean isConfirmada() {
         return EnumStatusPresenca.CONFIRMADO.equals(this.statusPresenca);
     }
 
     // Verifica se a inscrição está como PENDENTE
-    public boolean isPending() {
+    public boolean isPendente() {
         return EnumStatusPresenca.PENDENTE.equals(this.statusPresenca);
     }
 
     // Verifica se a inscrição está como CANCELADO
-    public boolean isCancelled() {
+    public boolean isCancelada() {
         return EnumStatusPresenca.CANCELADO.equals(this.statusPresenca);
-    }
-
-    // Método utilitário para marcar a inscrição como confirmada
-    public void confirm() {
-        this.statusPresenca = EnumStatusPresenca.CONFIRMADO;
     }
 
 

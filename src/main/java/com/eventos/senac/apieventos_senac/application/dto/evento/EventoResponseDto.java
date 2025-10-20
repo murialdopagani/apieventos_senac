@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record EventoResponseDto(Long id, String nome, String data, int capacidadeMaxima, int inscritos, String organizador,
+public record EventoResponseDto(Long id, String nome, String data, int capacidadeMaxima, String organizador,
                                 int duracaoMinutos, BigDecimal precoIngresso, String localCerimonia, EnumStatusEvento status,
                                 String tipoEvento) {
 
@@ -19,7 +19,6 @@ public record EventoResponseDto(Long id, String nome, String data, int capacidad
             evento.getNome(),
             String.valueOf(evento.getDataFormatada()),
             evento.getCapacidadeMaxima(),
-            evento.getInscritos(),
             evento.getOrganizador().getNome(),
             evento.getDuracaoMinutos(),
             evento.getPrecoIngresso(),
