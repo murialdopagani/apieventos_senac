@@ -5,12 +5,14 @@ import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoExcepti
 import com.eventos.senac.apieventos_senac.exception.ValidacoesRegraNegocioException;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.format.DateTimeParseException;
 import java.util.stream.Collectors;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,6 +33,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroResponseDto> handleDataIntegrity(DataIntegrityViolationException ex, HttpServletRequest request) {
         ErroResponseDto erro = ErroResponseDto.of(HttpStatus.CONFLICT, "Violação de integridade: " + ex.getMostSpecificCause()
             .getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(erro);
+    }
+
+    @ExceptionHandler({ObjectOptimisticLockingFailureException.class, OptimisticLockException.class})
+    public ResponseEntity<ErroResponseDto> handleOptimisticLock(Exception ex, HttpServletRequest request) {
+        ErroResponseDto erro = ErroResponseDto.of(HttpStatus.CONFLICT,
+            "Conflito de concorrência: recurso foi modificado por outra transação. Tente novamente.", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .body(erro);
     }

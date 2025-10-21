@@ -47,15 +47,15 @@ public class UsuarioController {
 
     @PostMapping
     @Operation(summary = "Criar/Atualiza usuario", description = "Método resposável por criar um usuário")
-    public ResponseEntity<UsuarioResponseDto> criarUsuario(@RequestBody UsuarioCriarRequestDto usuarioRequestDto) throws Exception {
+    public ResponseEntity<UsuarioResponseDto> criarUsuario(@RequestBody UsuarioCriarRequestDto usuarioRequestDto) {
         var usuarioSalvo = usuarioService.salvarUsuario(usuarioRequestDto);
         return ResponseEntity.ok(usuarioSalvo);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar um Usuário", description = "Método responsável por atualizar um Usuário no banco de dados.")
-    public ResponseEntity<UsuarioResponseDto> atulizarUsuario(@PathVariable Long id,
-        @RequestBody UsuarioCriarRequestDto usuarioRequestDto) throws Exception {
+    public ResponseEntity<UsuarioResponseDto> atualizarUsuario(@PathVariable Long id,
+        @RequestBody UsuarioCriarRequestDto usuarioRequestDto) {
 
         var usuarioBanco = usuarioService.atualizarUsuario(id, usuarioRequestDto);
         return ResponseEntity.ok(usuarioBanco);
@@ -64,21 +64,21 @@ public class UsuarioController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete de usuário!", description = "Método responsavel por deletar um usuario")
-    public ResponseEntity<?> deletarUsuario(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> deletarUsuario(@PathVariable Long id) {
         return usuarioService.excluirUsuario(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
 
     @PatchMapping("/{id}/bloquear")
     @Operation(summary = "Bloqueio de usuário!", description = "Método responsavel por Bloquear um usuario")
-    public ResponseEntity<?> atualizarBloquear(@PathVariable Long id)  throws Exception {
+    public ResponseEntity<?> atualizarBloquear(@PathVariable Long id)  {
 
         return usuarioService.bloquearUsuario(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/{id}/desbloquear")
     @Operation(summary = "Desbloqueio de usuário!", description = "Método responsavel por Desbloquear um usuario")
-    public ResponseEntity<?> atualizarDesbloquear(@PathVariable Long id)  throws Exception {
+    public ResponseEntity<?> atualizarDesbloquear(@PathVariable Long id)  {
 
         return usuarioService.desbloquearUsuario(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }

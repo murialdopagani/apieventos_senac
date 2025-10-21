@@ -9,6 +9,7 @@ public record EventoRequestDto(
     String data,
     int capacidadeMaxima,
     int inscritos,
+    int inscritosConfirmados,
     int duracaoMinutos,
     BigDecimal precoIngresso,
     Long organizadorId,
@@ -54,6 +55,7 @@ public record EventoRequestDto(
             dto.data(),
             dto.capacidadeMaxima(),
             0, //inscritos
+            0, //inscritosConfirmados
             dto.duracaoMinutos(),
             dto.precoIngresso(),
             dto.organizadorId(),
@@ -90,6 +92,7 @@ public record EventoRequestDto(
             dto.data(),
             dto.capacidadeMaxima(),
             0, //inscritos
+            0, //inscritosConfirmados
             dto.duracaoMinutos(),
             dto.precoIngresso(),
             dto.organizadorId(),
@@ -126,6 +129,7 @@ public record EventoRequestDto(
             dto.data(),
             dto.capacidadeMaxima(),
             0, //inscritos
+            0, //inscritosConfirmados
             dto.duracaoMinutos(),
             dto.precoIngresso(),
             dto.organizadorId(),
@@ -162,6 +166,7 @@ public record EventoRequestDto(
             dto.data(),
             dto.capacidadeMaxima(),
             0, //inscritos
+            0, //inscritosConfirmados
             dto.duracaoMinutos(),
             dto.precoIngresso(),
             dto.organizadorId(),

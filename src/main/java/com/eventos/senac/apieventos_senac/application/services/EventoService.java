@@ -10,7 +10,6 @@ import com.eventos.senac.apieventos_senac.domain.entity.EventoWorkshop;
 import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
 import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
 import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
-import com.eventos.senac.apieventos_senac.domain.repository.LocalCerimoniaRepository;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumTipoEvento;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
@@ -21,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EventoService {
