@@ -81,14 +81,6 @@ public class GlobalExceptionHandler {
             .body(erro);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErroResponseDto> handleGeneric(Exception ex, HttpServletRequest request) {
-        //log.error("Erro em {} {}: {}", request.getMethod(), request.getRequestURI(), ex.toString(), ex);
-        var erro = ErroResponseDto.of(HttpStatus.INTERNAL_SERVER_ERROR, "Erro inesperado, tente novamente mais tarde",
-            request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(erro);
-    }
 
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<ErroResponseDto> handleDateTimeParseException(DateTimeParseException ex, HttpServletRequest request) {
@@ -106,6 +98,14 @@ public class GlobalExceptionHandler {
             .body(erro);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErroResponseDto> handleGeneric(Exception ex, HttpServletRequest request) {
+        //log.error("Erro em {} {}: {}", request.getMethod(), request.getRequestURI(), ex.toString(), ex);
+        var erro = ErroResponseDto.of(HttpStatus.INTERNAL_SERVER_ERROR, "Erro inesperado, tente novamente mais tarde",
+            request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(erro);
+    }
 
 
 }

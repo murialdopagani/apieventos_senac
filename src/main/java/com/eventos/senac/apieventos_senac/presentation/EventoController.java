@@ -6,6 +6,7 @@ import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDt
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoResponseDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoShowRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoWorkshopRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.inscricao.InscricaoResponseDto;
 import com.eventos.senac.apieventos_senac.application.services.EventoService;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -142,5 +143,12 @@ public class EventoController {
     @Operation(summary = "Ativar um evento por ID", description = "Método responsável por ativar um único evento por id.")
     public ResponseEntity<?> atualizarAtivar(@PathVariable Long id) throws RegistroNaoEncontradoException {
         return eventoService.ativar(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/inscritos")
+    @Operation(summary = "Listar inscritos de um evento", description = "Retorna a lista de inscritos de um evento pelo ID.")
+    public ResponseEntity<List<InscricaoResponseDto>> listarInscritos(@PathVariable Long id) {
+        List<InscricaoResponseDto> inscritos = eventoService.listarInscritosPorEvento(id);
+        return ResponseEntity.ok(inscritos);
     }
 }

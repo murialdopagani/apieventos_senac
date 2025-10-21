@@ -30,7 +30,7 @@ public class LocalCerimoniaController {
     @PostMapping
     @Operation(summary = "Cria/Atualiza Local Cerimônias", description = "Método para criar ou atualizar um local de cerimônias.")
     public ResponseEntity<LocalCerimoniaResponseDto> criarLocalCerimonia(
-        @RequestBody @Validated LocalCerimoniaCriarRequestDto requestDto) throws Exception {
+        @RequestBody @Validated LocalCerimoniaCriarRequestDto requestDto) {
         LocalCerimoniaResponseDto localCerimonia = localCerimoniaService.salvarLocalCerimonia(requestDto);
         return ResponseEntity.ok(localCerimonia);
     }
@@ -55,20 +55,20 @@ public class LocalCerimoniaController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete local de cerimônias !", description = "Método responsavel por deletar um local de cerimônias ")
-    public ResponseEntity<?> deletarLocalCerimonia(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> deletarLocalCerimonia(@PathVariable Long id) {
         return localCerimoniaService.excluirLocalCerimonia(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
 
     @PatchMapping("/{id}/bloquear")
     @Operation(summary = "Bloqueiolocal de cerimônias !", description = "Método responsavel por Bloquear local de cerimônias !")
-    public ResponseEntity<?> bloquearLocalCerimonia(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> bloquearLocalCerimonia(@PathVariable Long id) {
         return localCerimoniaService.bloquearLocalCerimonia(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/{id}/desbloquear")
     @Operation(summary = "Desbloqueio local de cerimônias !", description = "Método responsavel por Desbloquear local de cerimônias !")
-    public ResponseEntity<?> desbloquearLocalCerimonia(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> desbloquearLocalCerimonia(@PathVariable Long id)  {
         return localCerimoniaService.desbloquearLocalCerimonia(id) ? ResponseEntity.ok().build()
             : ResponseEntity.notFound().build();
     }

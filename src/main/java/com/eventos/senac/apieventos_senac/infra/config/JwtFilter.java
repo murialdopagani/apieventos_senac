@@ -1,6 +1,7 @@
 package com.eventos.senac.apieventos_senac.infra.config;
 
 import com.eventos.senac.apieventos_senac.application.services.TokenService;
+import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,31 +30,37 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     String header = request.getHeader("Authorization");
+    // Código antigo comentado para referência:
+    // if (header != null && header.startsWith("Bearer ")) {
+    //   String token = header.replace("Bearer ", "");
+    //   try {
+    //     var jwt = tokenService.validarToken(token);
+    //     var usuario = tokenService.consultarUsuarioPorToken(token);
+    //     System.out.println("Usuairo logado" + usuario);
+    //   } catch (Exception e) {
+    //     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    //     response.getWriter().write("Token inválido ou expirado");
+    //     return;
+    //   }
+    // } else {
+    //   System.out.println("Authorization header ausente ou inválido: " + header);
+    //   response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    //   response.getWriter().write("Token não informado ou formato inválido");
+    //   return;
+    // }
+    // Nova abordagem usando GlobalExceptionHandler:
     if (header != null && header.startsWith("Bearer ")) {
       String token = header.replace("Bearer ", "");
       try {
-        // Aqui você pode adicionar a lógica para validar o token JWT
-        // Por exemplo, decodificar o token e verificar sua validade
-        // Se o token for inválido, lance uma exceção ou retorne um erro
         var jwt = tokenService.validarToken(token);
-
         var usuario = tokenService.consultarUsuarioPorToken(token);
-        //String usuario = jwt.getSubject();
         System.out.println("Usuairo logado" + usuario);
-
       } catch (Exception e) {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("Token inválido ou expirado");
-        //filterChain.doFilter(request, response);
-        return;
+        throw new RegistroNaoEncontradoException("Token inválido ou expirado");
       }
     } else {
-      // Adicionando log para facilitar diagnóstico
       System.out.println("Authorization header ausente ou inválido: " + header);
-      response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-      response.getWriter().write("Token não informado ou formato inválido");
-      //filterChain.doFilter(request, response);
-      return;
+      throw new RegistroNaoEncontradoException("Token não informado ou formato inválido");
     }
     filterChain.doFilter(request, response);
 

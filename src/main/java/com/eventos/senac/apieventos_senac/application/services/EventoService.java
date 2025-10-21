@@ -2,6 +2,7 @@ package com.eventos.senac.apieventos_senac.application.services;
 
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoResponseDto;
+import com.eventos.senac.apieventos_senac.application.dto.inscricao.InscricaoResponseDto;
 import com.eventos.senac.apieventos_senac.domain.entity.Evento;
 import com.eventos.senac.apieventos_senac.domain.entity.EventoFormatura;
 import com.eventos.senac.apieventos_senac.domain.entity.EventoPalestra;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EventoService {
@@ -168,4 +168,14 @@ public class EventoService {
         eventoRepository.save(eventoDB);
     }
 
+    public List<InscricaoResponseDto> listarInscritosPorEvento(Long id) {
+        Evento evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO)
+            .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
+        if (evento.getInscricoes() == null) {
+            return List.of();
+        }
+        return evento.getInscricoes().stream()
+            .map(inscricao -> new InscricaoResponseDto(inscricao))
+            .collect(Collectors.toList());
+    }
 }
