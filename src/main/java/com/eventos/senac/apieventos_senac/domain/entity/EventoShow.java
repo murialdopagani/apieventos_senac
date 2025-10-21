@@ -1,12 +1,10 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
 import com.eventos.senac.apieventos_senac.application.dto.evento.EventoRequestDto;
-import com.eventos.senac.apieventos_senac.application.dto.evento.EventoShowRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.AllArgsConstructor;

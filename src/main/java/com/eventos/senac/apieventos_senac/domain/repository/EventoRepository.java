@@ -2,7 +2,6 @@ package com.eventos.senac.apieventos_senac.domain.repository;
 
 import com.eventos.senac.apieventos_senac.domain.entity.Evento;
 import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
-import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import java.time.LocalDateTime;
 import java.util.List;

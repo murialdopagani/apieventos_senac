@@ -1,8 +1,7 @@
 package com.eventos.senac.apieventos_senac.application.dto.error;
 
-import org.springframework.http.HttpStatus;
-
 import java.time.LocalDateTime;
+import org.springframework.http.HttpStatus;
 
 public record ErroResponseDto(int status, String erro, String mensagem, String path, LocalDateTime timestamp) {
 

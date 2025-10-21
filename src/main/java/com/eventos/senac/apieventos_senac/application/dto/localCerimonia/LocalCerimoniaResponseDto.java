@@ -1,7 +1,6 @@
 package com.eventos.senac.apieventos_senac.application.dto.localCerimonia;
 
 import com.eventos.senac.apieventos_senac.domain.entity.LocalCerimonia;
-import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
 
 public record LocalCerimoniaResponseDto(Long id, String nome, String cnpj, String endereco, int capacidade) {
 

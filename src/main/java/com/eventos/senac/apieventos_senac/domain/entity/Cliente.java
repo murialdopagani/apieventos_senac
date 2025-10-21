@@ -1,7 +1,6 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
 import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
-
 import java.math.BigDecimal;
 
 //@Data

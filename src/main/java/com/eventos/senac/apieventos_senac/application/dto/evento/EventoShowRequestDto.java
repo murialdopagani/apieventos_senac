@@ -1,7 +1,6 @@
 package com.eventos.senac.apieventos_senac.application.dto.evento;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public record EventoShowRequestDto(
     //atributos comuns da classe pai

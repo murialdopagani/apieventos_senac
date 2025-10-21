@@ -2,9 +2,9 @@ package com.eventos.senac.apieventos_senac.presentation;
 
 import com.eventos.senac.apieventos_senac.application.dto.auth.LoginRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.auth.LoginResponseDto;
-import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusUsuario;
-import com.eventos.senac.apieventos_senac.domain.repository.UsuarioRepository;
 import com.eventos.senac.apieventos_senac.application.services.TokenService;
+import com.eventos.senac.apieventos_senac.domain.repository.UsuarioRepository;
+import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusUsuario;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

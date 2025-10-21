@@ -1,13 +1,9 @@
 package com.eventos.senac.apieventos_senac.application.dto.evento;
 
 import com.eventos.senac.apieventos_senac.domain.entity.Evento;
-import com.eventos.senac.apieventos_senac.domain.entity.EventoFormatura;
-import com.eventos.senac.apieventos_senac.domain.entity.EventoPalestra;
-import com.eventos.senac.apieventos_senac.domain.entity.EventoShow;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record EventoResponseDto(Long id, String nome, String data, int capacidadeMaxima, String organizador,
