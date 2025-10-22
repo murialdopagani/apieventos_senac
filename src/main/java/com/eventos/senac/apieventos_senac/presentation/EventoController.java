@@ -144,11 +144,4 @@ public class EventoController {
     public ResponseEntity<?> atualizarAtivar(@PathVariable Long id) throws RegistroNaoEncontradoException {
         return eventoService.ativar(id) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
-
-    @GetMapping("/{id}/inscritos")
-    @Operation(summary = "Listar inscritos de um evento", description = "Retorna a lista de inscritos de um evento pelo ID.")
-    public ResponseEntity<List<InscricaoResponseDto>> listarInscritos(@PathVariable Long id) {
-        List<InscricaoResponseDto> inscritos = eventoService.listarInscritosPorEvento(id);
-        return ResponseEntity.ok(inscritos);
-    }
 }

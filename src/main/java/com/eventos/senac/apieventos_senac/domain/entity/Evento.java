@@ -40,7 +40,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Evento {
+public abstract class Evento {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -92,6 +92,7 @@ public class Evento {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Inscricao> inscricoes = new ArrayList<>();
+
 
     // Regra de negócio: cria evento garantindo que a data não seja no passado
     public Evento(Long id,

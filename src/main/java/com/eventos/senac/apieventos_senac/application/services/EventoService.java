@@ -168,14 +168,5 @@ public class EventoService {
         eventoRepository.save(eventoDB);
     }
 
-    public List<InscricaoResponseDto> listarInscritosPorEvento(Long id) {
-        Evento evento = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO)
-            .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
-        if (evento.getInscricoes() == null) {
-            return List.of();
-        }
-        return evento.getInscricoes().stream()
-            .map(inscricao -> new InscricaoResponseDto(inscricao))
-            .collect(Collectors.toList());
-    }
 }
+

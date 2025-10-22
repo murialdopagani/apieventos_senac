@@ -4,11 +4,16 @@ import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioCriarRe
 import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusUsuario;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +25,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("USUARIO")
 public class Usuario {
 
     @Id
@@ -40,6 +48,10 @@ public class Usuario {
     private CPF cpf;
 
     private String telefone;
+
+    @Column(name = "tipo_usuario", insertable = false, updatable = false, nullable = true)
+    private String tipo_usuario;
+
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
@@ -66,8 +78,7 @@ public class Usuario {
         this.setTelefone(telefone);
     }
 
-    public Usuario atualizarUsuarioFromDTO(Usuario usuarioBanco,
-        UsuarioCriarRequestDto dto) {
+    public Usuario atualizarUsuarioFromDTO(Usuario usuarioBanco, UsuarioCriarRequestDto dto) {
         usuarioBanco.setCpf(new CPF(dto.cpf()));
         usuarioBanco.setNome(dto.nome());
         usuarioBanco.setSenha(dto.senha());

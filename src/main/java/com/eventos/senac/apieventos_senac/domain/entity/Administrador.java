@@ -1,22 +1,31 @@
 package com.eventos.senac.apieventos_senac.domain.entity;
 
-import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
+import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioCriarRequestDto;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-//@Data
-//@EqualsAndHashCode(callSuper = true)
+@Entity
+@Data
+@DiscriminatorValue("ADMIN")
+@NoArgsConstructor
 public class Administrador extends Usuario {
 
+    @Column
     private boolean acessoIrrestrito;
 
-    public Administrador(Long id, String nome, String email, String senha, CPF cpf, String telefone) {
-        super(id, nome, email, senha, cpf, telefone);
+    public Administrador(UsuarioCriarRequestDto usuarioRequest) {
+        super(usuarioRequest);
+        this.setAcessoIrrestrito(true);
     }
 
     @Override
     public String apresentar() {
-        return "Eu sou " + this.getNome() + " administrador e tenho acesso " + (this.acessoIrrestrito ? "Irrestrito" : "Nenhum!");
+        return " Dados do Administratod Nome: " + this.getNome() +
+            " CPF Format " + this.getCpf().toString() + " Nivel de acesso Irrestrito: " + this.isAcessoIrrestrito();
     }
-
 
     public boolean isAcessoIrrestrito() {
         return acessoIrrestrito;
@@ -25,6 +34,4 @@ public class Administrador extends Usuario {
     public void setAcessoIrrestrito(boolean acessoIrrestrito) {
         this.acessoIrrestrito = acessoIrrestrito;
     }
-
-
 }

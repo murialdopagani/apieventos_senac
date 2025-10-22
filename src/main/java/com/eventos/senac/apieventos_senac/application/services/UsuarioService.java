@@ -2,6 +2,7 @@ package com.eventos.senac.apieventos_senac.application.services;
 
 import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioCriarRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioResponseDto;
+import com.eventos.senac.apieventos_senac.domain.entity.Administrador;
 import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
 import com.eventos.senac.apieventos_senac.domain.repository.UsuarioRepository;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
@@ -43,7 +44,15 @@ public class UsuarioService {
 
     public UsuarioResponseDto salvarUsuario(UsuarioCriarRequestDto usuarioRequestDto) {
         var usuario = usuarioRepository.findByCpf_CpfAndStatusNot(String.valueOf(new CPF(usuarioRequestDto.cpf())),
-            EnumStatusUsuario.EXCLUIDO).orElse(new Usuario(usuarioRequestDto));
+            EnumStatusUsuario.EXCLUIDO).orElse(null);
+        if (usuario == null) {
+            if (usuarioRequestDto.isAdm()){
+                usuario = new Administrador(usuarioRequestDto);
+            } else {
+                usuario = new Usuario(usuarioRequestDto);
+            }
+        }
+
         if (usuario.getId() != null) {
             usuario = usuario.atualizarUsuarioFromDTO(usuario, usuarioRequestDto);
         }
