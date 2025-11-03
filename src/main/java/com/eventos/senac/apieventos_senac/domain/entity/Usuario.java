@@ -52,6 +52,8 @@ public class Usuario {
     @Column(name = "tipo_usuario", insertable = false, updatable = false, nullable = true)
     private String tipo_usuario;
 
+    @Column
+    private boolean acessoIrrestrito = false;
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
@@ -89,5 +91,13 @@ public class Usuario {
 
     public String apresentar() {
         return "Dados " + this.nome + " Cpf Format : " + this.cpf.toString();
+    }
+
+    public boolean isAcessoIrrestrito() {
+        return acessoIrrestrito;
+    }
+
+    public void setAcessoIrrestrito(boolean acessoIrrestrito) {
+        this.acessoIrrestrito = acessoIrrestrito;
     }
 }

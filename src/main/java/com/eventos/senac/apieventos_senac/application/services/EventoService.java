@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EventoService {
@@ -35,23 +36,25 @@ public class EventoService {
     private LocalCerimoniaService localCerimoniaService;
 
 
-    public List<EventoResponseDto> listarEventos() {
+    public List<EventoResponseDto> listarEventos(Long usuarioLogadoId) {
         return eventoRepository.findAllByStatusNotOrderById(EnumStatusEvento.EXCLUIDO)
             .stream()
+            .filter( evento -> evento.getOrganizador().getId().equals(usuarioLogadoId))
             .map(EventoResponseDto::new)
             .collect(Collectors.toList());
     }
 
-    public EventoResponseDto buscarEventoPorId(Long id) {
+    public EventoResponseDto buscarEventoPorId(Long id, Long usuarioLogadoId) {
         return eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO)
             .stream()
+            .filter( evento -> evento.getOrganizador().getId().equals(usuarioLogadoId))
             .map(EventoResponseDto::new)
             .findFirst()
             .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
     }
 
-    public EventoResponseDto criarEvento(EventoRequestDto eventoDto) {
-        Usuario organizador = usuarioService.buscarPorIdObj(eventoDto.organizadorId());
+    public EventoResponseDto criarEvento(EventoRequestDto eventoDto, Long usuarioLogadoId) {
+        Usuario organizador = usuarioService.buscarPorIdObj(usuarioLogadoId);
         LocalCerimonia localCerimonia = localCerimoniaService.buscarPorIdObj(eventoDto.localCerimoniaId());
         Evento evento = criarEventoBaseadoNoTipo(eventoDto, organizador, localCerimonia);
 
@@ -61,11 +64,15 @@ public class EventoService {
         return eventoResponseDto;
     }
 
-    public EventoResponseDto atualizarEvento(Long id, EventoRequestDto eventoDto) {
+    public EventoResponseDto atualizarEvento(Long id, EventoRequestDto eventoDto, Long usuarioLogadoId) {
         Evento eventoDB = eventoRepository.findByIdAndStatusNot(id, EnumStatusEvento.EXCLUIDO)
             .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
 
-        Usuario organizador = usuarioService.buscarPorIdObj(eventoDto.organizadorId());
+        if (eventoDB.getOrganizador() != null && !eventoDB.getOrganizador().getId().equals(usuarioLogadoId)) {
+            throw new ValidacoesRegraNegocioException("Apenas o organizador do evento pode atualizá-lo.");
+        }
+
+        Usuario organizador = usuarioService.buscarPorIdObj(usuarioLogadoId);
         LocalCerimonia localCerimonia = localCerimoniaService.buscarPorIdObj(eventoDto.localCerimoniaId());
         Evento evento = criarEventoBaseadoNoTipo(eventoDto, organizador, localCerimonia);
 
@@ -148,16 +155,25 @@ public class EventoService {
         return true;
     }
 
-    public boolean excluirEvento(Long id) {
+    @Transactional
+    public boolean excluirEvento(Long id, Long usuarioLogadoId) {
         var evento = eventoRepository.findById(id).orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
+
+        if (evento.getOrganizador() != null && !evento.getOrganizador().getId().equals(usuarioLogadoId)) {
+            throw new ValidacoesRegraNegocioException("Apenas o organizador do evento pode cancelá-lo.");
+        }
         alterarStatusEvento(evento, EnumStatusEvento.CANCELADO);
         eventoRepository.save(evento);
         return true;
     }
 
-    public boolean ativar(Long id) {
+    @Transactional
+    public boolean ativar(Long id, Long usuarioLogadoId) {
         var evento = eventoRepository.findByIdAndStatus(id, EnumStatusEvento.CANCELADO).orElseThrow(() ->
             new RegistroNaoEncontradoException("Evento não encontrado"));
+        if (evento.getOrganizador() != null && !evento.getOrganizador().getId().equals(usuarioLogadoId)) {
+            throw new ValidacoesRegraNegocioException("Apenas o organizador do evento pode ativá-lo.");
+        }
         alterarStatusEvento(evento, EnumStatusEvento.ATIVO);
         eventoRepository.save(evento);
         return true;

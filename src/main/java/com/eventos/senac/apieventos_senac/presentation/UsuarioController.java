@@ -45,12 +45,13 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping
+    @PostMapping("/participante")
     @Operation(summary = "Criar/Atualiza usuario", description = "Método resposável por criar um usuário")
     public ResponseEntity<UsuarioResponseDto> criarUsuario(@RequestBody UsuarioCriarRequestDto usuarioRequestDto) {
         var usuarioSalvo = usuarioService.salvarUsuario(usuarioRequestDto);
         return ResponseEntity.ok(usuarioSalvo);
     }
+
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar um Usuário", description = "Método responsável por atualizar um Usuário no banco de dados.")

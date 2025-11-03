@@ -4,9 +4,11 @@ import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioCriarRe
 import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioResponseDto;
 import com.eventos.senac.apieventos_senac.domain.entity.Administrador;
 import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
+import com.eventos.senac.apieventos_senac.domain.entity.UsuarioParticipanteEvento;
 import com.eventos.senac.apieventos_senac.domain.repository.UsuarioRepository;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.CPF;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusUsuario;
+import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumTipoUsuario;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,11 +47,18 @@ public class UsuarioService {
     public UsuarioResponseDto salvarUsuario(UsuarioCriarRequestDto usuarioRequestDto) {
         var usuario = usuarioRepository.findByCpf_CpfAndStatusNot(String.valueOf(new CPF(usuarioRequestDto.cpf())),
             EnumStatusUsuario.EXCLUIDO).orElse(null);
+
+        var tipoCodigo = usuarioRequestDto.tipoUsuario();
+
         if (usuario == null) {
-            if (usuarioRequestDto.isAdm()){
+            if (tipoCodigo == EnumTipoUsuario.ADMIN) {
                 usuario = new Administrador(usuarioRequestDto);
-            } else {
+            } else if (tipoCodigo == EnumTipoUsuario.USUARIO) {
                 usuario = new Usuario(usuarioRequestDto);
+            } else if (tipoCodigo == EnumTipoUsuario.PARTICIPANTE){
+                usuario = new UsuarioParticipanteEvento(usuarioRequestDto);
+            } else {
+                throw new RegistroNaoEncontradoException("Tipo de usuário inválido");
             }
         }
 

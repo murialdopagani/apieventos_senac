@@ -13,10 +13,13 @@ import org.springframework.stereotype.Repository;
 public interface EventoRepository extends JpaRepository<Evento, Long> {
 
     List<Evento> findAllByOrderByDataAsc();
-
     List<Evento> findAllByStatusNotOrderById(EnumStatusEvento statusEvento);
 
     Optional<Evento> findByIdAndStatusNot(Long id, EnumStatusEvento enumStatusEvento);
+
+    Optional<Evento> findByIdAndOrganizador_Id(Long id, Long organizadorId);
+    Optional<Evento> findByIdAndStatus(Long id, EnumStatusEvento enumStatusEvento);
+
 
     Object findByData(LocalDateTime data);
 
@@ -31,6 +34,4 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
         EnumStatusEvento status
     );
 
-
-    Optional<Evento> findByIdAndStatus(Long id, EnumStatusEvento enumStatusEvento);
 }

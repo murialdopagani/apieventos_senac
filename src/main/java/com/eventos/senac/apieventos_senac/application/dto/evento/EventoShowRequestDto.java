@@ -8,7 +8,6 @@ public record EventoShowRequestDto(
     String nome,
     String data,
     int capacidadeMaxima,
-    Long organizadorId,
     Long localCerimoniaId,
     int duracaoMinutos,
     BigDecimal precoIngresso,

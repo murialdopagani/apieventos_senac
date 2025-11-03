@@ -9,15 +9,13 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@DiscriminatorValue("ADMIN")
+@DiscriminatorValue("PARTICIPANTE")
 @NoArgsConstructor
-public class Administrador extends Usuario {
+public class UsuarioParticipanteEvento extends Usuario{
 
-    public Administrador(UsuarioCriarRequestDto usuarioRequest) {
+    public UsuarioParticipanteEvento(UsuarioCriarRequestDto usuarioRequest) {
         super(usuarioRequest);
-        this.setAcessoIrrestrito(true);
+        this.setAcessoIrrestrito(false);
     }
-
-
 
 }

@@ -11,7 +11,6 @@ public record EventoRequestDto(
     int inscritosConfirmados,
     int duracaoMinutos,
     BigDecimal precoIngresso,
-    Long organizadorId,
     Long localCerimoniaId,
 
     //campos específicos para Formatura
@@ -57,7 +56,6 @@ public record EventoRequestDto(
             0, //inscritosConfirmados
             dto.duracaoMinutos(),
             dto.precoIngresso(),
-            dto.organizadorId(),
             dto.localCerimoniaId(),
             dto.instituicao(),
             dto.curso(),
@@ -94,7 +92,6 @@ public record EventoRequestDto(
             0, //inscritosConfirmados
             dto.duracaoMinutos(),
             dto.precoIngresso(),
-            dto.organizadorId(),
             dto.localCerimoniaId(),
             null, //instituicao
             null, //curso
@@ -131,7 +128,6 @@ public record EventoRequestDto(
             0, //inscritosConfirmados
             dto.duracaoMinutos(),
             dto.precoIngresso(),
-            dto.organizadorId(),
             dto.localCerimoniaId(),
             null, //instituicao
             null, //curso
@@ -168,7 +164,6 @@ public record EventoRequestDto(
             0, //inscritosConfirmados
             dto.duracaoMinutos(),
             dto.precoIngresso(),
-            dto.organizadorId(),
             dto.localCerimoniaId(),
             null, //instituicao
             null, //curso

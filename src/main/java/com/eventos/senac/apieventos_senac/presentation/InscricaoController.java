@@ -2,6 +2,7 @@ package com.eventos.senac.apieventos_senac.presentation;
 
 import com.eventos.senac.apieventos_senac.application.dto.inscricao.InscricaoRequestDto;
 import com.eventos.senac.apieventos_senac.application.dto.inscricao.InscricaoResponseDto;
+import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioLogadoDto;
 import com.eventos.senac.apieventos_senac.application.services.InscricaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,36 +30,50 @@ public class InscricaoController {
 
     @PostMapping("/inscrever")
     @Operation(summary = "Inscrever usuário em evento", description = "Método responsável por inscrever um usuário em um evento.")
-    public ResponseEntity<InscricaoResponseDto> inscrever(@RequestBody InscricaoRequestDto requestDto) {
-        InscricaoResponseDto responseDto = inscricaoService.inscrever(requestDto);
+    public ResponseEntity<InscricaoResponseDto> inscrever(@AuthenticationPrincipal UsuarioLogadoDto usuario,
+        @RequestBody InscricaoRequestDto requestDto) throws Exception {
+
+        var userLogado = usuario.id();
+        InscricaoResponseDto responseDto = inscricaoService.inscrever(requestDto, userLogado);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping
     @Operation(summary = "Listar todas as inscrições", description = "Retorna todas as inscrições cadastradas.")
-    public ResponseEntity<List<InscricaoResponseDto>> listarTodos() {
-        List<InscricaoResponseDto> lista = inscricaoService.listarTodos();
+    public ResponseEntity<List<InscricaoResponseDto>> listarTodos(@AuthenticationPrincipal UsuarioLogadoDto usuario) {
+
+        var userLogado = usuario.id();
+        List<InscricaoResponseDto> lista = inscricaoService.listarTodos(userLogado);
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/evento/{eventoId}")
     @Operation(summary = "Listar inscrições por evento", description = "Retorna todas as inscrições de um evento específico.")
-    public ResponseEntity<List<InscricaoResponseDto>> listarPorEvento(@PathVariable("eventoId") Long eventoId) {
-        List<InscricaoResponseDto> lista = inscricaoService.listarPorEvento(eventoId);
+    public ResponseEntity<List<InscricaoResponseDto>> listarPorEvento(@PathVariable("eventoId") Long eventoId,
+        @AuthenticationPrincipal UsuarioLogadoDto usuario) {
+
+        var userLogado = usuario.id();
+        List<InscricaoResponseDto> lista = inscricaoService.listarPorEvento(eventoId, userLogado);
         return ResponseEntity.ok(lista);
     }
 
     @PatchMapping("/cancelar/{inscricaoId}")
     @Operation(summary = "Cancelar inscrição de usuário em evento", description = "Método responsável por cancelar a inscrição de um usuário em um evento.")
-    public ResponseEntity<InscricaoResponseDto> cancelar(@PathVariable("inscricaoId") Long inscricaoId) {
-        InscricaoResponseDto responseDto = inscricaoService.cancelarInscricao(inscricaoId);
+    public ResponseEntity<InscricaoResponseDto> cancelar(@PathVariable("inscricaoId") Long inscricaoId,
+        @AuthenticationPrincipal UsuarioLogadoDto usuario) {
+
+        var userLogado = usuario.id();
+        InscricaoResponseDto responseDto = inscricaoService.cancelarInscricao(inscricaoId, userLogado);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @PatchMapping("/confirmar/{inscricaoId}")
     @Operation(summary = "Confirmar inscrição de usuário no evento", description = "Método responsável por confirmar a inscrição de um usuário no evento.")
-    public ResponseEntity<InscricaoResponseDto> confirmar(@PathVariable("inscricaoId") Long inscricaoId) {
-        InscricaoResponseDto responseDto = inscricaoService.confirmarInscricao(inscricaoId);
+    public ResponseEntity<InscricaoResponseDto> confirmar(@PathVariable("inscricaoId") Long inscricaoId,
+        @AuthenticationPrincipal UsuarioLogadoDto usuario) {
+
+        var userLogado = usuario.id();
+        InscricaoResponseDto responseDto = inscricaoService.confirmarInscricao(inscricaoId, userLogado);
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 

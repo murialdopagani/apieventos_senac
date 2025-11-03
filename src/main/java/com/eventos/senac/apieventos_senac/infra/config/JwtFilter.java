@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
+@ConditionalOnProperty(prefix = "security", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -30,8 +32,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (path.equals("/auth/login") || path.equals("/usuario/cadastro") || path.startsWith("/swagger") || path.startsWith(
-            "/v3/api-docs") || path.startsWith("/webjars")) {
+        if (path.equals("/auth/login")
+            || path.equals("/usuario/cadastro")
+            || path.equals("/usuario/participante")
+            || path.startsWith("/swagger")
+            || path.startsWith("/v3/api-docs")
+            || path.startsWith("/webjars")) {
             filterChain.doFilter(request, response);
             return;
         }

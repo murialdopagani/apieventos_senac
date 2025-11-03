@@ -28,7 +28,7 @@ public class LocalCerimoniaController {
     private LocalCerimoniaService localCerimoniaService;
 
     @PostMapping
-    @Operation(summary = "Cria/Atualiza Local Cerimônias", description = "Método para criar ou atualizar um local de cerimônias.")
+    @Operation(summary = "Cria/Atualiza Local de Cerimônias", description = "Método para criar ou atualizar um local de cerimônias.")
     public ResponseEntity<LocalCerimoniaResponseDto> criarLocalCerimonia(
         @RequestBody @Validated LocalCerimoniaCriarRequestDto requestDto) {
         LocalCerimoniaResponseDto localCerimonia = localCerimoniaService.salvarLocalCerimonia(requestDto);

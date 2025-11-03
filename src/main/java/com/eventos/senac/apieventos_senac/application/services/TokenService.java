@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.eventos.senac.apieventos_senac.application.dto.auth.LoginRequestDto;
+import com.eventos.senac.apieventos_senac.application.dto.usuario.UsuarioLogadoDto;
 import com.eventos.senac.apieventos_senac.domain.entity.Token;
 import com.eventos.senac.apieventos_senac.domain.entity.Usuario;
 import com.eventos.senac.apieventos_senac.domain.repository.TokenRepository;
@@ -18,77 +19,77 @@ import org.springframework.stereotype.Service;
 @Service
 public class TokenService {
 
-  @Autowired
-  private TokenRepository tokenRepository;
+    @Autowired
+    private TokenRepository tokenRepository;
 
-  @Autowired
-  private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-  @Value("${spring.palavrapasse}")
-  private String secret;
+    @Value("${spring.palavrapasse}")
+    private String secret;
 
-  private String emissor = "Murialdo";
+    private String emissor = "Murialdo";
 
-  @Value("${spring.sessao}")
-  private Long tempo;
+    @Value("${spring.sessao}")
+    private Long tempo;
 
-  public String generateToken(LoginRequestDto login) {
-    try {
-      Algorithm algorithm = Algorithm.HMAC256(secret);
-      var usuario = usuarioRepository.findByEmail(login.email())
-          .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-      var dataExpiracao = this.gerarDataExpiracao();
-      String token = JWT.create()
-          .withIssuer(emissor)
-          .withSubject(login.email())
-          .withExpiresAt(dataExpiracao.plusHours(15).toInstant(ZoneOffset.of("-03:00")))
-          .sign(algorithm);
-      this.salvarToken(token,
-          dataExpiracao,
-          usuario);
-      return token;
-    } catch (Exception e) {
-      return null;
+    public String generateToken(LoginRequestDto login) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            var usuario = usuarioRepository.findByEmail(login.email())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+            var dataExpiracao = this.gerarDataExpiracao();
+            String token = JWT.create()
+                .withIssuer(emissor)
+                .withSubject(login.email())
+                .withExpiresAt(dataExpiracao.plusHours(15).toInstant(ZoneOffset.of("-03:00")))
+                .sign(algorithm);
+            this.salvarToken(token,
+                dataExpiracao,
+                usuario);
+            return token;
+        } catch (Exception e) {
+            return null;
+        }
     }
-  }
 
-  public DecodedJWT validarToken(String token) {
-    try {
-      Algorithm algorithm = Algorithm.HMAC256(secret);
-      JWTVerifier verifier = JWT.require(algorithm).withIssuer(emissor).build();
-      return verifier.verify(token);
-    } catch (Exception e) {
-      return null;
+    public DecodedJWT validarToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(emissor).build();
+            return verifier.verify(token);
+        } catch (Exception e) {
+            return null;
+        }
     }
-  }
 
-  public void salvarToken(String token,
-      LocalDateTime dataExpiracao,
-      Usuario usuario) {
-    var tokenBanco = new Token();
-    tokenBanco.setToken(token);
-    tokenBanco.setDataExpiracao(dataExpiracao);
-    tokenBanco.setUsuario(usuario);
+    public void salvarToken(String token, LocalDateTime dataExpiracao, Usuario usuario) {
+        var tokenBanco = new Token();
 
-    tokenRepository.save(tokenBanco);
-  }
+        tokenBanco.setToken(token);
+        tokenBanco.setDataExpiracao(dataExpiracao);
+        tokenBanco.setUsuario(usuario);
 
-  private LocalDateTime gerarDataExpiracao() {
-    var dataAtual = LocalDateTime.now();
-    var dataFutura = dataAtual.plusMinutes(tempo);
-    return dataFutura;
-  }
-
-  public Usuario consultarUsuarioPorToken(String token) throws Exception {
-    var tokenBanco = tokenRepository.findByToken(token)
-        .orElseThrow(() -> new RuntimeException("Token não encontrado"));
-
-    if (tokenBanco.getDataExpiracao().isBefore(LocalDateTime.now())) {
-      throw new Exception("Token Expirado.!");
+        tokenRepository.save(tokenBanco);
     }
-    tokenBanco.setDataExpiracao(LocalDateTime.now().plusMinutes(tempo));
-    tokenRepository.save(tokenBanco);
-    return tokenBanco.getUsuario();
-  }
+
+    private LocalDateTime gerarDataExpiracao() {
+        var dataAtual = LocalDateTime.now();
+        var dataFutura = dataAtual.plusMinutes(tempo);
+        return dataFutura;
+    }
+
+    public UsuarioLogadoDto consultarUsuarioPorToken(String token) throws Exception {
+        var tokenBanco = tokenRepository.findByToken(token)
+            .orElseThrow(() -> new RuntimeException("Token não encontrado"));
+
+        if (tokenBanco.getDataExpiracao().isBefore(LocalDateTime.now())) {
+            throw new Exception("Token Expirado.!");
+        }
+        tokenBanco.setDataExpiracao(LocalDateTime.now().plusMinutes(tempo));
+        tokenRepository.save(tokenBanco);
+        return new UsuarioLogadoDto(tokenBanco.getUsuario());
+    }
+
 
 }

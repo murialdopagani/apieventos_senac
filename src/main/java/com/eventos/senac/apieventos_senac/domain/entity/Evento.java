@@ -83,6 +83,14 @@ public abstract class Evento {
     @JoinColumn(name = "local_cerimonia_id", nullable = false, foreignKey = @ForeignKey(name = "fk_evento_localCerimonia"))
     private LocalCerimonia localCerimonia;
 
+//    @ManyToMany
+//    @JoinTable(
+//        name = "tb_eventos_usuarios_inscritos",
+//        joinColumns = @JoinColumn(name = "evento_id"),
+//        inverseJoinColumns = @JoinColumn(name = "usuario_id")
+//    )
+//    private Set<Usuario> usuariosInscritos;
+
     @Column
     private EnumStatusEvento status = EnumStatusEvento.ATIVO;
 

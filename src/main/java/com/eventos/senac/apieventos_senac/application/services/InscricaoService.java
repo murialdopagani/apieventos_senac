@@ -6,6 +6,7 @@ import com.eventos.senac.apieventos_senac.domain.entity.Evento;
 import com.eventos.senac.apieventos_senac.domain.entity.Inscricao;
 import com.eventos.senac.apieventos_senac.domain.repository.EventoRepository;
 import com.eventos.senac.apieventos_senac.domain.repository.InscricaoRepository;
+import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusEvento;
 import com.eventos.senac.apieventos_senac.domain.valueobjects.EnumStatusPresenca;
 import com.eventos.senac.apieventos_senac.exception.RegistroNaoEncontradoException;
 import com.eventos.senac.apieventos_senac.exception.ValidacoesRegraNegocioException;
@@ -33,19 +34,18 @@ public class InscricaoService {
      * (Evento.inscrever). Retorna o EventoResponseDto atualizado.
      */
     @Transactional
-    public InscricaoResponseDto inscrever(InscricaoRequestDto inscricaoRequestDto) {
-        var usuario = usuarioService.buscarPorIdObj(inscricaoRequestDto.usuarioId());
+    public InscricaoResponseDto inscrever(InscricaoRequestDto inscricaoRequestDto, Long usuarioId) {
 
-        var evento = eventoRepository.findById(inscricaoRequestDto.eventoId())
+        var usuario = usuarioService.buscarPorIdObj(usuarioId);
+        var evento = eventoRepository.findByIdAndStatus(inscricaoRequestDto.eventoId(), EnumStatusEvento.ATIVO)
             .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
 
-        if (inscricaoRepository.findByEventoIdAndUsuarioId(inscricaoRequestDto.eventoId(), inscricaoRequestDto.usuarioId())
+        if (inscricaoRepository.findByEventoIdAndUsuarioId(inscricaoRequestDto.eventoId(), usuario.getId())
             .isPresent()) {
             throw new ValidacoesRegraNegocioException("Participante já inscrito neste evento");
         }
 
         var inscricao = new Inscricao(inscricaoRequestDto, usuario, evento);
-
         try {
             evento.inscrever(inscricao);  // validações de domínio
             inscricaoRepository.save(inscricao);
@@ -54,15 +54,18 @@ public class InscricaoService {
         } catch (ObjectOptimisticLockingFailureException | DataIntegrityViolationException ex) {
             throw new ValidacoesRegraNegocioException("Não foi possível concluir a inscrição por conflito. Tente novamente.");
         }
-
         return new InscricaoResponseDto(inscricao);
     }
 
 
     @Transactional
-    public InscricaoResponseDto confirmarInscricao(Long inscricaoId) {
+    public InscricaoResponseDto confirmarInscricao(Long inscricaoId, Long usuarioLogadoId) {
         var inscricao = inscricaoRepository.findByIdAndStatusPresencaNot(inscricaoId, EnumStatusPresenca.CANCELADO)
             .orElseThrow(() -> new RegistroNaoEncontradoException("Inscrição não encontrada"));
+
+        if (!inscricao.getUsuario().getId().equals(usuarioLogadoId)) {
+            throw new ValidacoesRegraNegocioException("Apenas o usuário inscrito pode confirmar sua presença.");
+        }
 
         if (inscricao.getStatusPresenca() == EnumStatusPresenca.CONFIRMADO) {
             throw new ValidacoesRegraNegocioException("Inscrição já está Confirmada..!");
@@ -93,12 +96,16 @@ public class InscricaoService {
     }
 
     /**
-     * Cancela (soft) uma inscrição: marca status COMO CANCELADO e atualiza contadores no evento.
+     * Cancela (soft) uma inscrição: marca status COMO CANCELADO e atualiza contadores(Confirmados) no evento.
      */
     @Transactional
-    public InscricaoResponseDto cancelarInscricao(Long inscricaoId) {
+    public InscricaoResponseDto cancelarInscricao(Long inscricaoId, Long usuarioLogadoId) {
         var inscricao = inscricaoRepository.findById(inscricaoId)
             .orElseThrow(() -> new RegistroNaoEncontradoException("Inscrição não encontrada"));
+
+        if (!inscricao.getUsuario().getId().equals(usuarioLogadoId)) {
+            throw new ValidacoesRegraNegocioException("Apenas o usuário inscrito pode cancelar sua inscrição.");
+        }
 
         if (inscricao.getStatusPresenca() == EnumStatusPresenca.CANCELADO) {
             throw new ValidacoesRegraNegocioException("Inscrição já está cancelada");
@@ -127,9 +134,10 @@ public class InscricaoService {
      * Lista todas as inscrições (read-only).
      */
     @Transactional(readOnly = true)
-    public List<InscricaoResponseDto> listarTodos() {
+    public List<InscricaoResponseDto> listarTodos(Long usuarioLogadoId) {
         return inscricaoRepository.findAll()
             .stream()
+            .filter(inscricao -> inscricao.getUsuario().getId().equals(usuarioLogadoId))
             .map(InscricaoResponseDto::new)
             .toList();
     }
@@ -138,15 +146,19 @@ public class InscricaoService {
      * Lista todas as inscrições de um evento específico (read-only).
      */
     @Transactional(readOnly = true)
-    public List<InscricaoResponseDto> listarPorEvento(Long eventoId) {
+    public List<InscricaoResponseDto> listarPorEvento(Long eventoId, Long usuarioLogadoId) {
         // valida existência do evento
-        eventoRepository.findById(eventoId)
-                .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
+        var evento = eventoRepository.findById(eventoId)
+            .orElseThrow(() -> new RegistroNaoEncontradoException("Evento não encontrado"));
+
+        if (!evento.getOrganizador().getId().equals(usuarioLogadoId)) {
+            throw new ValidacoesRegraNegocioException("Apenas o organizador do evento pode consultar as inscrições.");
+        }
 
         return inscricaoRepository.findByEventoId(eventoId)
-                .stream()
-                .map(InscricaoResponseDto::new)
-                .toList();
+            .stream()
+            .map(InscricaoResponseDto::new)
+            .toList();
     }
 
     private void alterarStatusInscricao(Inscricao inscricao, EnumStatusPresenca statusPresenca) {
