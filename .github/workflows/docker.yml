@@ -27,21 +27,21 @@ jobs:
 
       - name: 🩺 Verificar status dos contêineres
         run: |
-          echo "--- Status dos Contêineres (incluindo os que falharam) ---"
-          docker-compose ps -a
-    
-          echo "--- Logs do Banco de Dados ---"
-          docker-compose logs meu-postgres-local
-    
-          echo "--- Logs da API ---"
-          docker-compose logs api-eventos       
-
-#          echo "--- Status dos Contêineres ---"
-#          docker-compose ps
+#          echo "--- Status dos Contêineres (incluindo os que falharam) ---"
+#          docker-compose ps -a
+#
 #          echo "--- Logs do Banco de Dados ---"
-#          docker-compose logs db || echo "Serviço 'db' não encontrado ou sem logs."
+#          docker-compose logs meu-postgres-local
+#
 #          echo "--- Logs da API ---"
-#          docker-compose logs api || echo "Serviço 'api' não encontrado ou sem logs."
+#          docker-compose logs api-eventos
+
+          echo "--- Status dos Contêineres ---"
+          docker-compose ps
+          echo "--- Logs do Banco de Dados ---"
+          docker-compose logs db || echo "Serviço 'db' não encontrado ou sem logs."
+          echo "--- Logs da API ---"
+          docker-compose logs api || echo "Serviço 'api' não encontrado ou sem logs."
 #      - name: 📞 Realizar teste de saúde na API
 #        run: curl --fail http://localhost:8080/swagger-ui/index.html
 
