@@ -10,6 +10,7 @@ services:
       - POSTGRES_DB=db_eventos
     volumes:
       - postgres-data-local:/var/lib/postgresql/data
+
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s       # Tenta a cada 10 segundos
