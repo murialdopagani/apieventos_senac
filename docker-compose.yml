@@ -28,7 +28,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=123456
     depends_on:
-        - postgres-db
+      - postgres-db
 
 
 volumes:
