@@ -20,6 +20,7 @@ public record EventoFormaturaRequestDto(
     int numeroFormandos,
     String paraninfo,
     String orador,
-    boolean temCerimonialista) {
+    boolean temCerimonialista
+) {
 
 }

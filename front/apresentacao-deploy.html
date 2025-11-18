@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto de Deploy - API de Eventos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 90%;
+        }
+
+        .text-content {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #333;
+            text-align: left;
+        }
+
+        .text-content strong {
+            color: #667eea;
+        }
+
+        .list {
+            list-style: none;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .list li {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .list li:hover {
+            transform: translateX(10px);
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #68d391;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+            margin-top: 20px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .diagram-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: white;
+            margin: 0 10px;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            color: #667eea;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            color: #333;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Capa -->
+        <div class="slide active">
+            <div class="icon">🚀</div>
+            <h1>Projeto de Deploy</h1>
+            <h3>API de Eventos com Docker, CI/CD e Cloud</h3>
+            <div class="content-box" style="margin-top: 30px;">
+                <p class="text-content">
+                    <strong>Projeto Final - Disciplina de Deploy</strong><br>
+                    Containerização, Automação e Deploy em Produção
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Visão Geral do Projeto -->
+        <div class="slide">
+            <h2>Visão Geral do Projeto</h2>
+            <div class="content-box">
+                <div class="text-content">
+                    <p>Este projeto implementa uma <strong>API REST de Eventos</strong> desenvolvida com Spring Boot, demonstrando um fluxo completo de deploy moderno:</p>
+                    <ul class="list">
+                        <li>🐳 <strong>Containerização</strong> com Docker</li>
+                        <li>🔄 <strong>CI/CD</strong> com GitHub Actions</li>
+                        <li>☁️ <strong>Deploy em Produção</strong> no Render</li>
+                        <li>🗄️ <strong>Banco de Dados</strong> PostgreSQL</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Fase 1 - Containerização -->
+        <div class="slide">
+            <h2>Fase 1: Containerização com Docker</h2>
+            <div class="content-box">
+                <h3>Dockerfile - Multi-Stage Build</h3>
+                <div class="code-block">
+# Stage 1: Builder (Maven + JDK)<br>
+FROM maven:3.9.8-eclipse-temurin-21-jammy as builder<br>
+WORKDIR /app<br>
+COPY pom.xml .<br>
+RUN mvn dependency:go-offline<br>
+COPY src ./src<br>
+RUN mvn clean package -DskipTests<br>
+<br>
+# Stage 2: Runtime (JRE)<br>
+FROM eclipse-temurin:21-jre-jammy<br>
+COPY --from=builder /app/target/*.jar /app.jar<br>
+EXPOSE 8080<br>
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+                </div>
+                <p class="text-content" style="margin-top: 20px;">
+                    <strong>Por que Multi-Stage?</strong> Reduz o tamanho da imagem final, incluindo apenas o JRE e o JAR compilado, sem ferramentas de build.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Docker Compose -->
+        <div class="slide">
+            <h2>Docker Compose - Orquestração Local</h2>
+            <div class="content-box">
+                <div class="grid-3">
+                    <div class="card">
+                        <h4>🗄️ Serviço Database</h4>
+                        <p>PostgreSQL com persistência de dados via volumes e variáveis de ambiente configuradas</p>
+                    </div>
+                    <div class="card">
+                        <h4>🚀 Serviço API</h4>
+                        <p>Build a partir do Dockerfile e conexão com o banco via variáveis de ambiente</p>
+                    </div>
+                    <div class="card">
+                        <h4>❤️ Health Check</h4>
+                        <p>Garante que a API só inicia quando o banco está pronto (depends_on com condition)</p>
+                    </div>
+                </div>
+                <p class="text-content" style="margin-top: 30px;">
+                    <strong>Desafio:</strong> Implementar healthcheck no PostgreSQL para garantir inicialização correta usando <span class="highlight">pg_isready</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Fase 2 - CI/CD -->
+        <div class="slide">
+            <h2>Fase 2: Automação com GitHub Actions</h2>
+            <div class="content-box">
+                <h3>Pipeline de CI/CD</h3>
+                <ul class="list">
+                    <li>✅ <strong>Checkout</strong> do código fonte</li>
+                    <li>🧪 <strong>Teste de Integração</strong> - docker-compose up -d</li>
+                    <li>🔍 <strong>Verificação</strong> - Status dos containers e logs</li>
+                    <li>🛑 <strong>Cleanup</strong> - docker-compose down (sempre executa)</li>
+                    <li>🔐 <strong>Login</strong> no Docker Hub com secrets</li>
+                    <li>📦 <strong>Build & Push</strong> - Publica imagem no Docker Hub</li>
+                </ul>
+                <p class="text-content" style="margin-top: 20px;">
+                    <strong>Resultado:</strong> Toda alteração na branch main dispara o pipeline automaticamente!
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Arquitetura do Fluxo -->
+        <div class="slide">
+            <h2>Arquitetura do Fluxo de Deploy</h2>
+            <div class="content-box">
+                <div class="diagram">
+                    <div class="diagram-item">📝 Git Push</div>
+                    <div class="arrow">→</div>
+                    <div class="diagram-item">🔄 GitHub Actions</div>
+                    <div class="arrow">→</div>
+                    <div class="diagram-item">🧪 Testes</div>
+                    <div class="arrow">→</div>
+                    <div class="diagram-item">🐳 Docker Hub</div>
+                    <div class="arrow">→</div>
+                    <div class="diagram-item">☁️ Render</div>
+                </div>
+                <div class="text-content" style="margin-top: 30px;">
+                    <strong>Fluxo Automático:</strong> Do código fonte até a produção, tudo automatizado e testado!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Fase 3 - Deploy Render -->
+        <div class="slide">
+            <h2>Fase 3: Deploy em Produção - Render</h2>
+            <div class="content-box">
+                <div class="grid-3">
+                    <div class="card">
+                        <h4>🗄️ PostgreSQL</h4>
+                        <p>Banco de dados gerenciado no plano gratuito com conexão segura</p>
+                    </div>
+                    <div class="card">
+                        <h4>🌐 Web Service</h4>
+                        <p>Deploy automático a partir do Dockerfile no repositório GitHub</p>
+                    </div>
+                    <div class="card">
+                        <h4>🔧 Variáveis de Ambiente</h4>
+                        <p>Configuração segura da conexão entre API e banco de dados</p>
+                    </div>
+                </div>
+                <p class="text-content" style="margin-top: 30px;">
+                    <strong>Configuração:</strong> Environment definido como Docker - O Render detecta automaticamente o Dockerfile!
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Escolhas Técnicas -->
+        <div class="slide">
+            <h2>Justificativa das Escolhas Técnicas</h2>
+            <div class="content-box">
+                <ul class="list">
+                    <li>
+                        <strong>Multi-Stage Build:</strong> Redução de ~800MB para ~300MB na imagem final, mantendo apenas o necessário para execução
+                    </li>
+                    <li>
+                        <strong>Health Check:</strong> Evita erros de conexão garantindo que o banco está pronto antes da API iniciar
+                    </li>
+                    <li>
+                        <strong>GitHub Actions:</strong> Automação completa do processo de build e deploy, reduzindo erros humanos
+                    </li>
+                    <li>
+                        <strong>Docker Volumes:</strong> Persistência dos dados do banco mesmo após restart dos containers
+                    </li>
+                    <li>
+                        <strong>Secrets no GitHub:</strong> Segurança das credenciais do Docker Hub
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Demonstração -->
+        <div class="slide">
+            <h2>Demonstração ao Vivo</h2>
+            <div class="content-box">
+                <div class="icon">🎯</div>
+                <h3>O que será demonstrado:</h3>
+                <ul class="list">
+                    <li>✅ API funcionando no Render via Swagger UI</li>
+                    <li>✅ Endpoints CRUD (Create, Read, Update, Delete)</li>
+                    <li>✅ Persistência de dados no PostgreSQL em nuvem</li>
+                    <li>✅ Pipeline verde no GitHub Actions</li>
+                    <li>✅ Imagem publicada no Docker Hub</li>
+                </ul>
+                <p class="text-content" style="margin-top: 30px; font-size: 1.4rem;">
+                    <strong>Pronto para a demonstração! 🚀</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Conclusão -->
+        <div class="slide">
+            <div class="icon">✨</div>
+            <h1>Conclusão</h1>
+            <div class="content-box">
+                <div class="text-content">
+                    <h3 style="color: #667eea; margin-bottom: 20px;">Objetivos Alcançados</h3>
+                    <ul class="list">
+                        <li>✅ Containerização completa da aplicação</li>
+                        <li>✅ Pipeline de CI/CD funcionando</li>
+                        <li>✅ Deploy automatizado em produção</li>
+                        <li>✅ Boas práticas de DevOps implementadas</li>
+                    </ul>
+                    <p style="margin-top: 30px; font-size: 1.3rem;">
+                        <strong>Obrigado pela atenção! 🎓</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">10</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">◀ Anterior</button>
+        <button class="nav-btn" onclick="nextSlide()">Próximo ▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Navegação por teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+    </script>
+</body>
+</html>
