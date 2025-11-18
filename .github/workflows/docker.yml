@@ -22,7 +22,7 @@ jobs:
 
       - name: ⏱️ Aguardar os contêineres estabilizarem
         run: |
-          echo "Aguardando 30 segundos para os serviços iniciarem..."
+          echo "Aguardando 10 segundos para os serviços iniciarem..."
           sleep 30
 
       - name: 🩺 Verificar status dos contêineres
@@ -31,10 +31,10 @@ jobs:
           docker-compose ps -a
   
           echo "--- Logs do Banco de Dados ---"
-          docker-compose logs meu-postgres-local
+          docker-compose logs postgres-db
   
           echo "--- Logs da API ---"
-          docker-compose logs api-eventos
+          docker-compose logs api-spring
 
       - name: 📞 Testar API (com retentativas)
         run: |

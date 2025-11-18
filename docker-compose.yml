@@ -8,14 +8,14 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
       - POSTGRES_DB=db_eventos
-#    volumes:
-#      - postgres-data-local:/var/lib/postgresql/data
+    volumes:
+      - postgres-data-local:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER}" ]
-      interval: 30s       # Tenta a cada 10 segundos
-      timeout: 10s
-      retries: 10         # Aumentamos as tentativas para 10
-      start_period: 90s   # <-- A GRANDE MUDANÇA
+      interval: 10s       # Tenta a cada 10 segundos
+      timeout: 5s
+      retries: 5         # Aumentamos as tentativas para 10
+      start_period: 30s   # <-- A GRANDE MUDANÇA
 
   api-spring:
     container_name: api-eventos
@@ -30,5 +30,5 @@ services:
       postgres-db:
         condition: service_healthy
 
-#volumes:
-#  postgres-data-local:
+volumes:
+  postgres-data-local:
