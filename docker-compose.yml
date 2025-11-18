@@ -30,5 +30,5 @@ services:
       postgres-db:
         condition: service_healthy
 
-volumes:
-  postgres-data-local:
+#volumes:
+#  postgres-data-local:
