@@ -12,20 +12,13 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: 🔧 Instalar o docker compose
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
+#      - name: 🔧 Instalar o docker compose
+#        run: |
+#          sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+#          sudo chmod +x /usr/local/bin/docker-compose
 
       - name: 🐋 Subir ambiente com Docker Compose
-        run: docker-compose up -d --build
-
-
-      - name: List containers and statuses
-        run: docker-compose ps -a
-
-      - name: Show logs for postgres (mais detalhado)
-        run: docker-compose logs --no-color --timestamps postgres-db || true
+        run: docker-compose up -d
 
       - name: ⏱️ Aguardar os contêineres estabilizarem
         run: |
